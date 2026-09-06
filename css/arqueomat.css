@@ -1,0 +1,527 @@
+/* ==========================================
+   1. ESTRUCTURA GLOBAL Y FONDO
+   ========================================== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('../img/arqueomat/Fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    display: flex;
+    flex-direction: column; /* Apila el header arriba y la tarjeta abajo */
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================
+   2. BARRA SUPERIOR (HEADER)
+   ========================================== */
+.top-bar {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    background: rgba(20, 15, 10, 0.85);
+    backdrop-filter: blur(5px);
+    border-bottom: 2px solid #c8a261;
+    box-sizing: border-box;
+}
+
+.logo {
+    font-size: 1.3rem;
+    color: #d4af37;
+    letter-spacing: 1.5px;
+    margin: 0;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+.audio-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-audio, .btn-settings {
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid #d4af37;
+    color: #fff2a3;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-settings {
+    padding: 6px 10px;
+}
+
+.btn-audio:hover, .btn-settings:hover {
+    background: #d4af37;
+    color: #2c1d11;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* ==========================================
+   3. TARJETA PRINCIPAL DEL JUEGO
+   ========================================== */
+.game-card {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 850px;
+    background: rgba(255, 248, 234, 0.96);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.2);
+    border: 2px solid #c8a261;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    margin: auto 0; /* Centrado vertical en el espacio disponible */
+    transform: translateY(-50px); /* Sube la tarjeta 20 píxeles */
+    box-sizing: border-box;
+}
+
+.screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================
+   4. PANTALLA DE PORTADA
+   ========================================== */
+#screen-cover {
+    background: url('../img/arqueomat/portada.jpg') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    min-height: 500px;
+    height: 65vh; 
+    border-radius: 10px;
+    border: 3px solid #d4af37;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+#screen-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+    z-index: 1;
+}
+
+.blink-text-full {
+    position: relative;
+    z-index: 2;
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 12px rgba(255, 255, 255, 0.6);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+    animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
+    50% { 
+        opacity: 0.25; 
+        transform: scale(0.97); 
+    }
+}
+
+/* ==========================================
+   5. FORMULARIOS, SELECCIÓN Y BOTONES
+   ========================================== */
+.menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+    max-width: 350px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border: none;
+    background-color: #d2b48c;
+    color: #2c1d11;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+button:hover:not(:disabled) {
+    background-color: #c19a6b;
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-start {
+    background-color: #2e8b57;
+    color: white;
+    font-size: 1.2rem;
+    margin-top: 15px;
+}
+
+.btn-start:hover {
+    background-color: #246b43;
+}
+
+.btn-back {
+    background-color: #8c7b6b;
+    color: #ffffff;
+    margin-top: 25px;
+    font-size: 0.95rem;
+    padding: 8px 18px;
+}
+
+.btn-back:hover {
+    background-color: #6e6053;
+}
+
+.btn-abort {
+    background-color: #a94442;
+    color: white;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+.btn-abort:hover {
+    background-color: #843534;
+}
+
+/* ==========================================
+   6. TABLERO Y PANTALLA DE JUEGO
+   ========================================== */
+.scoreboard {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 12px 20px;
+    background: #e2d1a6;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.active-team {
+    color: #8b0000;
+    text-decoration: underline;
+}
+
+.egypt-number-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    min-height: 120px;
+    margin: 15px 0;
+    padding: 20px;
+    background: #fff;
+    border: 2px dashed #b8860b;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.digit-group {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
+    align-items: center;
+}
+
+.symbol-row {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.symbol-row span {
+    font-size: 2.2rem;
+    line-height: 1;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.feedback {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-top: 15px;
+    min-height: 30px;
+}
+
+.btn-next {
+    background-color: #4682b4;
+    color: white;
+    margin-top: 15px;
+}
+
+.btn-next:hover {
+    background-color: #36648b;
+}
+
+.final-scores {
+    font-size: 1.3rem;
+    margin: 20px 0;
+}
+
+/* Entrada Directa */
+.direct-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto 10px;
+}
+
+.direct-input-container input {
+    font-size: 1.2rem;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 2px solid #c8a261;
+    width: 65%;
+    text-align: center;
+    outline: none;
+}
+
+.direct-input-container input:focus {
+    border-color: #8b0000;
+    box-shadow: 0 0 5px rgba(139, 0, 0, 0.4);
+}
+
+.game-action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* ==========================================
+   7. ESTILOS DE SISTEMAS MAYA Y MESOPOTÁMICO
+   ========================================== */
+/* Sistema Maya */
+.maya-number-container {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+}
+
+.maya-level {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 15px;
+    border-bottom: 2px dashed rgba(200, 162, 97, 0.4);
+    min-width: 80px;
+}
+
+.maya-level:last-child {
+    border-bottom: none;
+}
+
+.maya-dots {
+    display: flex;
+    gap: 6px;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.maya-bar {
+    width: 50px;
+    height: 10px;
+    background-color: #333;
+    border-radius: 4px;
+    margin: 2px 0;
+}
+
+.maya-zero {
+    font-size: 2.2rem;
+}
+
+/* Sistema Mesopotámico */
+.meso-digit-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    border: 1px dashed rgba(200, 162, 97, 0.6);
+}
+
+.meso-subgroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.meso-row {
+    display: flex;
+    gap: 3px;
+    line-height: 1;
+}
+
+.meso-ten {
+    font-size: 2.2rem;
+    color: #8b0000;
+    font-weight: bold;
+}
+
+.meso-one {
+    font-size: 2.2rem;
+    color: #2b2b2b;
+    font-weight: bold;
+}
+
+/* ==========================================
+   8. MODAL DE CONFIGURACIÓN DE AUDIO
+   ========================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: #fff8ea;
+    border: 3px solid #c8a261;
+    border-radius: 12px;
+    padding: 25px 30px;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+    text-align: center;
+}
+
+.slider-group {
+    margin: 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+}
+
+.slider-group input[type="range"] {
+    width: 100%;
+    accent-color: #2e8b57;
+    cursor: pointer;
+}
+
+/* PIE DE PÁGINA INSTITUCIONAL */
+.institutional-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px 15px;
+    background: rgba(10, 15, 29, 0.85);
+    backdrop-filter: blur(4px);
+    border-top: 1px solid rgba(0, 240, 255, 0.15);
+    z-index: 90;
+    font-size: 0.95rem; /* Letra pequeña y discreta */
+    color: #a0aec0;
+}
+
+.footer-logo {
+    height: 40px; /* Tamaño sutil para el logo */
+    width: auto;
+    object-fit: contain;
+}
+
+.footer-text {
+    letter-spacing: 0.5px;
+}
+
+.footer-separator {
+    color: #00f0ff; /* Resalta con el neón del juego */
+    opacity: 0.5;
+}

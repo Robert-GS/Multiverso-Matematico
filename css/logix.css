@@ -1,0 +1,466 @@
+/* ==========================================
+   1. ESTRUCTURA GLOBAL Y FONDO
+   ========================================== */
+body {
+    background: url('../img/logix/fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #e0e6ed;
+    display: flex;
+    flex-direction: column; /* Apila el header arriba y el juego abajo */
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Capa oscura translúcida sobre el fondo */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 15, 25, 0.75);
+    backdrop-filter: blur(1px);
+    z-index: 0;
+}
+
+.hidden { 
+    display: none !important; 
+}
+
+/* ==========================================
+   2. BARRA SUPERIOR (HEADER)
+   ========================================== */
+.top-bar {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    background: rgba(10, 15, 29, 0.9);
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+    box-sizing: border-box;
+}
+
+.logo {
+    font-size: 1.2rem;
+    color: #00f0ff;
+    letter-spacing: 1.5px;
+    margin: 0;
+}
+
+.audio-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-audio, .btn-settings, .btn-home {
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid #00f0ff;
+    color: #00f0ff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.btn-audio:hover, .btn-settings:hover, .btn-home:hover {
+    background: #00f0ff;
+    color: #0a0f19;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+/* ==========================================
+   3. TARJETA PRINCIPAL DEL JUEGO
+   ========================================== */
+.game-card {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 800px;
+    background: rgba(18, 24, 36, 0.90);
+    border: 2px solid #00f0ff;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+    border-radius: 12px;
+    padding: 30px;
+    margin: auto 0; /* Centra la tarjeta verticalmente en el espacio restante */
+    transform: translateY(-50px); /* Sube la tarjeta 20 píxeles */
+    box-sizing: border-box;
+}
+
+/* Títulos y Subtítulos */
+.glitch-title {
+    font-size: 2.5rem;
+    color: #00f0ff;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+    margin: 0;
+}
+
+.subtitle {
+    color: #8a99ad;
+    font-size: 1.1rem;
+}
+
+/* ==========================================
+   4. MARCO DE PORTADA
+   ========================================== */
+#screen-cover {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    background-color: #0b0f19;
+}
+
+.cover-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center top;
+    z-index: 1;
+}
+
+.cover-overlay-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 20px 15px;
+    background: linear-gradient(to top, rgba(11, 15, 25, 0.95) 0%, rgba(11, 15, 25, 0.6) 70%, transparent 100%);
+    text-align: center;
+}
+
+.blink-text-full {
+    color: #00f0ff;
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 0, 0, 0.9);
+    animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.98); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================
+   5. PANTALLA CONFIGURACIÓN
+   ========================================== */
+#screen-setup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.setup-title {
+    font-size: 2.2rem;
+    color: #00f0ff;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    margin-bottom: 30px;
+}
+
+.setup-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.input-group label {
+    font-size: 1.1rem;
+    color: #e0e6ed;
+    font-weight: 500;
+}
+
+.custom-select {
+    width: 100%;
+    max-width: 380px;
+    padding: 12px 16px;
+    background-color: #1a2332;
+    color: #00f0ff;
+    border: 2px solid #00f0ff;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.custom-select:hover, .custom-select:focus {
+    background-color: #222d40;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+.custom-select option {
+    background-color: #121824;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.setup-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 380px;
+    margin-top: 15px;
+}
+
+.setup-buttons .btn-start, 
+.setup-buttons .btn-back {
+    width: 100%;
+    margin-top: 0;
+}
+
+/* ==========================================
+   6. PANEL DE JUEGO Y TABLA
+   ========================================== */
+.door-status {
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+.door-status.locked {
+    background: rgba(255, 0, 85, 0.2);
+    border: 1px solid #ff0055;
+    color: #ff0055;
+}
+
+.door-status.unlocked {
+    background: rgba(0, 255, 136, 0.2);
+    border: 1px solid #00ff88;
+    color: #00ff88;
+}
+
+.target-code-box {
+    background: #1a2332;
+    border-left: 4px solid #00f0ff;
+    padding: 12px 20px;
+    margin: 15px 0;
+}
+
+.target-code-box h2 {
+    color: #fff2a3;
+    margin: 5px 0 0 0;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.truth-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #0d131d;
+}
+
+.truth-table th, .truth-table td {
+    border: 1px solid #232d3f;
+    padding: 10px;
+    text-align: center;
+}
+
+.truth-table th {
+    background: #182232;
+    color: #00f0ff;
+}
+
+.switch-btn {
+    background: #ff0055;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 60px;
+    transition: all 0.2s ease;
+}
+
+.switch-btn.is-true {
+    background: #00ff88;
+    color: #0b0f19;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+.switch-btn.revealed {
+    animation: glow-pulse 1.2s infinite alternate;
+    cursor: not-allowed;
+    opacity: 0.9;
+}
+
+.switch-btn:disabled {
+    cursor: not-allowed;
+}
+
+@keyframes glow-pulse {
+    0% {
+        box-shadow: 0 0 5px #00ff88, inset 0 0 5px #00ff88;
+        transform: scale(1);
+    }
+    100% {
+        box-shadow: 0 0 20px #00ff88, 0 0 30px #00ff88;
+        transform: scale(1.05);
+    }
+}
+
+/* Botones Generales */
+button {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-start {
+    background: #00f0ff;
+    color: #0b0f19;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.btn-start:hover {
+    background: #70f8ff;
+}
+
+.btn-back, .btn-abort {
+    background: #232d3f;
+    color: #8a99ad;
+    border: 1px solid #3a4b66;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+/* ==========================================
+   7. MODAL DE CONFIGURACIÓN DE AUDIO
+   ========================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 15, 25, 0.85);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #121824;
+    border: 2px solid #00f0ff;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+    border-radius: 12px;
+    padding: 35px 30px;
+    width: 90%;
+    max-width: 450px;
+    color: #e0e6ed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 25px;
+}
+
+.modal-content h3 {
+    color: #00f0ff;
+    font-size: 1.6rem;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.slider-group label {
+    font-size: 1.05rem;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.slider-group input[type="range"] {
+    width: 80%;
+    max-width: 280px;
+    accent-color: #00f0ff;
+    cursor: pointer;
+    height: 6px;
+}
+
+.modal-content .btn-start {
+    margin-top: 10px;
+    width: 80%;
+    max-width: 250px;
+}
+
+/* PIE DE PÁGINA INSTITUCIONAL */
+.institutional-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px 15px;
+    background: rgba(10, 15, 29, 0.85);
+    backdrop-filter: blur(4px);
+    border-top: 1px solid rgba(0, 240, 255, 0.15);
+    z-index: 90;
+    font-size: 0.95rem; /* Letra pequeña y discreta */
+    color: #a0aec0;
+}
+
+.footer-logo {
+    height: 40px; /* Tamaño sutil para el logo */
+    width: auto;
+    object-fit: contain;
+}
+
+.footer-text {
+    letter-spacing: 0.5px;
+}
+
+.footer-separator {
+    color: #00f0ff; /* Resalta con el neón del juego */
+    opacity: 0.5;
+}

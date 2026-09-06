@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiverso Matemático</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <!-- BARRA SUPERIOR -->
+    <header class="top-bar">
+        <h1 class="logo">🌌 MULTIVERSO MATEMÁTICO 🌌</h1>
+        <div class="top-controls">
+            <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">🔊 Sound ON</button>
+            <button id="btn-settings" class="btn-settings" onclick="openAudioSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <!-- PANTALLA 1: PORTADA PRINCIPAL -->
+    <section id="screen-cover" class="screen">
+        <div class="cover-content">
+            <!-- Imagen de portada principal -->
+            <img src="img/main/portada.png" alt="Multiverso Matemático" class="cover-img" onerror="this.style.display='none'">
+
+            <div class="pulse-container">
+                <p class="press-enter">PRESIONA <span class="key">[ ENTER ]</span> PARA ENTRAR</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PANTALLA 2: MENÚ (Inicia con la clase hidden) -->
+    <section id="screen-menu" class="screen hidden">
+        <h2 class="menu-title">SELECCIONA UN PROPÓSITO FORMATIVO</h2>
+        
+        <div class="modules-grid">
+            
+            <div class="module-card active" onclick="launchGame('logix.html')">
+                <div class="thumb-container">
+                    <img src="img/thumbs/logix.jpg" alt="Lógica Matemática" onerror="this.src='https://via.placeholder.com/300x180/121824/00f0ff?text=LogiX'">
+                    <span class="badge active-badge">¡DISPONIBLE!</span>
+                </div>
+                <h3>1. Lógica Matemática</h3>
+            </div>
+
+            <div class="module-card active" onclick="launchGame('arqueomat.html')">
+                <div class="thumb-container">
+                    <img src="img/thumbs/arqueomat.jpg" alt="Sistemas de Conteo" onerror="this.src='https://via.placeholder.com/300x180/121824/00f0ff?text=Sistemas+de+Conteo'">
+                    <span class="badge active-badge">¡DISPONIBLE!</span>
+                </div>
+                <h3>2. Sistemas de Conteo</h3>
+            </div>
+
+            <div class="module-card locked">
+                <div class="thumb-container">
+                    <img src="img/thumbs/prox.jpg" alt="Números Reales" onerror="this.src='https://via.placeholder.com/300x180/121824/555555?text=🔒+Próximamente'">
+                    <span class="badge locked-badge">Próximamente</span>
+                </div>
+                <h3>3. Números Reales</h3>
+            </div>
+
+            <div class="module-card locked">
+                <div class="thumb-container">
+                    <img src="img/thumbs/prox.jpg" alt="Fraccionarios" onerror="this.src='https://via.placeholder.com/300x180/121824/555555?text=🔒+Próximamente'">
+                    <span class="badge locked-badge">Próximamente</span>
+                </div>
+                <h3>4. Números Fraccionarios</h3>
+            </div>
+
+            <div class="module-card locked">
+                <div class="thumb-container">
+                    <img src="img/thumbs/prox.jpg" alt="Exponentes" onerror="this.src='https://via.placeholder.com/300x180/121824/555555?text=🔒+Próximamente'">
+                    <span class="badge locked-badge">Próximamente</span>
+                </div>
+                <h3>5. Exponentes y Radicales</h3>
+            </div>
+
+            <div class="module-card locked">
+                <div class="thumb-container">
+                    <img src="img/thumbs/prox.jpg" alt="Medición" onerror="this.src='https://via.placeholder.com/300x180/121824/555555?text=🔒+Próximamente'">
+                    <span class="badge locked-badge">Próximamente</span>
+                </div>
+                <h3>6. Mediciones y Proporciones</h3>
+            </div>
+
+            <div class="module-card locked">
+                <div class="thumb-container">
+                    <img src="img/thumbs/prox.jpg" alt="Operaciones Combinadas" onerror="this.src='https://via.placeholder.com/300x180/121824/555555?text=🔒+Próximamente'">
+                    <span class="badge locked-badge">Próximamente</span>
+                </div>
+                <h3>7. Operaciones Combinadas</h3>
+            </div>
+
+        </div>
+
+        <button class="btn-return" onclick="returnToCover()">🏠 Volver a Portada</button>
+    </section>
+
+    <!-- MODAL AUDIO -->
+    <div id="modal-audio-settings" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>🎛️ Control de Volumen</h3>
+            <div class="slider-group">
+                <label for="volume-bg">Música 🎵</label>
+                <input type="range" id="volume-bg" min="0" max="1" step="0.05" value="0.5" oninput="updateVolumes()">
+            </div>
+            <div class="slider-group">
+                <label for="volume-sfx">Efectos 🔔</label>
+                <input type="range" id="volume-sfx" min="0" max="1" step="0.05" value="0.3" oninput="updateVolumes()">
+            </div>
+            <button class="btn-return" style="margin-top:0;" onclick="closeAudioSettings()">Guardar</button>
+        </div>
+    </div>
+
+    <footer class="institutional-footer">
+        <img src="img/main/logo.png" alt="Logo Institución" class="footer-logo" onerror="this.style.display='none'">
+        <span class="footer-text">C.E.T.i.s. N° 47</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">Roberto Gallegos Santos</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">2026</span>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

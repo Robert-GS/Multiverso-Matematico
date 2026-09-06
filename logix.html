@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salida Lógica: Decodifica la verdad y escapa</title>
+    <link rel="stylesheet" href="css/logix.css">
+    
+</head>
+<body>
+
+    <header class="top-bar">
+        <h1 class="logo">⌨ SALIDA LÓGICA ⌨</h1>
+        <div class="audio-controls-group">
+            <button class="btn-audio" onclick="window.location.href='index.html?screen=menu'">🌌 Multiverso</button>
+            <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">🔊 Sound ON</button>
+            <button id="btn-settings" class="btn-settings" onclick="openAudioSettings()">⚙️</button>
+        </div>
+    </header>
+
+<div class="game-card">
+
+    <!-- PANTALLA 1: PORTADA -->
+    <section id="screen-cover" class="screen active">
+        <img src="img/logix/portada.png" alt="Portada Salida Lógica" class="cover-bg-img" onerror="this.src='portada.jpg'">
+        
+        <div class="cover-overlay-content">
+            <div class="blink-text-full">
+                Presiona <strong>[ ENTER ]</strong> para Iniciar
+            </div>
+        </div>
+    </section>
+
+   <!-- PANTALLA 2: CONFIGURACIÓN DE DIFICULTAD -->
+    <section id="screen-setup" class="screen hidden">
+        <h2 class="setup-title">Configuración del Desafío</h2>
+        
+        <div class="setup-form">
+            <div class="input-group">
+                <label for="num-vars-select">Número de Variables Proposicionales:</label>
+                <select id="num-vars-select" class="custom-select">
+                    <option value="2" selected>2 Variables (A, B) — 4 Filas</option>
+                    <option value="3">3 Variables (A, B, C) — 8 Filas</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="max-attempts">Intentos por Puerta:</label>
+                <select id="max-attempts" class="custom-select">
+                    <option value="1">1 Intento (Extremo)</option>
+                    <option value="2">2 Intentos</option>
+                    <option value="3" selected>3 Intentos (Recomendado)</option>
+                    <option value="5">5 Intentos</option>
+                </select>
+            </div>
+
+            <div class="setup-buttons">
+                <button class="btn-start" onclick="startGame()">🔓 ¡INICIAR ESCAPE!</button>
+                <button class="btn-back" onclick="showScreen('screen-cover')">⬅ Regresar al Inicio</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PANTALLA 3: PANEL DE JUEGO (LABORATORIO) -->
+    <section id="screen-game" class="screen hidden">
+        <div class="panel-header">
+            <div id="door-status" class="door-status locked">🔒 PUERTA BLOQUEADA</div>
+            <div id="attempts-left" class="attempts-display">Intentos: ❤️❤️❤️</div>
+        </div>
+
+        <div class="target-code-box">
+            <span>Expresión a Descifrar:</span>
+            <h2 id="target-expression">A' ∧ B ∧ C'</h2>
+        </div>
+
+        <!-- TABLA DE VERDAD E INTERRUPTORES -->
+        <div class="table-container">
+            <table class="truth-table" id="truth-table">
+                <thead id="table-head">
+                    <!-- Se genera dinámicamente con JS -->
+                </thead>
+                <tbody id="table-body">
+                    <!-- Filas con interruptores V/F -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="feedback" class="feedback"></div>
+
+        <div class="game-action-buttons">
+            <button id="btn-submit" class="btn-start" onclick="checkAnswer()">⚡ VERIFICAR CÓDIGO</button>
+            <button id="btn-next" class="btn-next hidden" onclick="loadNextDoor()">Siguiente Puerta ➔</button>
+            <button class="btn-abort" onclick="confirmEndGame()">🏁 Terminar Partida</button>
+        </div>
+    </section>
+
+    <!-- PANTALLA 4: RESULTADOS -->
+    <section id="screen-results" class="screen hidden">
+        <h1 id="result-title">🚪 ¡LABORATORIO ESCAPADO!</h1>
+        <h2 id="result-message"></h2>
+        <button class="btn-start" onclick="showScreen('screen-setup')">Jugar de Nuevo 🔄</button>
+    </section>
+
+</div>
+
+<!-- MODAL DE AUDIO -->
+<div id="modal-audio-settings" class="modal-overlay hidden">
+    <div class="modal-content">
+        <h3>🎛️ Control de Volumen</h3>
+        
+        <div class="slider-group">
+            <label for="volume-bg">Música de Fondo 🎵</label>
+            <input type="range" id="volume-bg" min="0" max="1" step="0.05" value="0.5" oninput="updateVolumes()">
+        </div>
+        
+        <div class="slider-group">
+            <label for="volume-sfx">Efectos de Sonido 🔔</label>
+            <input type="range" id="volume-sfx" min="0" max="1" step="0.05" value="0.3" oninput="updateVolumes()">
+        </div>
+        
+        <button class="btn-start" onclick="closeAudioSettings()">Guardar y Cerrar</button>
+    </div>
+</div>
+
+    <footer class="institutional-footer">
+        <img src="img/main/logo.png" alt="Logo Institución" class="footer-logo" onerror="this.style.display='none'">
+        <span class="footer-text">C.E.T.i.s. N° 47</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">Roberto Gallegos Santos</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">2026</span>
+    </footer>
+
+<script src="js/logix.js"></script>
+</body>
+</html>

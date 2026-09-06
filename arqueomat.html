@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArqueoMat: El Enigma de los Números Antiguos</title>
+    <link rel="stylesheet" href="css/arqueomat.css">
+</head>
+<body>
+
+    <!-- ENCABEZADO CON NAVEGACIÓN Y CONTROLES DE AUDIO INTEGRADOS -->
+    <header class="top-bar">
+        <h1 class="logo">🏛️ ARQUEOMAT 🏛️</h1>
+        <div class="audio-controls-group">
+            <button class="btn-audio" onclick="window.location.href='index.html?screen=menu'">🌌 Multiverso</button>
+            <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">🔊 Sound ON</button>
+            <button id="btn-settings" class="btn-settings" onclick="openAudioSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <div class="game-card">
+
+        <!-- PANTALLA 1: PORTADA -->
+        <section id="screen-cover" class="screen active">
+            <div class="blink-text-full">
+                Presiona <strong>[ ENTER ]</strong> para comenzar
+            </div>
+        </section>
+
+        <!-- PANTALLA 2: SELECCIÓN DE SISTEMA -->
+        <section id="screen-system" class="screen hidden">
+            <h2>Selecciona el Sistema de Numeración</h2>
+            <div class="menu-grid">
+                <button onclick="selectSystem('egipcia')">𓏞 Egipcia 𓏞</button>
+                <button onclick="selectSystem('mesopotamica')">📐 Mesopotámica 📐</button>
+                <button onclick="selectSystem('maya')">🌽 Maya 🌽</button>
+                <button onclick="selectSystem('mixta')">𔔁 Mixta 𔔁</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-cover')">⬅ Regresar al Inicio</button>
+        </section>
+
+        <!-- PANTALLA 3: DIFICULTAD -->
+        <section id="screen-difficulty" class="screen hidden">
+            <h2>Selecciona el Rango de Números</h2>
+            <div class="menu-grid">
+                <button onclick="selectDifficulty(1, 9)">Nivel 1: 1 a 9</button>
+                <button onclick="selectDifficulty(10, 99)">Nivel 2: 10 a 99</button>
+                <button onclick="selectDifficulty(100, 999)">Nivel 3: 100 a 999</button>
+                <button onclick="selectDifficulty(1000, 9999)">Nivel 4: 1,000 a 9,999</button>
+                <button onclick="selectDifficulty(10000, 1000000)">Nivel 5: 10,000 a 1,000,000</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-system')">⬅ Regresar a Sistemas</button>
+        </section>
+
+        <!-- PANTALLA 4: CONFIGURACIÓN DE EQUIPOS -->
+        <section id="screen-setup" class="screen hidden">
+            <h2>Configuración de la Partida</h2>
+            <form id="setup-form" onsubmit="startGame(event)">
+                <div class="input-group">
+                    <label for="team1-name">Nombre Equipo 1:</label>
+                    <input type="text" id="team1-name" value="Equipo A" required>
+                </div>
+                <div class="input-group">
+                    <label for="team2-name">Nombre Equipo 2:</label>
+                    <input type="text" id="team2-name" value="Equipo B" required>
+                </div>
+                <div class="input-group">
+                    <label for="total-rounds">Cantidad de Reactivos:</label>
+                    <select id="total-rounds">
+                        <option value="6">6 Reactivos</option>
+                        <option value="10" selected>10 Reactivos</option>
+                        <option value="16">16 Reactivos</option>
+                        <option value="20">20 Reactivos</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="question-type">Tipo de Reactivo:</label>
+                    <select id="question-type">
+                        <option value="multiple">Opción Múltiple (4 opciones)</option>
+                        <option value="direct">Respuesta Directa (Escribir número)</option>
+                        <option value="mixed">Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">¡COMENZAR DESAFÍO!</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-difficulty')">⬅ Regresar a Dificultad</button>
+        </section>
+
+        <!-- PANTALLA 5: JUEGO -->
+        <section id="screen-game" class="screen hidden">
+            <div class="scoreboard">
+                <div id="team1-display" class="team-score active-team">Equipo 1: 0 pts</div>
+                <div id="round-info">Pregunta: 1 / 10</div>
+                <div id="team2-display" class="team-score">Equipo 2: 0 pts</div>
+            </div>
+
+            <p class="instruction">Traduce el número mostrado a nuestro sistema decimal:</p>
+
+            <div class="egypt-number-container" id="egypt-display"></div>
+
+            <!-- Opciones Múltiples -->
+            <div class="options-grid" id="options-container"></div>
+
+            <!-- Entrada Directa -->
+            <div id="direct-input-container" class="direct-input-container hidden">
+                <input type="text" id="direct-answer" placeholder="Escribe el número aquí..." autocomplete="off">
+                <button id="btn-submit-answer" onclick="checkDirectAnswer()">Enviar Respuesta</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="game-action-buttons">
+                <button id="btn-next" class="btn-next hidden" onclick="loadNextQuestion()">Siguiente Pregunta ➔</button>
+                <button class="btn-abort" onclick="confirmEndGame()">🏁 Terminar Partida</button>
+            </div>
+        </section>
+
+        <!-- PANTALLA 6: RESULTADOS -->
+        <section id="screen-results" class="screen hidden">
+            <h1>🏆 ¡FIN DEL JUEGO! 🏆</h1>
+            <h2 id="winner-message"></h2>
+            <div class="final-scores" id="final-scores"></div>
+            <button class="btn-start" onclick="resetToSystemSelection()">Jugar de Nuevo 🔄</button>
+        </section>
+
+    </div>
+
+    <!-- MODAL DE AJUSTE DE VOLUMEN (Ubicado afuera de game-card para cubrir pantalla completa) -->
+    <div id="modal-audio-settings" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>🎛️ Control de Volumen</h3>
+            
+            <div class="slider-group">
+                <label for="volume-bg">Música de Fondo 🎵</label>
+                <input type="range" id="volume-bg" min="0" max="1" step="0.05" value="0.5" oninput="updateVolumes()">
+            </div>
+
+            <div class="slider-group">
+                <label for="volume-sfx">Efectos de Sonido 🔔</label>
+                <input type="range" id="volume-sfx" min="0" max="1" step="0.05" value="0.3" oninput="updateVolumes()">
+            </div>
+
+            <button class="btn-start" onclick="closeAudioSettings()">Guardar y Cerrar</button>
+        </div>
+    </div>
+
+    <footer class="institutional-footer">
+        <img src="img/main/logo.png" alt="Logo Institución" class="footer-logo" onerror="this.style.display='none'">
+        <span class="footer-text">C.E.T.i.s. N° 47</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">Roberto Gallegos Santos</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">2026</span>
+    </footer>
+
+    <script src="js/arqueomat.js"></script>
+</body>
+</html>

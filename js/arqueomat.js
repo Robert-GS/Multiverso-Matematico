@@ -100,7 +100,7 @@ let correctAnswer = 0;
 let questionType = 'multiple';
 let currentQuestionMode = 'multiple';
 
-document.addEventListener('keydown', function(event) {
+/*document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         const coverScreen = document.getElementById('screen-cover');
         if (!coverScreen.classList.contains('hidden')) {
@@ -114,7 +114,34 @@ document.addEventListener('keydown', function(event) {
             }
         }
     }
+});*/
+
+// Referencia a la portada del juego
+const screenCover = document.getElementById('screen-cover');
+
+// Función central para iniciar el juego desde la portada
+function startFromCover() {
+    // Verifica que la portada esté visible (sin la clase 'hidden')
+    if (screenCover && !screenCover.classList.contains('hidden')) {
+        // Descomenta esta línea si deseas activar el audio al presionar/tocar
+        // if (sounds && sounds.bg) sounds.bg.play().catch(err => console.log("Audio bloqueado:", err));
+
+        // Transición a la siguiente pantalla (Ajusta la pantalla destino según el juego)
+        showScreen('screen-system'); 
+    }
+}
+
+// 1. Escuchar tecla ENTER en PC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        startFromCover();
+    }
 });
+
+// 2. Escuchar TAP / CLIC en Celulares, Tablets y Mouse
+if (screenCover) {
+    screenCover.addEventListener('click', startFromCover);
+}
 
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));

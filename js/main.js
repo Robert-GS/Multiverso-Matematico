@@ -9,7 +9,7 @@ let isAudioActive = localStorage.getItem('multiverse_audio_active') !== 'false';
 let currentBgVolume = parseFloat(localStorage.getItem('multiverse_bg_vol')) || 0.5;
 let currentSfxVolume = parseFloat(localStorage.getItem('multiverse_sfx_vol')) || 0.3;
 
-document.addEventListener('keydown', function(e) {
+/*document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
         const cover = document.getElementById('screen-cover');
         if (cover && !cover.classList.contains('hidden')) {
@@ -19,7 +19,36 @@ document.addEventListener('keydown', function(e) {
             showScreen('screen-menu');
         }
     }
+});*/
+
+// Referencia a la portada
+const screenCover = document.getElementById('screen-cover');
+
+// Función única para ingresar al menú principal (PC y Celulares)
+function enterMultiverse() {
+    // Verificamos si la portada existe y está visible (sin la clase 'hidden')
+    if (screenCover && !screenCover.classList.contains('hidden')) {
+        // Reproduce el audio si está activo
+        if (typeof isAudioActive !== 'undefined' && isAudioActive && sounds?.bg) {
+            sounds.bg.play().catch(() => {});
+        }
+        
+        // Avanza al menú principal
+        showScreen('screen-menu'); 
+    }
+}
+
+// 1. Escuchar tecla ENTER en PC
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        enterMultiverse();
+    }
 });
+
+// 2. Escuchar TAP / CLIC en Celulares, Tablets y Mouse
+if (screenCover) {
+    screenCover.addEventListener('click', enterMultiverse);
+}
 
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));

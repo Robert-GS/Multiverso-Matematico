@@ -1,5 +1,5 @@
 // ==========================================
-// 1. SISTEMA DE AUDIO Y SONIDOS (CORREGIDO)
+// 1. SISTEMA DE AUDIO Y SONIDOS
 // ==========================================
 const sounds = {
     bg: new Audio('audio/arqueomat/bg-music2.mp3'),
@@ -11,7 +11,6 @@ const sounds = {
 
 sounds.bg.loop = true;
 
-// Leer si el audio está ACTIVO (si no existe previa configuración, inicia activado 'true')
 let isAudioActive = localStorage.getItem('multiverse_audio_active') !== 'false';
 let bgVolume = parseFloat(localStorage.getItem('multiverse_bg_vol')) || 0.5;
 let sfxVolume = parseFloat(localStorage.getItem('multiverse_sfx_vol')) || 0.3;
@@ -29,7 +28,6 @@ function applyVolumes() {
         if (btn) btn.innerText = '🔇 Sound OFF';
     }
 
-    // Guardar estado sincronizado en memoria local
     localStorage.setItem('multiverse_audio_active', isAudioActive);
     localStorage.setItem('multiverse_bg_vol', bgVolume);
     localStorage.setItem('multiverse_sfx_vol', sfxVolume);
@@ -54,7 +52,6 @@ function playSFX(type) {
     }
 }
 
-// Abrir y Cerrar Modal de Configuración
 function openAudioSettings() {
     document.getElementById('modal-audio-settings').classList.remove('hidden');
 }
@@ -69,7 +66,6 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Inicializar el estado de audio inmediatamente al cargar la página
 applyVolumes();
 
 // ==========================================
@@ -86,13 +82,29 @@ const SYMBOLS_EGYPT = [
 ];
 
 let selectedSystem = 'egipcia';
-let currentActiveSystem = 'egipcia'; // Para cuando el modo es 'mixta'
+let currentActiveSystem = 'egipcia'; 
 let minRange = 1;
 let maxRange = 9999;
+
+// Control de Modos
+let gameMode = 'equipos'; // 'solitario' o 'equipos'
+let playerName = "Estudiante";
 let team1Name = "Equipo 1";
 let team2Name = "Equipo 2";
+
+// Puntajes
 let scoreTeam1 = 0;
 let scoreTeam2 = 0;
+let soloCorrect = 0;
+let soloTotal = 0;
+
+// Desglose para modo mixto / solitario
+let soloMultipleTotal = 0;
+let soloMultipleCorrect = 0;
+let soloDirectTotal = 0;
+let soloDirectCorrect = 0;
+
+
 let currentTurn = 1; 
 let currentRound = 1;
 let maxRounds = 10;
@@ -100,45 +112,30 @@ let correctAnswer = 0;
 let questionType = 'multiple';
 let currentQuestionMode = 'multiple';
 
-/*document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        const coverScreen = document.getElementById('screen-cover');
-        if (!coverScreen.classList.contains('hidden')) {
-            //if (!isMuted) sounds.bg.play().catch(() => {});
-            showScreen('screen-system');
-        } else {
-            const directContainer = document.getElementById('direct-input-container');
-            if (!directContainer.classList.contains('hidden')) {
-                const submitBtn = document.getElementById('btn-submit-answer');
-                if (!submitBtn.disabled) checkDirectAnswer();
-            }
-        }
-    }
-});*/
 
-// Referencia a la portada del juego
+
 const screenCover = document.getElementById('screen-cover');
 
-// Función central para iniciar el juego desde la portada
 function startFromCover() {
-    // Verifica que la portada esté visible (sin la clase 'hidden')
     if (screenCover && !screenCover.classList.contains('hidden')) {
-        // Descomenta esta línea si deseas activar el audio al presionar/tocar
-        // if (sounds && sounds.bg) sounds.bg.play().catch(err => console.log("Audio bloqueado:", err));
-
-        // Transición a la siguiente pantalla (Ajusta la pantalla destino según el juego)
         showScreen('screen-system'); 
     }
 }
 
-// 1. Escuchar tecla ENTER en PC
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
-        startFromCover();
+        if (screenCover && !screenCover.classList.contains('hidden')) {
+            startFromCover();
+        } else {
+            const directContainer = document.getElementById('direct-input-container');
+            if (directContainer && !directContainer.classList.contains('hidden')) {
+                const submitBtn = document.getElementById('btn-submit-answer');
+                if (submitBtn && !submitBtn.disabled) checkDirectAnswer();
+            }
+        }
     }
 });
 
-// 2. Escuchar TAP / CLIC en Celulares, Tablets y Mouse
 if (screenCover) {
     screenCover.addEventListener('click', startFromCover);
 }
@@ -156,15 +153,63 @@ function selectSystem(system) {
 function selectDifficulty(min, max) {
     minRange = min;
     maxRange = max;
-    showScreen('screen-setup');
+    showScreen('screen-mode');
 }
 
+function selectGameMode(mode) {
+    gameMode = mode;
+    if (mode === 'solitario') {
+        showScreen('screen-setup-solo');
+    } else {
+        showScreen('screen-setup');
+    }
+}
+
+// Iniciar Juego en Solitario
+function startSoloGame(event) {
+    event.preventDefault();
+
+    const nameInput = document.getElementById('player-name').value.trim();
+    if (!nameInput) {
+        alert("Por favor ingresa tu nombre completo para el registro de tu práctica.");
+        return;
+    }
+
+    playerName = nameInput;
+    questionType = document.getElementById('question-type-solo').value;
+
+    soloCorrect = 0;
+    soloTotal = 0;
+    soloMultipleTotal = 0;
+    soloMultipleCorrect = 0;
+    soloDirectTotal = 0;
+    soloDirectCorrect = 0;
+
+    showScreen('screen-game');
+    loadNextQuestion();
+}
+
+// Iniciar Juego en Competencia (Equipos)
 function startGame(event) {
     event.preventDefault();
 
-    team1Name = document.getElementById('team1-name').value || "Equipo 1";
-    team2Name = document.getElementById('team2-name').value || "Equipo 2";
-    maxRounds = parseInt(document.getElementById('total-rounds').value);
+    const t1 = document.getElementById('team1-name').value.trim();
+    const t2 = document.getElementById('team2-name').value.trim();
+
+    // Validaciones de Nombres
+    if (!t1 || !t2) {
+        alert("Por favor ingresa un nombre válido para ambos equipos.");
+        return;
+    }
+
+    if (t1.toLowerCase() === t2.toLowerCase()) {
+        alert("Los nombres de los equipos no pueden ser iguales. Elige nombres distintos.");
+        return;
+    }
+
+    team1Name = t1;
+    team2Name = t2;
+    maxRounds = parseInt(document.getElementById('total-rounds').value, 10);
     questionType = document.getElementById('question-type').value;
 
     scoreTeam1 = 0;
@@ -189,15 +234,14 @@ function generateNumber() {
 }
 
 // ==========================================
-// 3. RENDERIZADORES DE SISTEMAS NUMÉRICOS
+// 3. RENDERIZADORES DE SISTEMAS NUMÉRICOS (OPTIMIZADOS)
 // ==========================================
 
 function renderNumber(num) {
     const displayContainer = document.getElementById('egypt-display');
     displayContainer.innerHTML = '';
-    displayContainer.className = "egypt-number-container"; // Reset clases
+    displayContainer.className = "egypt-number-container"; 
 
-    // Selección de sistema activo
     if (selectedSystem === 'mixta') {
         const sysList = ['egipcia', 'mesopotamica', 'maya'];
         currentActiveSystem = sysList[Math.floor(Math.random() * sysList.length)];
@@ -214,9 +258,17 @@ function renderNumber(num) {
     }
 }
 
-// --- EGIPCIO ---
+// --- EGIPCIO (Con Escalado Dinámico) ---
 function renderEgyptian(num, container) {
     let temp = num;
+    
+    // Ajustar escala visual según la magnitud del número
+    if (num >= 100000) {
+        container.classList.add('egypt-scale-compact');
+    } else if (num >= 1000) {
+        container.classList.add('egypt-scale-medium');
+    }
+
     for (let item of SYMBOLS_EGYPT) {
         let count = Math.floor(temp / item.val);
         temp %= item.val;
@@ -247,13 +299,11 @@ function renderEgyptian(num, container) {
     }
 }
 
-// --- MESOPOTÁMICO (BASE 60) ---
-// --- MESOPOTÁMICO CON AGRUPACIÓN EN FILAS DE 3 (IGUAL A LA TABLILLA) ---
+// --- MESOPOTÁMICO (Con Alineación Unificada) ---
 function renderMesopotamian(num, container) {
     let temp = num;
     let base60Digits = [];
 
-    // Descomponer en potencias de 60
     if (temp === 0) base60Digits.push(0);
     while (temp > 0) {
         base60Digits.unshift(temp % 60);
@@ -267,7 +317,6 @@ function renderMesopotamian(num, container) {
         let tens = Math.floor(val / 10);
         let ones = val % 10;
 
-        // --- DIBUJAR DECENAS (Cuñas 𒌋) ---
         if (tens > 0) {
             const tensGroup = document.createElement('div');
             tensGroup.className = 'meso-subgroup';
@@ -292,7 +341,6 @@ function renderMesopotamian(num, container) {
             digitGroup.appendChild(tensGroup);
         }
 
-        // --- DIBUJAR UNIDADES (Clavos 𒁹) ---
         if (ones > 0) {
             const onesGroup = document.createElement('div');
             onesGroup.className = 'meso-subgroup';
@@ -317,7 +365,6 @@ function renderMesopotamian(num, container) {
             digitGroup.appendChild(onesGroup);
         }
 
-        // Si la cifra es 0
         if (val === 0) {
             digitGroup.innerHTML = `<span style="font-size: 1.5rem; color: #888;">[0]</span>`;
         }
@@ -326,7 +373,7 @@ function renderMesopotamian(num, container) {
     });
 }
 
-// --- MAYA (BASE 20 VERTICAL) ---
+// --- MAYA (Con Indicadores de Nivel Posicional) ---
 function renderMaya(num, container) {
     container.classList.add('maya-number-container');
     let temp = num;
@@ -334,37 +381,46 @@ function renderMaya(num, container) {
 
     if (temp === 0) base20Digits.push(0);
     while (temp > 0) {
-        base20Digits.push(temp % 20); // Posiciones inferiores primero
+        base20Digits.push(temp % 20);
         temp = Math.floor(temp / 20);
     }
 
-    // Dibujar verticalmente (los niveles superiores irán arriba por CSS column-reverse)
-    base20Digits.forEach(val => {
+    // Dibujar cada nivel posicional
+    base20Digits.forEach((val, index) => {
         const levelGroup = document.createElement('div');
         levelGroup.className = 'maya-level';
 
+        // Etiqueta discreta del valor posicional (ej. x1, x20, x400)
+        const multiplier = Math.pow(20, index);
+        const tag = document.createElement('span');
+        tag.className = 'maya-level-tag';
+        tag.innerText = `(x${multiplier.toLocaleString()})`;
+        levelGroup.appendChild(tag);
+
+        const symbolBox = document.createElement('div');
+        symbolBox.className = 'maya-symbol-box';
+
         if (val === 0) {
-            levelGroup.innerHTML = `<div class="maya-zero">🐚</div>`;
+            symbolBox.innerHTML = `<div class="maya-zero">🐚</div>`;
         } else {
             let bars = Math.floor(val / 5);
             let dots = val % 5;
 
-            // Puntos
             if (dots > 0) {
                 const dotsDiv = document.createElement('div');
                 dotsDiv.className = 'maya-dots';
                 dotsDiv.innerHTML = '•'.repeat(dots);
-                levelGroup.appendChild(dotsDiv);
+                symbolBox.appendChild(dotsDiv);
             }
 
-            // Rayas
             for (let b = 0; b < bars; b++) {
                 const barDiv = document.createElement('div');
                 barDiv.className = 'maya-bar';
-                levelGroup.appendChild(barDiv);
+                symbolBox.appendChild(barDiv);
             }
         }
 
+        levelGroup.appendChild(symbolBox);
         container.appendChild(levelGroup);
     });
 }
@@ -385,7 +441,7 @@ function generateOptions(correct) {
 }
 
 function loadNextQuestion() {
-    if (currentRound > maxRounds) {
+    if (gameMode === 'equipos' && currentRound > maxRounds) {
         endGame();
         return;
     }
@@ -461,64 +517,152 @@ function checkDirectAnswer() {
 
 function processResult(isCorrect) {
     const feedback = document.getElementById('feedback');
-    const activeTeamName = currentTurn === 1 ? team1Name : team2Name;
 
-    if (isCorrect) {
-        playSFX('correct');
-        feedback.style.color = 'green';
-        feedback.innerText = `¡Correcto, ${activeTeamName}! (+1 Punto)`;
-        if (currentTurn === 1) scoreTeam1++;
-        else scoreTeam2++;
+    if (gameMode === 'solitario') {
+        soloTotal++;
+
+        // Registrar estadísticas específicas por tipo de reactivo
+        if (currentQuestionMode === 'multiple') {
+            soloMultipleTotal++;
+            if (isCorrect) soloMultipleCorrect++;
+        } else if (currentQuestionMode === 'direct') {
+            soloDirectTotal++;
+            if (isCorrect) soloDirectCorrect++;
+        }
+
+        if (isCorrect) {
+            playSFX('correct');
+            soloCorrect++;
+            feedback.style.color = 'green';
+            feedback.innerText = `¡Correcto, ${playerName}! ✨ (+1 Resuelto)`;
+        } else {
+            playSFX('wrong');
+            feedback.style.color = 'red';
+            feedback.innerText = `Incorrecto. La respuesta era ${correctAnswer.toLocaleString()}`;
+        }
     } else {
-        playSFX('wrong');
-        feedback.style.color = 'red';
-        feedback.innerText = `Incorrecto (${activeTeamName}). La respuesta era ${correctAnswer.toLocaleString()}`;
+        const activeTeamName = currentTurn === 1 ? team1Name : team2Name;
+        if (isCorrect) {
+            playSFX('correct');
+            feedback.style.color = 'green';
+            feedback.innerText = `¡Correcto, ${activeTeamName}! (+1 Punto)`;
+            if (currentTurn === 1) scoreTeam1++;
+            else scoreTeam2++;
+        } else {
+            playSFX('wrong');
+            feedback.style.color = 'red';
+            feedback.innerText = `Incorrecto (${activeTeamName}). La respuesta era ${correctAnswer.toLocaleString()}`;
+        }
+        currentTurn = currentTurn === 1 ? 2 : 1;
+        currentRound++;
     }
 
-    currentTurn = currentTurn === 1 ? 2 : 1;
-    currentRound++;
-
     document.getElementById('btn-next').classList.remove('hidden');
+    updateUI();
 }
 
 function updateUI() {
-    document.getElementById('team1-display').innerText = `${team1Name}: ${scoreTeam1} pts`;
-    document.getElementById('team2-display').innerText = `${team2Name}: ${scoreTeam2} pts`;
-    
+    const container = document.getElementById('scoreboard-container');
+    const abortBtn = document.getElementById('btn-abort-game');
     let systemLabel = currentActiveSystem.toUpperCase();
-    document.getElementById('round-info').innerText = `Reactivo: ${currentRound} / ${maxRounds} (${systemLabel})`;
 
-    if (currentTurn === 1) {
-        document.getElementById('team1-display').classList.add('active-team');
-        document.getElementById('team2-display').classList.remove('active-team');
+    if (gameMode === 'solitario') {
+        abortBtn.innerText = "🏁 Terminar Práctica";
+        container.innerHTML = `
+            <div class="team-score active-team">👤 ${playerName}</div>
+            <div id="round-info">Sistema: ${systemLabel}</div>
+            <div class="team-score">🎯 Correctos: ${soloCorrect} / ${soloTotal}</div>
+        `;
     } else {
-        document.getElementById('team2-display').classList.add('active-team');
-        document.getElementById('team1-display').classList.remove('active-team');
+        abortBtn.innerText = "🏁 Terminar Partida";
+        let team1Class = currentTurn === 1 ? 'active-team' : '';
+        let team2Class = currentTurn === 2 ? 'active-team' : '';
+
+        container.innerHTML = `
+            <div id="team1-display" class="team-score ${team1Class}">${team1Name}: ${scoreTeam1} pts</div>
+            <div id="round-info">Reactivo: ${currentRound} / ${maxRounds} (${systemLabel})</div>
+            <div id="team2-display" class="team-score ${team2Class}">${team2Name}: ${scoreTeam2} pts</div>
+        `;
     }
 }
 
 function confirmEndGame() {
-    const confirmExit = confirm("¿Estás seguro de que deseas terminar la partida actual?");
-    if (confirmExit) {
+    const msg = gameMode === 'solitario' 
+        ? "¿Deseas finalizar tu sesión de práctica y ver tu reporte de ejercicios?" 
+        : "¿Estás seguro de que deseas terminar la partida actual?";
+
+    if (confirm(msg)) {
         endGame();
     }
 }
 
 function endGame() {
-    let winnerMessage = "";
-    if (scoreTeam1 > scoreTeam2) {
-        winnerMessage = `🏆 ¡Ganador: ${team1Name}! 🏆`;
-    } else if (scoreTeam2 > scoreTeam1) {
-        winnerMessage = `🏆 ¡Ganador: ${team2Name}! 🏆`;
-    } else {
-        winnerMessage = "🤝 ¡Empate Espectacular! 🤝";
-    }
+    const resultsTitle = document.getElementById('results-title');
+    const winnerMessage = document.getElementById('winner-message');
+    const finalScores = document.getElementById('final-scores');
 
-    document.getElementById('winner-message').innerText = winnerMessage;
-    document.getElementById('final-scores').innerHTML = `
-        <p><strong>${team1Name}:</strong> ${scoreTeam1} puntos</p>
-        <p><strong>${team2Name}:</strong> ${scoreTeam2} puntos</p>
-    `;
+    if (gameMode === 'solitario') {
+        resultsTitle.innerText = "📋 REPORTE DE PRÁCTICA INDIVIDUAL 📋";
+        winnerMessage.innerText = `¡Gran trabajo, ${playerName}!`;
+
+        const accuracy = soloTotal > 0 ? Math.round((soloCorrect / soloTotal) * 100) : 0;
+
+        // Texto descriptivo del tipo de reactivo
+        let typeLabel = "Opción Múltiple";
+        if (questionType === 'direct') typeLabel = "Respuesta Directa";
+        if (questionType === 'mixed') typeLabel = "Mixto (Aleatorio)";
+
+        // HTML base del reporte
+        let reportHTML = `
+            <div style="background: rgba(0,0,0,0.05); padding: 15px; border-radius: 8px; border: 1px dashed #c8a261; text-align: left; max-width: 450px; margin: 0 auto;">
+                <p><strong>Alumno:</strong> ${playerName}</p>
+                <p><strong>Sistema Practicado:</strong> ${selectedSystem.toUpperCase()}</p>
+                <p><strong>Rango Dificultad:</strong> ${minRange.toLocaleString()} a ${maxRange.toLocaleString()}</p>
+                <p><strong>Tipo de Reactivo:</strong> ${typeLabel}</p>
+                <hr style="border: 0; border-top: 1px dashed #c8a261; margin: 10px 0;">
+                <p><strong>Total de Ejercicios Intentados:</strong> ${soloTotal}</p>
+                <p><strong>Aciertos Totales:</strong> ${soloCorrect}</p>
+                <p><strong>Efectividad Global:</strong> ${accuracy}%</p>
+        `;
+
+        // Si eligió Mixto, agregar el desglose detallado
+        if (questionType === 'mixed') {
+            const multAcc = soloMultipleTotal > 0 ? Math.round((soloMultipleCorrect / soloMultipleTotal) * 100) : 0;
+            const dirAcc = soloDirectTotal > 0 ? Math.round((soloDirectCorrect / soloDirectTotal) * 100) : 0;
+
+            reportHTML += `
+                <hr style="border: 0; border-top: 1px dashed #c8a261; margin: 10px 0;">
+                <p style="font-weight: bold; color: #8b0000; text-align: center;">📊 Desglose por Tipo de Reactivo:</p>
+                <p>• <strong>Opción Múltiple:</strong> ${soloMultipleCorrect} / ${soloMultipleTotal} correctos (${multAcc}%)</p>
+                <p>• <strong>Respuesta Directa:</strong> ${soloDirectCorrect} / ${soloDirectTotal} correctos (${dirAcc}%)</p>
+            `;
+        }
+
+        reportHTML += `
+            </div>
+            <p style="font-size: 0.95rem; color: #555; margin-top: 15px;">
+                📷 <em>Por favor toma una captura de pantalla a este reporte como evidencia de tu tarea.</em>
+            </p>
+        `;
+
+        finalScores.innerHTML = reportHTML;
+    } else {
+        resultsTitle.innerText = "🏆 ¡FIN DEL JUEGO! 🏆";
+        let winnerText = "";
+        if (scoreTeam1 > scoreTeam2) {
+            winnerText = `🏆 ¡Ganador: ${team1Name}! 🏆`;
+        } else if (scoreTeam2 > scoreTeam1) {
+            winnerText = `🏆 ¡Ganador: ${team2Name}! 🏆`;
+        } else {
+            winnerText = "🤝 ¡Empate Espectacular! 🤝";
+        }
+
+        winnerMessage.innerText = winnerText;
+        finalScores.innerHTML = `
+            <p><strong>${team1Name}:</strong> ${scoreTeam1} puntos</p>
+            <p><strong>${team2Name}:</strong> ${scoreTeam2} puntos</p>
+        `;
+    }
 
     showScreen('screen-results');
     playSFX('victory');

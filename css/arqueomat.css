@@ -368,56 +368,60 @@ button:disabled {
 }
 
 /* ==========================================
-   7. ESTILOS DE SISTEMAS MAYA Y MESOPOTÁMICO
+   7. ESTILOS DE SISTEMAS NUMÉRICOS (OPTIMIZADOS)
    ========================================== */
-/* Sistema Maya */
-.maya-number-container {
+
+/* --- SISTEMA EGIPCIO (Responsivo) --- */
+.egypt-number-container {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
     gap: 12px;
-    padding: 15px;
+    flex-wrap: wrap; /* Permite envolver símbolos si es muy largo */
+    min-height: 120px;
+    margin: 15px 0;
+    padding: 20px;
+    background: #fff;
+    border: 2px dashed #b8860b;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.maya-level {
+/* Reducción de escala para números grandes */
+.egypt-scale-medium .symbol-row span {
+    font-size: 1.8rem;
+}
+
+.egypt-scale-compact .symbol-row span {
+    font-size: 1.4rem;
+}
+
+.digit-group {
     display: flex;
     flex-direction: column-reverse;
+    gap: 2px;
     align-items: center;
-    gap: 4px;
-    padding: 8px 15px;
-    border-bottom: 2px dashed rgba(200, 162, 97, 0.4);
-    min-width: 80px;
 }
 
-.maya-level:last-child {
-    border-bottom: none;
-}
-
-.maya-dots {
+.symbol-row {
     display: flex;
-    gap: 6px;
-    font-size: 2rem;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.symbol-row span {
+    font-size: 2.2rem;
     line-height: 1;
 }
 
-.maya-bar {
-    width: 50px;
-    height: 10px;
-    background-color: #333;
-    border-radius: 4px;
-    margin: 2px 0;
-}
-
-.maya-zero {
-    font-size: 2.2rem;
-}
-
-/* Sistema Mesopotámico */
+/* --- SISTEMA MESOPOTÁMICO (Alineación Fija) --- */
 .meso-digit-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 18px;
+    padding: 8px 14px;
     background: rgba(0, 0, 0, 0.04);
     border-radius: 8px;
     border: 1px dashed rgba(200, 162, 97, 0.6);
@@ -426,26 +430,92 @@ button:disabled {
 .meso-subgroup {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 2px;
 }
 
 .meso-row {
     display: flex;
+    justify-content: center;
     gap: 3px;
     line-height: 1;
 }
 
-.meso-ten {
-    font-size: 2.2rem;
-    color: #8b0000;
+.meso-ten, .meso-one {
+    font-size: 2rem;
     font-weight: bold;
+    display: inline-block;
+    width: 24px;
+    text-align: center;
+    line-height: 1;
+}
+
+.meso-ten {
+    color: #8b0000;
 }
 
 .meso-one {
-    font-size: 2.2rem;
     color: #2b2b2b;
+}
+
+/* --- SISTEMA MAYA (Estructura y Delimitación) --- */
+.maya-number-container {
+    display: flex;
+    flex-direction: column-reverse; /* Niveles superiores arriba */
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+}
+
+.maya-level {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 220px;
+    padding: 10px 15px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(200, 162, 97, 0.5);
+    border-radius: 8px;
+}
+
+.maya-level-tag {
+    position: absolute;
+    left: 10px;
+    font-size: 0.8rem;
     font-weight: bold;
+    color: #8c7b6b;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.maya-symbol-box {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 4px;
+}
+
+.maya-dots {
+    display: flex;
+    gap: 6px;
+    font-size: 2.2rem;
+    line-height: 0.8;
+    color: #2c1d11;
+}
+
+.maya-bar {
+    width: 55px;
+    height: 10px;
+    background-color: #2c1d11;
+    border-radius: 4px;
+    margin: 2px 0;
+}
+
+.maya-zero {
+    font-size: 2.2rem;
 }
 
 /* ==========================================
@@ -524,4 +594,15 @@ button:disabled {
 .footer-separator {
     color: #00f0ff; /* Resalta con el neón del juego */
     opacity: 0.5;
+}
+
+/* Estilos para el Reporte Final de Práctica Individual */
+#final-scores hr {
+    border: none;
+    border-top: 1px dashed #c8a261;
+    margin: 12px 0;
+}
+
+#final-scores p {
+    margin: 6px 0;
 }

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salida Lógica: Decodifica la verdad y escapa</title>
     <link rel="stylesheet" href="css/logix.css">
-    
 </head>
 <body>
 
@@ -36,6 +35,11 @@
         <h2 class="setup-title">Configuración del Desafío</h2>
         
         <div class="setup-form">
+            <div class="input-group">
+                <label for="student-name">Nombre del Alumno:</label>
+                <input type="text" id="student-name" class="custom-input" placeholder="Escribe tu nombre completo" autocomplete="off">
+            </div>
+
             <div class="input-group">
                 <label for="num-vars-select">Número de Variables Proposicionales:</label>
                 <select id="num-vars-select" class="custom-select">
@@ -96,9 +100,27 @@
 
     <!-- PANTALLA 4: RESULTADOS -->
     <section id="screen-results" class="screen hidden">
-        <h1 id="result-title">🚪 ¡LABORATORIO ESCAPADO!</h1>
-        <h2 id="result-message"></h2>
-        <button class="btn-start" onclick="showScreen('screen-setup')">Jugar de Nuevo 🔄</button>
+        <div class="report-box">
+            <h2 class="report-header">📋 REPORTE DE PRÁCTICA INDIVIDUAL 📋</h2>
+            
+            <div class="report-details">
+                <p><strong>Alumno:</strong> <span id="res-student-name">-</span></p>
+                <p><strong>Tipo de juego:</strong> <span id="res-game-type">-</span></p>
+                <p><strong>Intentos permitidos por ejercicio:</strong> <span id="res-max-attempts">-</span></p>
+                <p><strong>Total de Ejercicios Intentados:</strong> <span id="res-total-exercices">0</span></p>
+                <p><strong>Promedio de intentos por ejercicio:</strong> <span id="res-avg-attempts">0.0</span></p>
+                <p><strong>Aciertos Totales:</strong> <span id="res-total-correct">0</span></p>
+                <p><strong>Efectividad Global:</strong> <span id="res-effectiveness">0%</span></p>
+            </div>
+
+            <div class="report-footer-note">
+                📷 Por favor toma una captura de pantalla a este reporte como evidencia de tu tarea.
+            </div>
+        </div>
+
+        <div class="setup-buttons">
+            <button class="btn-start" onclick="showScreen('screen-setup')">🔄 Jugar de nuevo</button>
+        </div>
     </section>
 
 </div>

@@ -52,17 +52,50 @@
             <button class="btn-back" onclick="showScreen('screen-system')">⬅ Regresar a Sistemas</button>
         </section>
 
-        <!-- PANTALLA 4: CONFIGURACIÓN DE EQUIPOS -->
+        <!-- PANTALLA NUEVA: SELECCIÓN DE MODO DE JUEGO -->
+        <section id="screen-mode" class="screen hidden">
+            <h2>Selecciona el Modo de Juego</h2>
+            <div class="menu-grid">
+                <button onclick="selectGameMode('solitario')">👤 Práctica en Solitario</button>
+                <button onclick="selectGameMode('equipos')">👥 Competencia por Equipos</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-difficulty')">⬅ Regresar a Dificultad</button>
+        </section>
+
+        <!-- PANTALLA 4A: CONFIGURACIÓN SOLITARIO -->
+        <section id="screen-setup-solo" class="screen hidden">
+            <h2>Configuración de Práctica Individual</h2>
+            <form id="setup-form-solo" onsubmit="startSoloGame(event)">
+                <div class="input-group">
+                    <label for="player-name">Nombre Completo del Alumno:</label>
+                    <input type="text" id="player-name" placeholder="Ej. Juan Pérez López" required autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label for="question-type-solo">Tipo de Reactivo:</label>
+                    <select id="question-type-solo">
+                        <option value="multiple">Opción Múltiple (4 opciones)</option>
+                        <option value="direct">Respuesta Directa (Escribir número)</option>
+                        <option value="mixed" selected>Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">¡COMENZAR PRÁCTICA!</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modo de Juego</button>
+        </section>
+
+        <!-- PANTALLA 4B: CONFIGURACIÓN DE EQUIPOS -->
         <section id="screen-setup" class="screen hidden">
             <h2>Configuración de la Partida</h2>
             <form id="setup-form" onsubmit="startGame(event)">
                 <div class="input-group">
                     <label for="team1-name">Nombre Equipo 1:</label>
-                    <input type="text" id="team1-name" value="Equipo A" required>
+                    <input type="text" id="team1-name" value="Equipo A" required autocomplete="off">
                 </div>
                 <div class="input-group">
                     <label for="team2-name">Nombre Equipo 2:</label>
-                    <input type="text" id="team2-name" value="Equipo B" required>
+                    <input type="text" id="team2-name" value="Equipo B" required autocomplete="off">
                 </div>
                 <div class="input-group">
                     <label for="total-rounds">Cantidad de Reactivos:</label>
@@ -85,15 +118,13 @@
 
                 <button type="submit" class="btn-start">¡COMENZAR DESAFÍO!</button>
             </form>
-            <button class="btn-back" onclick="showScreen('screen-difficulty')">⬅ Regresar a Dificultad</button>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modo de Juego</button>
         </section>
 
         <!-- PANTALLA 5: JUEGO -->
         <section id="screen-game" class="screen hidden">
-            <div class="scoreboard">
-                <div id="team1-display" class="team-score active-team">Equipo 1: 0 pts</div>
-                <div id="round-info">Pregunta: 1 / 10</div>
-                <div id="team2-display" class="team-score">Equipo 2: 0 pts</div>
+            <div class="scoreboard" id="scoreboard-container">
+                <!-- Se rellena dinámicamente según el modo -->
             </div>
 
             <p class="instruction">Traduce el número mostrado a nuestro sistema decimal:</p>
@@ -113,13 +144,13 @@
 
             <div class="game-action-buttons">
                 <button id="btn-next" class="btn-next hidden" onclick="loadNextQuestion()">Siguiente Pregunta ➔</button>
-                <button class="btn-abort" onclick="confirmEndGame()">🏁 Terminar Partida</button>
+                <button class="btn-abort" id="btn-abort-game" onclick="confirmEndGame()">🏁 Terminar Partida</button>
             </div>
         </section>
 
         <!-- PANTALLA 6: RESULTADOS -->
         <section id="screen-results" class="screen hidden">
-            <h1>🏆 ¡FIN DEL JUEGO! 🏆</h1>
+            <h1 id="results-title">🏆 ¡FIN DEL JUEGO! 🏆</h1>
             <h2 id="winner-message"></h2>
             <div class="final-scores" id="final-scores"></div>
             <button class="btn-start" onclick="resetToSystemSelection()">Jugar de Nuevo 🔄</button>

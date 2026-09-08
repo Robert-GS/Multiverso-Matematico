@@ -9,8 +9,15 @@ let currentTableData = [];
 let userSwitches = []; // Array de booleans [true, false, ...]
 let isTableLocked = false;
 
+// Variables de estadísticas y reporte
+let studentName = "";
+let totalAttemptedExercises = 0;
+let totalCorrectExercises = 0;
+let totalCheckAttempts = 0;
+let hasAttemptedCurrentExercise = false;
+
 // ==========================================
-// 1. SISTEMA DE AUDIO Y SONIDOS (CORREGIDO)
+// 1. SISTEMA DE AUDIO Y SONIDOS
 // ==========================================
 const sounds = {
     bg: new Audio('audio/logix/bg-music2.mp3'),
@@ -21,7 +28,6 @@ const sounds = {
 
 sounds.bg.loop = true;
 
-// Leer si el audio está ACTIVO (si no existe previa configuración, inicia activado 'true')
 let isAudioActive = localStorage.getItem('multiverse_audio_active') !== 'false';
 let bgVolume = parseFloat(localStorage.getItem('multiverse_bg_vol')) || 0.5;
 let sfxVolume = parseFloat(localStorage.getItem('multiverse_sfx_vol')) || 0.3;
@@ -39,7 +45,6 @@ function applyVolumes() {
         if (btn) btn.innerText = '🔇 Sound OFF';
     }
 
-    // Guardar estado sincronizado en memoria local
     localStorage.setItem('multiverse_audio_active', isAudioActive);
     localStorage.setItem('multiverse_bg_vol', bgVolume);
     localStorage.setItem('multiverse_sfx_vol', sfxVolume);
@@ -64,7 +69,6 @@ function playSFX(type) {
     }
 }
 
-// Abrir y Cerrar Modal de Configuración
 function openAudioSettings() {
     document.getElementById('modal-audio-settings').classList.remove('hidden');
 }
@@ -79,44 +83,22 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Inicializar el estado de audio inmediatamente al cargar la página
 applyVolumes();
 
-
-// Tecla Enter en Portada
-/*document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        const cover = document.getElementById('screen-cover');
-        if (cover && !cover.classList.contains('hidden')) {
-            //sounds.bg.play().catch(err => console.log("Audio bloqueado:", err));
-            showScreen('screen-setup');
-        }
-    }
-});*/
-
-// Referencia a la portada del juego
 const screenCover = document.getElementById('screen-cover');
 
-// Función central para iniciar el juego desde la portada
 function startFromCover() {
-    // Verifica que la portada esté visible (sin la clase 'hidden')
     if (screenCover && !screenCover.classList.contains('hidden')) {
-        // Descomenta esta línea si deseas activar el audio al presionar/tocar
-        // if (sounds && sounds.bg) sounds.bg.play().catch(err => console.log("Audio bloqueado:", err));
-
-        // Transición a la siguiente pantalla (Ajusta la pantalla destino según el juego)
         showScreen('screen-setup'); 
     }
 }
 
-// 1. Escuchar tecla ENTER en PC
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
         startFromCover();
     }
 });
 
-// 2. Escuchar TAP / CLIC en Celulares, Tablets y Mouse
 if (screenCover) {
     screenCover.addEventListener('click', startFromCover);
 }
@@ -136,7 +118,6 @@ function selectVariables(num) {
 // ==========================================
 function generateRandomExpression(numVars) {
     if (numVars === 2) {
-        // Expresiones simples de 2 variables
         const vars = ['A', 'B'];
         let parts = vars.map(v => (Math.random() < 0.5 ? `${v}'` : v));
         let op = Math.random() < 0.5 ? ' ∧ ' : ' ∨ ';
@@ -144,11 +125,9 @@ function generateRandomExpression(numVars) {
     } 
 
     if (numVars === 3) {
-        // Elegimos de manera equitativa entre los 3 patrones (33% probabilidad cada uno)
         const patternType = Math.floor(Math.random() * 3);
 
         if (patternType === 0) {
-            // PATRÓN 1: SIN AGRUPACIÓN (Ejemplo: A' ∧ B ∨ C')
             const vars = ['A', 'B', 'C'];
             let parts = vars.map(v => (Math.random() < 0.5 ? `${v}'` : v));
             let op1 = Math.random() < 0.5 ? ' ∧ ' : ' ∨ ';
@@ -156,7 +135,6 @@ function generateRandomExpression(numVars) {
             return `${parts[0]}${op1}${parts[1]}${op2}${parts[2]}`;
         } 
         else if (patternType === 1) {
-            // PATRÓN 2: UN GRUPO Y UNA LIBRE (Ejemplo: (A ∧ B') ∨ C)
             const p1 = Math.random() < 0.5 ? "A'" : "A";
             const p2 = Math.random() < 0.5 ? "B'" : "B";
             const p3 = Math.random() < 0.5 ? "C'" : "C";
@@ -167,7 +145,6 @@ function generateRandomExpression(numVars) {
             return `(${p1}${innerOp}${p2})${outerOp}${p3}`;
         } 
         else {
-            // PATRÓN 3: DOBLE AGRUPACIÓN (Ejemplo: (A ∧ B) ∨ (A' ∧ C'))
             const a1 = Math.random() < 0.5 ? "A'" : "A";
             const b1 = Math.random() < 0.5 ? "B'" : "B";
             const a2 = Math.random() < 0.5 ? "A'" : "A";
@@ -223,9 +200,22 @@ function evaluateRow(expr, values) {
 // 3. INICIO DE PARTIDA Y RENDERING
 // ==========================================
 function startGame() {
+    const nameInput = document.getElementById('student-name');
+    studentName = nameInput.value.trim();
+
+    if (!studentName) {
+        alert("Por favor, ingresa tu nombre para continuar.");
+        nameInput.focus();
+        return;
+    }
+
+    // Reiniciar contadores estadísticos
+    totalAttemptedExercises = 0;
+    totalCorrectExercises = 0;
+    totalCheckAttempts = 0;
+
     numVariables = parseInt(document.getElementById('num-vars-select').value);
     maxAttempts = parseInt(document.getElementById('max-attempts').value);
-    currentAttempts = maxAttempts;
     
     showScreen('screen-game');
     loadNextDoor();
@@ -234,6 +224,7 @@ function startGame() {
 function loadNextDoor() {
     currentAttempts = maxAttempts;
     isTableLocked = false;
+    hasAttemptedCurrentExercise = false; // Reset para la nueva puerta
     
     document.getElementById('door-status').className = "door-status locked";
     document.getElementById('door-status').innerText = "🔒 PUERTA BLOQUEADA";
@@ -309,6 +300,14 @@ function updateAttemptsDisplay() {
 // 4. VERIFICACIÓN DE CÓDIGO
 // ==========================================
 function checkAnswer() {
+    // Si es el primer intento en esta puerta, incrementamos los ejercicios intentados
+    if (!hasAttemptedCurrentExercise) {
+        totalAttemptedExercises++;
+        hasAttemptedCurrentExercise = true;
+    }
+
+    totalCheckAttempts++; // Contamos cada clic de verificación
+
     let isCorrect = true;
 
     currentTableData.forEach((rowValues, index) => {
@@ -325,6 +324,8 @@ function checkAnswer() {
         sounds.correct.currentTime = 0;
         sounds.correct.play().catch(() => {});
         isTableLocked = true;
+        totalCorrectExercises++; // Incrementamos los aciertos
+        
         document.getElementById('door-status').className = "door-status unlocked";
         document.getElementById('door-status').innerText = "🔓 ¡PUERTA DESBLOQUEADA!";
         feedback.style.color = "#00ff88";
@@ -361,7 +362,32 @@ function revealCorrectAnswer() {
 }
 
 function confirmEndGame() {
-    if (confirm("¿Deseas abandonar el laboratorio?")) {
-        showScreen('screen-setup');
+    if (confirm("¿Deseas concluir la partida y ver tu reporte de resultados?")) {
+        showReportScreen();
     }
+}
+
+// ==========================================
+// 5. MOSTRAR REPORTE DE RESULTADOS
+// ==========================================
+function showReportScreen() {
+    // Cálculo de estadísticas
+    const avgAttempts = totalAttemptedExercises > 0 
+        ? (totalCheckAttempts / totalAttemptedExercises).toFixed(1) 
+        : "0.0";
+
+    const effectiveness = totalAttemptedExercises > 0 
+        ? Math.round((totalCorrectExercises / totalAttemptedExercises) * 100) 
+        : 0;
+
+    // Renderizar datos en el DOM
+    document.getElementById('res-student-name').innerText = studentName;
+    document.getElementById('res-game-type').innerText = `${numVariables} Variables (${numVariables === 2 ? '4 Filas' : '8 Filas'})`;
+    document.getElementById('res-max-attempts').innerText = maxAttempts;
+    document.getElementById('res-total-exercices').innerText = totalAttemptedExercises;
+    document.getElementById('res-avg-attempts').innerText = avgAttempts;
+    document.getElementById('res-total-correct').innerText = totalCorrectExercises;
+    document.getElementById('res-effectiveness').innerText = `${effectiveness}%`;
+
+    showScreen('screen-results');
 }

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardianes del Orden: El Templo de las Operaciones</title>
+    <link rel="stylesheet" href="css/guardianes.css">
+</head>
+<body>
+
+    <!-- BARRA SUPERIOR DEL TEMPLO -->
+    <header class="top-bar">
+        <h1 class="logo">🏛️ GUARDIANES DEL ORDEN 🏛️</h1>
+        <div class="audio-controls-group">
+            <button class="btn-audio" onclick="window.location.href='index.html?screen=menu'">🌌 Multiverso</button>
+            <button class="btn-audio" onclick="openLeaderboardModal()">🏆 Líderes</button>
+            <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">🔊 Sound ON</button>
+            <button id="btn-settings" class="btn-settings" onclick="openAudioSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <div class="game-card">
+
+        <!-- PANTALLA 1: PORTADA DEL TEMPLO -->
+        <section id="screen-cover" class="screen active" style="cursor: pointer;">
+            <div class="blink-text-full">
+                Presiona <strong>[ ENTER ]</strong> para Iniciar la Expedición
+            </div>
+        </section>
+
+        <!-- PANTALLA 2: SELECCIÓN DE SALA / TEMA -->
+        <section id="screen-server" class="screen hidden">
+            <h2>Selecciona la Cámara del Templo</h2>
+            <div class="menu-grid">
+                <button onclick="selectServer('sala1')">🏛️ Sala 1: Altar de la Jerarquía<br><small>(Prioridad de operaciones y potencias)</small></button>
+                <button onclick="selectServer('sala2')">🔮 Sala 2: Sellos Concéntricos<br><small>(Paréntesis, corchetes y llaves)</small></button>
+                <button onclick="selectServer('sala3')">📜 Sala 3: Espejo del Opuesto<br><small>(Resta como suma del opuesto y reales)</small></button>
+                <button class="btn-root-mode" onclick="selectServer('root')">👑 EL SANTO GRIAL DEL ORDEN<br><small>(Prueba completa del Guardián Supremo)</small></button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-cover')">⬅ Regresar a la Entrada</button>
+        </section>
+
+        <!-- PANTALLA 3: DIFICULTAD -->
+        <section id="screen-difficulty" class="screen hidden">
+            <h2>Nivel de Complejidad de Runas</h2>
+            <div class="menu-grid">
+                <button onclick="selectDifficulty(1)">Grado 1: Iniciado (Básico)</button>
+                <button onclick="selectDifficulty(2)">Grado 2: Guardián (Intermedio)</button>
+                <button onclick="selectDifficulty(3)">Grado 3: Maestro del Orden (Avanzado)</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-server')">⬅ Regresar a Cámaras</button>
+        </section>
+
+        <!-- PANTALLA 4: MODO DE JUEGO -->
+        <section id="screen-mode" class="screen hidden">
+            <h2>Selecciona la Modalidad de Expedición</h2>
+            <div class="menu-grid">
+                <button onclick="selectGameMode('solitario')">🧭 Exploración Solitaria (Práctica/Evaluación)</button>
+                <button onclick="selectGameMode('equipos')">⚔️ Desafío de Gremios (Competencia 2 Equipos)</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-difficulty')">⬅ Regresar a Grados</button>
+        </section>
+
+        <!-- PANTALLA 5A: REGISTRO SOLITARIO -->
+        <section id="screen-setup-solo" class="screen hidden">
+            <h2>Inscripción en el Libro Ancestral</h2>
+            <form id="setup-form-solo" onsubmit="startSoloGame(event)">
+                <div class="input-group">
+                    <label for="player-name">Nombre del Guardián / Explorador:</label>
+                    <input type="text" id="player-name" placeholder="Ej. Indiana Jones" required autocomplete="off">
+                </div>
+
+                <div class="infinite-mode-notice">
+                    <span>♾️</span> <strong>Modo Exploración Libre:</strong> Resuelve acertijos al ritmo del templo. La expedición finalizará al pulsar <em>"Salir del Templo"</em>.
+                </div>
+
+                <div class="input-group">
+                    <label for="question-type-solo">Calibración del Cristal del Oráculo:</label>
+                    <select id="question-type-solo">
+                        <option value="multiple">Opción Múltiple (4 Runas)</option>
+                        <option value="direct">Entrada Directa en Grabado</option>
+                        <option value="mixed" selected>Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">🏛️ ¡ENTRAR AL TEMPLO! 🏛️</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modalidad</button>
+        </section>
+
+        <!-- PANTALLA 5B: CONFIGURACIÓN DE EQUIPOS -->
+        <section id="screen-setup" class="screen hidden">
+            <h2>Configuración del Desafío de Gremios</h2>
+            <form id="setup-form" onsubmit="startGame(event)">
+                <div class="input-group">
+                    <label for="team1-name">Nombre Gremio 1:</label>
+                    <input type="text" id="team1-name" value="Gremio del Fuego" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="team2-name">Nombre Gremio 2:</label>
+                    <input type="text" id="team2-name" value="Gremio del Sol" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="total-rounds">Total de Runas (Reactivos):</label>
+                    <select id="total-rounds">
+                        <option value="6">6 Enigmas</option>
+                        <option value="10" selected>10 Enigmas</option>
+                        <option value="16">16 Enigmas</option>
+                        <option value="20">20 Enigmas</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="question-type">Tipo de Cristal:</label>
+                    <select id="question-type">
+                        <option value="multiple">Opción Múltiple</option>
+                        <option value="direct">Entrada Directa</option>
+                        <option value="mixed">Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">⚔️ ¡INICIAR DESAFÍO DE GREMIOS!</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modalidad</button>
+        </section>
+
+        <!-- PANTALLA 6: ÁREA DE JUEGO / RUNAS -->
+        <section id="screen-game" class="screen hidden">
+            <div class="scoreboard" id="scoreboard-container"></div>
+
+            <p class="instruction" id="challenge-instruction">Analiza la inscripción ancestral:</p>
+
+            <div class="hack-display-container" id="hack-display"></div>
+
+            <div class="options-grid" id="options-container"></div>
+
+            <div id="direct-input-container" class="direct-input-container hidden">
+                <input type="text" id="direct-answer" placeholder="Escribe la solución..." autocomplete="off">
+                <button id="btn-submit-answer" onclick="checkDirectAnswer()">Grabar ↵</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="game-action-buttons">
+                <button id="btn-next" class="btn-next hidden" onclick="loadNextQuestion()">Siguiente Runa ➔</button>
+                <button class="btn-abort" id="btn-abort-game" onclick="confirmEndGame()">🏛️ Salir del Templo</button>
+            </div>
+
+
+            <!-- Contenedor para Opción Múltiple Estándar e Insumos -->
+            <div id="standard-options-container" class="options-grid"></div>
+
+            <!-- Contenedor de Balanza Templaria -->
+            <div id="balance-game-container" class="game-module-container hidden">
+            <div class="balance-scale">
+                <div id="balance-left" class="scale-pan"></div>
+                <div class="scale-fulcrum">⚖️</div>
+                <div id="balance-right" class="scale-pan"></div>
+            </div>
+            <div id="balance-options" class="options-grid mt-4"></div>
+            </div>
+
+            <!-- Contenedor de Secuencia de Pasos -->
+            <div id="sequence-game-container" class="game-module-container hidden">
+            <p class="instruction-text">Ordena los pasos del algoritmo de arriba a abajo:</p>
+            <div id="sequence-slots" class="slots-container"></div>
+            <div id="sequence-bank" class="bank-container"></div>
+            </div>
+
+            <!-- Contenedor de Árbol de Jerarquía -->
+            <div id="tree-game-container" class="game-module-container hidden">
+            <div id="tree-nodes-wrapper" class="tree-grid"></div>
+            </div>
+
+            <!-- Contenedor de Selección Múltiple de Sellos -->
+            <div id="multi-select-container" class="game-module-container hidden">
+            <p class="instruction-text">Selecciona TODOS los sellos que cumplan la propiedad:</p>
+            <div id="multi-select-grid" class="options-grid"></div>
+            <button id="btn-submit-multi" class="btn-primary mt-4" onclick="checkMultiSelectAnswer()">Desvelar Sellos</button>
+            </div>
+
+        </section>
+
+        <!-- PANTALLA 7: REPORTES Y RESULTADOS -->
+        <section id="screen-results" class="screen hidden">
+            <h1 id="results-title">📜 PERGAMINO ANCESTRAL 📜</h1>
+            <h2 id="winner-message"></h2>
+            <div class="final-scores" id="final-scores"></div>
+            <button class="btn-start" onclick="resetToServerSelection()">Nueva Expedición 🔄</button>
+        </section>
+
+    </div>
+
+    <!-- MODAL DE LEADERBOARD (TABLA DE HONOR DEL TEMPLO) -->
+    <div id="modal-leaderboard" class="modal-overlay hidden">
+        <div class="modal-content leaderboard-modal">
+            <div class="leaderboard-tabs">
+                <button id="btn-tab-sala1" class="tab-btn active" onclick="switchLeaderboardMode('sala1')">🏛️ Sala 1</button>
+                <button id="btn-tab-sala2" class="tab-btn" onclick="switchLeaderboardMode('sala2')">🔮 Sala 2</button>
+                <button id="btn-tab-sala3" class="tab-btn" onclick="switchLeaderboardMode('sala3')">📜 Sala 3</button>
+                <button id="btn-tab-root" class="tab-btn" onclick="switchLeaderboardMode('root')">👑 Grial</button>
+            </div>
+
+            <div class="leaderboard-filters-row">
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-level-select">🎯 Grado:</label>
+                    <select id="leaderboard-level-select" class="leaderboard-select" onchange="onLeaderboardLevelChange()">
+                        <option value="1">Grado 1: Iniciado</option>
+                        <option value="2">Grado 2: Guardián</option>
+                        <option value="3">Grado 3: Maestro</option>
+                    </select>
+                </div>
+
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-type-select">📝 Cristal:</label>
+                    <select id="leaderboard-type-select" class="leaderboard-select" onchange="onLeaderboardTypeChange()">
+                        <option value="multiple">Opción Múltiple</option>
+                        <option value="direct">Entrada Directa</option>
+                        <option value="mixed">Mixto</option>
+                    </select>
+                </div>
+            </div>
+
+            <h3>🏆 Leyendas del Templo del Orden</h3>
+            <p class="leaderboard-subtitle">Top 10 - Mejores Exploradores (Modo Solitario)</p>
+
+            <div class="leaderboard-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Guardián</th>
+                            <th>Aciertos</th>
+                            <th>Efectividad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr><td colspan="4">Cargando bitácora del templo...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn-start" onclick="closeLeaderboardModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL AUDIO -->
+    <div id="modal-audio-settings" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>🎛️ Control de Sonido del Templo</h3>
+            <div class="slider-group">
+                <label for="volume-bg">Música Mística 🌿</label>
+                <input type="range" id="volume-bg" min="0" max="1" step="0.05" value="0.5" oninput="updateVolumes()">
+            </div>
+            <div class="slider-group">
+                <label for="volume-sfx">Efectos de Mecanismos y Runas 🔮</label>
+                <input type="range" id="volume-sfx" min="0" max="1" step="0.05" value="0.3" oninput="updateVolumes()">
+            </div>
+            <button class="btn-start" onclick="closeAudioSettings()">Guardar y Cerrar</button>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA INSTITUCIONAL -->
+    <footer class="institutional-footer">
+        <img src="img/main/logo.png" alt="Logo Institución" class="footer-logo" onerror="this.style.display='none'">
+        <span class="footer-text">C.E.T.i.s. N° 47</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">Roberto Gallegos Santos</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">2026</span>
+    </footer>
+
+    <script type="module" src="js/guardianes.js"></script>
+</body>
+</html>

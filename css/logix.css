@@ -7,7 +7,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #e0e6ed;
     display: flex;
-    flex-direction: column; /* Apila el header arriba y el juego abajo */
+    flex-direction: column;
     align-items: center;
     min-height: 100vh;
     margin: 0;
@@ -15,7 +15,6 @@ body {
     box-sizing: border-box;
 }
 
-/* Capa oscura translúcida sobre el fondo */
 body::before {
     content: '';
     position: fixed;
@@ -92,12 +91,11 @@ body::before {
     box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
     border-radius: 12px;
     padding: 30px;
-    margin: auto 0; /* Centra la tarjeta verticalmente en el espacio restante */
-    transform: translateY(-50px); /* Sube la tarjeta 20 píxeles */
+    margin: auto 0;
+    transform: translateY(-50px);
     box-sizing: border-box;
 }
 
-/* Títulos y Subtítulos */
 .glitch-title {
     font-size: 2.5rem;
     color: #00f0ff;
@@ -343,7 +341,6 @@ body::before {
     }
 }
 
-/* Botones Generales */
 button {
     cursor: pointer;
     font-weight: bold;
@@ -446,12 +443,12 @@ button {
     backdrop-filter: blur(4px);
     border-top: 1px solid rgba(0, 240, 255, 0.15);
     z-index: 90;
-    font-size: 0.95rem; /* Letra pequeña y discreta */
+    font-size: 0.95rem;
     color: #a0aec0;
 }
 
 .footer-logo {
-    height: 40px; /* Tamaño sutil para el logo */
+    height: 40px;
     width: auto;
     object-fit: contain;
 }
@@ -461,7 +458,7 @@ button {
 }
 
 .footer-separator {
-    color: #00f0ff; /* Resalta con el neón del juego */
+    color: #00f0ff;
     opacity: 0.5;
 }
 
@@ -489,7 +486,6 @@ button {
     box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
 }
 
-/* Caja de Reporte */
 .report-box {
     background: #0d131d;
     border: 2px dashed #00f0ff;
@@ -548,3 +544,82 @@ button {
     width: auto;
     min-width: 220px;
 }
+
+/* ==========================================
+   9. MODAL DE TABLA GLOBAL DE LÍDERES
+   ========================================== */
+.leaderboard-modal {
+    max-width: 550px;
+}
+
+.leaderboard-subtitle {
+    color: #8a99ad;
+    font-size: 0.95rem;
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+
+.leaderboard-container {
+    width: 100%;
+    max-height: 320px;
+    overflow-y: auto;
+    background: #0d131d;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.leaderboard-table th {
+    background: #182232;
+    color: #00f0ff;
+    padding: 10px;
+    border-bottom: 1px solid #232d3f;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.leaderboard-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #e0e6ed;
+}
+
+.leaderboard-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    border: 2px solid #4a5568;
+    background-color: transparent;
+    color: #cbd5e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.tab-btn.active {
+    background-color: #3182ce;
+    color: #ffffff;
+    border-color: #3182ce;
+}
+
+.leaderboard-table tr:nth-child(1) td { color: #ffd700; font-weight: bold; }
+.leaderboard-table tr:nth-child(2) td { color: #c0c0c0; font-weight: bold; }
+.leaderboard-table tr:nth-child(3) td { color: #cd7f32; font-weight: bold; }

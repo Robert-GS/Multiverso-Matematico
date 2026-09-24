@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizonte Cósmico: Las Medidas del Universo</title>
+    <link rel="stylesheet" href="css/horizonte.css">
+</head>
+<body>
+
+    <!-- BARRA SUPERIOR ESPACIAL -->
+    <header class="top-bar">
+        <h1 class="logo">🚀 HORIZONTE CÓSMICO 🚀</h1>
+        <div class="audio-controls-group">
+            <button class="btn-audio" onclick="window.location.href='index.html?screen=menu'">🌌 Multiverso</button>
+            <button class="btn-audio" onclick="openLeaderboardModal()">🏆 Líderes</button>
+            <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">🔊 Sound ON</button>
+            <button id="btn-settings" class="btn-settings" onclick="openAudioSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <div class="game-card">
+
+        <!-- PANTALLA 1: PORTADA ESPACIAL -->
+        <section id="screen-cover" class="screen active" style="cursor: pointer;">
+            <div class="blink-text-full">
+                Presiona <strong>[ ENTER ]</strong> para Iniciar Secuencia de Despegue
+            </div>
+        </section>
+
+        <!-- PANTALLA 2: SELECCIÓN DE SECTOR / TEMA -->
+        <section id="screen-server" class="screen hidden">
+            <h2>Selecciona el Sector de Misión</h2>
+            <div class="menu-grid">
+                <button onclick="selectServer('sector1')">📏 Sector 1: Estación SI<br><small>(Unidades de Medida y Sistema Internacional)</small></button>
+                <button onclick="selectServer('sector2')">🌌 Sector 2: Nebulosa Notación<br><small>(Magnitudes y Notación Científica)</small></button>
+                <button onclick="selectServer('sector3')">⚖️ Sector 3: Órbita Razón<br><small>(Razones, Proporciones y Escalas Estelares)</small></button>
+                <button class="btn-root-mode" onclick="selectServer('root')">👑 PRUEBA DEL COMANDANTE: Desafío Cosmos<br><small>(Evalúa todos los sectores galácticos)</small></button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-cover')">⬅ Regresar a la Base</button>
+        </section>
+
+        <!-- PANTALLA 3: RANGOS DE PILOTO -->
+        <section id="screen-difficulty" class="screen hidden">
+            <h2>Nivel de Rango Astronáutico</h2>
+            <div class="menu-grid">
+                <button onclick="selectDifficulty(1)">Rango 1: Cadete Espacial (Básico)</button>
+                <button onclick="selectDifficulty(2)">Rango 2: Oficial de Vuelo (Intermedio)</button>
+                <button onclick="selectDifficulty(3)">Rango 3: Comandante Estelar (Avanzado)</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-server')">⬅ Regresar a Sectores</button>
+        </section>
+
+        <!-- PANTALLA 4: MODALIDAD DE EXPEDICIÓN -->
+        <section id="screen-mode" class="screen hidden">
+            <h2>Selecciona la Modalidad de Vuelo</h2>
+            <div class="menu-grid">
+                <button onclick="selectGameMode('solitario')">🧭 Exploración Solitaria (Práctica/Evaluación)</button>
+                <button onclick="selectGameMode('equipos')">⚔️ Competencia de Escuadrones (Batalla por Equipos)</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-difficulty')">⬅ Regresar a Rangos</button>
+        </section>
+
+        <!-- PANTALLA 5A: REGISTRO SOLITARIO -->
+        <section id="screen-setup-solo" class="screen hidden">
+            <h2>Registro de Comandante de Registro</h2>
+            <form id="setup-form-solo" onsubmit="startSoloGame(event)">
+                <div class="input-group">
+                    <label for="player-name">Nombre del Piloto / Comandante:</label>
+                    <input type="text" id="player-name" placeholder="Ej. Comandante Nova" required autocomplete="off">
+                </div>
+
+                <div class="infinite-mode-notice">
+                    <span>♾️</span> <strong>Vuelo de Exploración Libre:</strong> Resolverás enigmas de medición sin tiempo límite. El vuelo concluye al presionar <em>"Regresar a la Base"</em>.
+                </div>
+
+                <div class="input-group">
+                    <label for="question-type-solo">Calibración de Sensores:</label>
+                    <select id="question-type-solo">
+                        <option value="multiple">Opción Múltiple (4 Alternativas)</option>
+                        <option value="direct">Entrada Directa de Telemetría</option>
+                        <option value="mixed" selected>Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">🚀 ¡INICIAR SALTO HIPERESPACIAL! 🚀</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modalidad</button>
+        </section>
+
+        <!-- PANTALLA 5B: CONFIGURACIÓN DE ESCUADRONES -->
+        <section id="screen-setup" class="screen hidden">
+            <h2>Configuración de Batalla de Escuadrones</h2>
+            <form id="setup-form" onsubmit="startGame(event)">
+                <div class="input-group">
+                    <label for="team1-name">Nombre Escuadrón 1:</label>
+                    <input type="text" id="team1-name" value="Nave Orion" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="team2-name">Nombre Escuadrón 2:</label>
+                    <input type="text" id="team2-name" value="Nave Andromeda" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="total-rounds">Total de Transmisiones (Reactivos):</label>
+                    <select id="total-rounds">
+                        <option value="6">6 Enigmas</option>
+                        <option value="10" selected>10 Enigmas</option>
+                        <option value="16">16 Enigmas</option>
+                        <option value="20">20 Enigmas</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="question-type">Tipo de Calibración:</label>
+                    <select id="question-type">
+                        <option value="multiple">Opción Múltiple</option>
+                        <option value="direct">Entrada Directa</option>
+                        <option value="mixed">Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">⚔️ ¡INICIAR BOMBARDEO DE METEOROS!</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modalidad</button>
+        </section>
+
+        <!-- PANTALLA 6: PANEL DE CONTROL DE MISIÓN -->
+        <section id="screen-game" class="screen hidden">
+            <div class="scoreboard" id="scoreboard-container"></div>
+
+            <p class="instruction" id="challenge-instruction">Analiza la telemetría espacial:</p>
+
+            <!-- 1. DISPLAY ESTÁNDAR / TEXTO / NOTACIÓN -->
+            <div class="hack-display-container" id="hack-display"></div>
+
+            <!-- 2. BALANZA GRAVITATORIA -->
+            <div id="balance-game-container" class="balance-container hidden">
+                <div class="balance-scale-wrapper">
+                    <div class="balance-pan left-pan" id="balance-left-pan">?</div>
+                    <div class="balance-pivot">⚖️</div>
+                    <div class="balance-pan right-pan" id="balance-right-pan">?</div>
+                </div>
+            </div>
+
+            <!-- 3. SECUENCIA DE TELEMETRÍA -->
+            <div id="sequence-game-container" class="sequence-container hidden">
+                <div id="sequence-list" class="sequence-list"></div>
+                <button id="btn-submit-sequence" class="btn-start" onclick="checkSequenceAnswer()">🛰️ Calibrar Telemetría ↵</button>
+            </div>
+
+            <!-- 4. ESCÁNER DE SATÉLITES (SELECCIÓN MÚLTIPLE) -->
+            <div id="multi-select-container" class="multi-select-container hidden">
+                <div id="jars-grid" class="jars-grid"></div>
+                <button id="btn-submit-multi" class="btn-start" onclick="checkMultiSelectAnswer()">🚀 Confirmar Transmisión ↵</button>
+            </div>
+
+            <!-- 5. RED DE NODOS ESPACIALES -->
+            <div id="tree-game-container" class="tree-container hidden">
+                <div id="tree-nodes-container" class="tree-nodes"></div>
+            </div>
+
+            <!-- Opciones Múltiples Estándar -->
+            <div class="options-grid" id="options-container"></div>
+
+            <!-- Entrada Directa de Telemetría -->
+            <div id="direct-input-container" class="direct-input-container hidden">
+                <input type="text" id="direct-answer" placeholder="Escribe tu resultado (ej. 3.5x10^4 o 1500)..." autocomplete="off">
+                <button id="btn-submit-answer" onclick="checkDirectAnswer()">Transmitir ↵</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="game-action-buttons">
+                <button id="btn-next" class="btn-next hidden" onclick="loadNextQuestion()">Siguiente Coordenada ➔</button>
+                <button class="btn-abort" id="btn-abort-game" onclick="confirmEndGame()">🏁 Regresar a la Base</button>
+            </div>
+        </section>
+
+        <!-- PANTALLA 7: REPORTES Y RESULTADOS -->
+        <section id="screen-results" class="screen hidden">
+            <h1 id="results-title">📜 TELEMETRÍA FINAL DE MISIÓN 📜</h1>
+            <h2 id="winner-message"></h2>
+            <div class="final-scores" id="final-scores"></div>
+            <button class="btn-start" onclick="resetToServerSelection()">Nueva Expedición 🔄</button>
+        </section>
+
+    </div>
+
+    <!-- MODAL DE LEADERBOARD (TABLA DE LÍDERES ESPACIAL) -->
+    <div id="modal-leaderboard" class="modal-overlay hidden">
+        <div class="modal-content leaderboard-modal">
+            <div class="leaderboard-tabs">
+                <button id="btn-tab-sector1" class="tab-btn active" onclick="switchLeaderboardMode('sector1')">📏 Sector 1</button>
+                <button id="btn-tab-sector2" class="tab-btn" onclick="switchLeaderboardMode('sector2')">🌌 Sector 2</button>
+                <button id="btn-tab-sector3" class="tab-btn" onclick="switchLeaderboardMode('sector3')">⚖️ Sector 3</button>
+                <button id="btn-tab-root" class="tab-btn" onclick="switchLeaderboardMode('root')">👑 Cosmos</button>
+            </div>
+
+            <div class="leaderboard-filters-row">
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-level-select">🎯 Rango:</label>
+                    <select id="leaderboard-level-select" class="leaderboard-select" onchange="onLeaderboardLevelChange()">
+                        <option value="1">Rango 1: Cadete</option>
+                        <option value="2">Rango 2: Oficial</option>
+                        <option value="3">Rango 3: Comandante</option>
+                    </select>
+                </div>
+
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-type-select">📝 Sensores:</label>
+                    <select id="leaderboard-type-select" class="leaderboard-select" onchange="onLeaderboardTypeChange()">
+                        <option value="multiple">Opción Múltiple</option>
+                        <option value="direct">Entrada Directa</option>
+                        <option value="mixed">Mixto</option>
+                    </select>
+                </div>
+            </div>
+
+            <h3>🏆 Comandantes Supremos del Universo</h3>
+            <p class="leaderboard-subtitle">Top 10 - Mejores Pilotos (Exploración Solitaria)</p>
+
+            <div class="leaderboard-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Piloto</th>
+                            <th>Aciertos</th>
+                            <th>Efectividad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr><td colspan="4">Conectando con el satélite central...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn-start" onclick="closeLeaderboardModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL AUDIO -->
+    <div id="modal-audio-settings" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>🎛️ Modulación del Sistema de Sonido</h3>
+            <div class="slider-group">
+                <label for="volume-bg">Música Ambientes Cósmicos 🌌</label>
+                <input type="range" id="volume-bg" min="0" max="1" step="0.05" value="0.5" oninput="updateVolumes()">
+            </div>
+            <div class="slider-group">
+                <label for="volume-sfx">Efectos de Motores y Sensores 🛰️</label>
+                <input type="range" id="volume-sfx" min="0" max="1" step="0.05" value="0.3" oninput="updateVolumes()">
+            </div>
+            <button class="btn-start" onclick="closeAudioSettings()">Guardar y Cerrar</button>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA INSTITUCIONAL -->
+    <footer class="institutional-footer">
+        <img src="img/main/logo.png" alt="Logo Institución" class="footer-logo" onerror="this.style.display='none'">
+        <span class="footer-text">C.E.T.i.s. N° 47</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">Roberto Gallegos Santos</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">2026</span>
+    </footer>
+
+    <script type="module" src="js/horizonte.js"></script>
+</body>
+</html>

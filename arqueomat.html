@@ -13,6 +13,7 @@
         <h1 class="logo">🏛️ ARQUEOMAT 🏛️</h1>
         <div class="audio-controls-group">
             <button class="btn-audio" onclick="window.location.href='index.html?screen=menu'">🌌 Multiverso</button>
+            <button class="btn-audio" onclick="openLeaderboardModal()">🏆 Líderes</button>
             <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">🔊 Sound ON</button>
             <button id="btn-settings" class="btn-settings" onclick="openAudioSettings()">⚙️</button>
         </div>
@@ -52,7 +53,7 @@
             <button class="btn-back" onclick="showScreen('screen-system')">⬅ Regresar a Sistemas</button>
         </section>
 
-        <!-- PANTALLA NUEVA: SELECCIÓN DE MODO DE JUEGO -->
+        <!-- SELECCIÓN DE MODO DE JUEGO -->
         <section id="screen-mode" class="screen hidden">
             <h2>Selecciona el Modo de Juego</h2>
             <div class="menu-grid">
@@ -123,9 +124,7 @@
 
         <!-- PANTALLA 5: JUEGO -->
         <section id="screen-game" class="screen hidden">
-            <div class="scoreboard" id="scoreboard-container">
-                <!-- Se rellena dinámicamente según el modo -->
-            </div>
+            <div class="scoreboard" id="scoreboard-container"></div>
 
             <p class="instruction">Traduce el número mostrado a nuestro sistema decimal:</p>
 
@@ -158,7 +157,7 @@
 
     </div>
 
-    <!-- MODAL DE AJUSTE DE VOLUMEN (Ubicado afuera de game-card para cubrir pantalla completa) -->
+    <!-- MODAL DE AJUSTE DE VOLUMEN -->
     <div id="modal-audio-settings" class="modal-overlay hidden">
         <div class="modal-content">
             <h3>🎛️ Control de Volumen</h3>
@@ -177,6 +176,66 @@
         </div>
     </div>
 
+    <!-- MODAL DE TABLA GLOBAL DE LÍDERES -->
+    <div id="modal-leaderboard" class="modal-overlay hidden">
+        <div class="modal-content leaderboard-modal">
+            
+            <!-- Pestañas de Sistemas -->
+            <div class="leaderboard-tabs">
+                <button id="btn-tab-egipcia" class="tab-btn active" onclick="switchLeaderboardMode('egipcia')">𓏞 Egipcia</button>
+                <button id="btn-tab-mesopotamica" class="tab-btn" onclick="switchLeaderboardMode('mesopotamica')">📐 Mesopotámica</button>
+                <button id="btn-tab-maya" class="tab-btn" onclick="switchLeaderboardMode('maya')">🌽 Maya</button>
+                <button id="btn-tab-mixta" class="tab-btn" onclick="switchLeaderboardMode('mixta')">𔔁 Mixta</button>
+            </div>
+
+            <!-- Contenedor con Ambos Filtros -->
+            <div class="leaderboard-filters-row">
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-range-select">🎯 Rango:</label>
+                    <select id="leaderboard-range-select" class="leaderboard-select" onchange="onLeaderboardRangeChange()">
+                        <option value="1-9">Nivel 1: 1 a 9</option>
+                        <option value="10-99">Nivel 2: 10 a 99</option>
+                        <option value="100-999">Nivel 3: 100 a 999</option>
+                        <option value="1000-9999">Nivel 4: 1,000 a 9,999</option>
+                        <option value="10000-1000000">Nivel 5: 10,000 a 1,000,000</option>
+                    </select>
+                </div>
+
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-type-select">📝 Reactivo:</label>
+                    <select id="leaderboard-type-select" class="leaderboard-select" onchange="onLeaderboardTypeChange()">
+                        <option value="multiple">Opción Múltiple</option>
+                        <option value="direct">Respuesta Directa</option>
+                        <option value="mixed">Mixto</option>
+                    </select>
+                </div>
+            </div>
+
+            <h3>🏆 Tabla Global de Líderes</h3>
+            <p class="leaderboard-subtitle">Top 10 - Mejores Prácticas Individuales</p>
+            
+            <div class="leaderboard-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Alumno</th>
+                            <th>Aciertos</th>
+                            <th>Efectividad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr>
+                            <td colspan="4">Cargando puntuaciones...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn-start" onclick="closeLeaderboardModal()">Cerrar</button>
+        </div>
+    </div>
+    
     <footer class="institutional-footer">
         <img src="img/main/logo.png" alt="Logo Institución" class="footer-logo" onerror="this.style.display='none'">
         <span class="footer-text">C.E.T.i.s. N° 47</span>
@@ -186,6 +245,6 @@
         <span class="footer-text">2026</span>
     </footer>
 
-    <script src="js/arqueomat.js"></script>
+    <script type="module" src="js/arqueomat.js"></script>
 </body>
 </html>

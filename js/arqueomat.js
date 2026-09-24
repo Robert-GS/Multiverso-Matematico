@@ -1,3 +1,5 @@
+import { saveScore, getTopScores } from './leaderboard.js';
+
 // ==========================================
 // 1. SISTEMA DE AUDIO Y SONIDOS
 // ==========================================
@@ -104,15 +106,12 @@ let soloMultipleCorrect = 0;
 let soloDirectTotal = 0;
 let soloDirectCorrect = 0;
 
-
 let currentTurn = 1; 
 let currentRound = 1;
 let maxRounds = 10;
 let correctAnswer = 0;
 let questionType = 'multiple';
 let currentQuestionMode = 'multiple';
-
-
 
 const screenCover = document.getElementById('screen-cover');
 
@@ -196,7 +195,6 @@ function startGame(event) {
     const t1 = document.getElementById('team1-name').value.trim();
     const t2 = document.getElementById('team2-name').value.trim();
 
-    // Validaciones de Nombres
     if (!t1 || !t2) {
         alert("Por favor ingresa un nombre válido para ambos equipos.");
         return;
@@ -234,7 +232,7 @@ function generateNumber() {
 }
 
 // ==========================================
-// 3. RENDERIZADORES DE SISTEMAS NUMÉRICOS (OPTIMIZADOS)
+// 3. RENDERIZADORES DE SISTEMAS NUMÉRICOS
 // ==========================================
 
 function renderNumber(num) {
@@ -258,11 +256,9 @@ function renderNumber(num) {
     }
 }
 
-// --- EGIPCIO (Con Escalado Dinámico) ---
 function renderEgyptian(num, container) {
     let temp = num;
     
-    // Ajustar escala visual según la magnitud del número
     if (num >= 100000) {
         container.classList.add('egypt-scale-compact');
     } else if (num >= 1000) {
@@ -299,7 +295,6 @@ function renderEgyptian(num, container) {
     }
 }
 
-// --- MESOPOTÁMICO (Con Alineación Unificada) ---
 function renderMesopotamian(num, container) {
     let temp = num;
     let base60Digits = [];
@@ -373,7 +368,6 @@ function renderMesopotamian(num, container) {
     });
 }
 
-// --- MAYA (Con Indicadores de Nivel Posicional) ---
 function renderMaya(num, container) {
     container.classList.add('maya-number-container');
     let temp = num;
@@ -385,12 +379,10 @@ function renderMaya(num, container) {
         temp = Math.floor(temp / 20);
     }
 
-    // Dibujar cada nivel posicional
     base20Digits.forEach((val, index) => {
         const levelGroup = document.createElement('div');
         levelGroup.className = 'maya-level';
 
-        // Etiqueta discreta del valor posicional (ej. x1, x20, x400)
         const multiplier = Math.pow(20, index);
         const tag = document.createElement('span');
         tag.className = 'maya-level-tag';
@@ -521,7 +513,6 @@ function processResult(isCorrect) {
     if (gameMode === 'solitario') {
         soloTotal++;
 
-        // Registrar estadísticas específicas por tipo de reactivo
         if (currentQuestionMode === 'multiple') {
             soloMultipleTotal++;
             if (isCorrect) soloMultipleCorrect++;
@@ -596,7 +587,7 @@ function confirmEndGame() {
     }
 }
 
-function endGame() {
+async function endGame() {
     const resultsTitle = document.getElementById('results-title');
     const winnerMessage = document.getElementById('winner-message');
     const finalScores = document.getElementById('final-scores');
@@ -607,12 +598,10 @@ function endGame() {
 
         const accuracy = soloTotal > 0 ? Math.round((soloCorrect / soloTotal) * 100) : 0;
 
-        // Texto descriptivo del tipo de reactivo
         let typeLabel = "Opción Múltiple";
         if (questionType === 'direct') typeLabel = "Respuesta Directa";
         if (questionType === 'mixed') typeLabel = "Mixto (Aleatorio)";
 
-        // HTML base del reporte
         let reportHTML = `
             <div style="background: rgba(0,0,0,0.05); padding: 15px; border-radius: 8px; border: 1px dashed #c8a261; text-align: left; max-width: 450px; margin: 0 auto;">
                 <p><strong>Alumno:</strong> ${playerName}</p>
@@ -625,7 +614,6 @@ function endGame() {
                 <p><strong>Efectividad Global:</strong> ${accuracy}%</p>
         `;
 
-        // Si eligió Mixto, agregar el desglose detallado
         if (questionType === 'mixed') {
             const multAcc = soloMultipleTotal > 0 ? Math.round((soloMultipleCorrect / soloMultipleTotal) * 100) : 0;
             const dirAcc = soloDirectTotal > 0 ? Math.round((soloDirectCorrect / soloDirectTotal) * 100) : 0;
@@ -646,6 +634,27 @@ function endGame() {
         `;
 
         finalScores.innerHTML = reportHTML;
+
+        // GUARDAR PUNTAJE EN FIRESTORE SI HUBO INTENTOS
+        // DENTRO DE endGame() (Sección de Solitario)
+        if (soloTotal > 0) {
+            try {
+                // Clave combinada: sistema + rango + tipo de reactivo
+                const modeKey = `${selectedSystem}_${minRange}-${maxRange}_${questionType}`;
+
+                await saveScore({
+                    gameId: 'arqueomat',
+                    gameTitle: 'ArqueoMat',
+                    studentName: playerName,
+                    mode: modeKey, // Ej: "egipcia_1-9_multiple" o "maya_100-999_direct"
+                    score: soloCorrect,
+                    effectiveness: accuracy,
+                    details: `Sistema: ${selectedSystem.toUpperCase()} | Rango: ${minRange}-${maxRange} | Tipo: ${questionType}`
+                });
+            } catch (err) {
+                console.error("Error al guardar puntuación en ArqueoMat:", err);
+            }
+        }
     } else {
         resultsTitle.innerText = "🏆 ¡FIN DEL JUEGO! 🏆";
         let winnerText = "";
@@ -671,3 +680,120 @@ function endGame() {
 function resetToSystemSelection() {
     showScreen('screen-system');
 }
+
+// ==========================================
+// 5. TABLA GLOBAL DE LÍDERES
+// ==========================================
+let currentLeaderboardSystem = 'egipcia'; 
+let currentLeaderboardRange = '1-9';
+let currentLeaderboardType = 'multiple';
+
+async function switchLeaderboardMode(system) {
+    currentLeaderboardSystem = String(system).toLowerCase();
+    
+    ['egipcia', 'mesopotamica', 'maya', 'mixta'].forEach(s => {
+        const btn = document.getElementById(`btn-tab-${s}`);
+        if (btn) btn.classList.toggle('active', currentLeaderboardSystem === s);
+    });
+
+    await loadLeaderboard();
+}
+
+async function onLeaderboardRangeChange() {
+    const rangeSelect = document.getElementById('leaderboard-range-select');
+    if (rangeSelect) {
+        currentLeaderboardRange = rangeSelect.value;
+        await loadLeaderboard();
+    }
+}
+
+async function onLeaderboardTypeChange() {
+    const typeSelect = document.getElementById('leaderboard-type-select');
+    if (typeSelect) {
+        currentLeaderboardType = typeSelect.value;
+        await loadLeaderboard();
+    }
+}
+
+async function openLeaderboardModal() {
+    const modal = document.getElementById('modal-leaderboard');
+    if (modal) modal.classList.remove('hidden');
+    
+    // Sincronizar selectores
+    const rangeSelect = document.getElementById('leaderboard-range-select');
+    if (rangeSelect) currentLeaderboardRange = rangeSelect.value;
+
+    const typeSelect = document.getElementById('leaderboard-type-select');
+    if (typeSelect) currentLeaderboardType = typeSelect.value;
+
+    await loadLeaderboard();
+}
+
+function closeLeaderboardModal() {
+    const modal = document.getElementById('modal-leaderboard');
+    if (modal) modal.classList.add('hidden');
+}
+
+async function loadLeaderboard() {
+    const tbody = document.getElementById('leaderboard-body');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="4">Cargando puntuaciones...</td></tr>';
+
+    // Construir la clave tripartita
+    const combinedMode = `${currentLeaderboardSystem}_${currentLeaderboardRange}_${currentLeaderboardType}`;
+
+    try {
+        const scores = await getTopScores('arqueomat', combinedMode, 10);
+
+        if (!scores || scores.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4">Sin récords en ${currentLeaderboardSystem.toUpperCase()} (${currentLeaderboardRange}) - ${currentLeaderboardType}. ¡Sé el primero!</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = '';
+        scores.forEach((item, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}</td>
+                <td><strong>${item.studentName}</strong></td>
+                <td>${item.score}</td>
+                <td>${item.effectiveness}%</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (e) {
+        console.error("Error cargando leaderboard:", e);
+        tbody.innerHTML = '<tr><td colspan="4">No se pudo cargar la tabla de líderes.</td></tr>';
+    }
+}
+
+
+
+
+// ==========================================
+// 6. EXPOSICIÓN GLOBAL A WINDOW
+// ==========================================
+window.showScreen = showScreen;
+window.selectSystem = selectSystem;
+window.selectDifficulty = selectDifficulty;
+window.selectGameMode = selectGameMode;
+window.startSoloGame = startSoloGame;
+window.startGame = startGame;
+window.checkDirectAnswer = checkDirectAnswer;
+window.loadNextQuestion = loadNextQuestion;
+window.confirmEndGame = confirmEndGame;
+window.resetToSystemSelection = resetToSystemSelection;
+window.toggleAudio = toggleAudio;
+window.openAudioSettings = openAudioSettings;
+window.closeAudioSettings = closeAudioSettings;
+window.updateVolumes = updateVolumes;
+window.switchLeaderboardMode = switchLeaderboardMode;
+window.openLeaderboardModal = openLeaderboardModal;
+window.closeLeaderboardModal = closeLeaderboardModal;
+// Registro global de funciones
+window.onLeaderboardRangeChange = onLeaderboardRangeChange;
+window.onLeaderboardTypeChange = onLeaderboardTypeChange;
+window.switchLeaderboardMode = switchLeaderboardMode;
+window.openLeaderboardModal = openLeaderboardModal;
+window.closeLeaderboardModal = closeLeaderboardModal;

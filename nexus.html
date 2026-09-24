@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EL NEXUS: El Desafío de los Siete Mundos Matemáticos</title>
+    
+    <!-- KaTeX para renderizado elegante de fórmulas matemáticas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="css/nexus.css">
+</head>
+<body>
+
+    <!-- BARRA SUPERIOR GLOBAL -->
+    <header class="top-bar">
+        <h1 class="logo">⚡ EL NEXUS ⚡</h1>
+        <div class="audio-controls-group">
+            <button class="btn-audio" onclick="window.location.href='index.html'">🌌 Multiverso</button>
+            <button class="btn-audio" onclick="openLeaderboardModal()">🏆 Líderes</button>
+            <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">🔊 Sound ON</button>
+            <button id="btn-settings" class="btn-settings" onclick="openAudioSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <!-- MARCO CENTRAL DEL JUEGO -->
+    <main id="nexus-container">
+
+        <!-- PANTALLA 1: PORTADA -->
+        <section id="screen-cover" class="screen active" style="cursor: pointer;">
+            <div class="blink-text">
+                Presiona <strong>[ ENTER ]</strong> para iniciar la Infiltración
+            </div>
+        </section>
+
+        <!-- PANTALLA 2: SELECCIÓN DE MODO -->
+        <section id="screen-config-1" class="screen hidden">
+            <h2>SELECCIONA EL MODO DE INFILTRACIÓN</h2>
+            <div class="modes-grid">
+                <div class="mode-card" onclick="selectGameMode('solitario')">
+                    <div class="mode-icon">👤</div>
+                    <h3>DESAFÍO SOLITARIO</h3>
+                    <p>Mide tu efectividad individual en los 7 mundos.</p>
+                </div>
+                <div class="mode-card" onclick="selectGameMode('equipos')">
+                    <div class="mode-icon">⚔️</div>
+                    <h3>DUELO DE EQUIPOS</h3>
+                    <p>Enfrentamiento por turnos entre dos escuadrones.</p>
+                </div>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-cover')">⬅ Volver a Portada</button>
+        </section>
+
+        <!-- PANTALLA 3: CONFIGURACIÓN DE PARÁMETROS -->
+        <section id="screen-config-2" class="screen hidden">
+            <h2>CONFIGURACIÓN DE PARTIDA</h2>
+            <form id="form-config" onsubmit="iniciarPartida(event)">
+                <div id="player-inputs" class="config-group">
+                    <label for="player-name">Nombre del Jugador:</label>
+                    <input type="text" id="player-name" placeholder="Ej. CyberPhantom" maxlength="20" autocomplete="off">
+                </div>
+
+                <div id="team-inputs" class="config-group hidden">
+                    <label for="team-1-name">Equipo A (Cian):</label>
+                    <input type="text" id="team-1-name" value="CyberPhantom" maxlength="20" autocomplete="off">
+                    <label for="team-2-name" style="margin-top: 10px;">Equipo B (Dorado):</label>
+                    <input type="text" id="team-2-name" value="NetGuardians" maxlength="20" autocomplete="off">
+                </div>
+
+                <div class="config-group">
+                    <label for="select-quantity">Cantidad de Enigmas Aleatorios:</label>
+                    <select id="select-quantity"></select>
+                </div>
+
+                <div class="config-group">
+                    <label for="select-timer">Límite de Tiempo por Reactivo:</label>
+                    <select id="select-timer">
+                        <option value="0">♾️ Sin Límite de Tiempo</option>
+                        <option value="30">⏱️ 30 Segundos</option>
+                        <option value="45">⏱️ 45 Segundos</option>
+                        <option value="60">⏱️ 60 Segundos</option>
+                    </select>
+                </div>
+
+                <div class="config-actions">
+                    <button type="button" class="btn-back" onclick="showScreen('screen-config-1')">⬅ Cambiar Modo</button>
+                    <button type="submit" class="btn-primary">🚀 INICIAR INFILTRACIÓN</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- PANTALLA 4: ZONA DE JUEGO -->
+        <section id="screen-game" class="screen hidden">
+            <div class="game-header">
+                <div class="turn-indicator" id="turn-indicator">Jugador: CyberPhantom</div>
+                <div class="game-badge" id="area-badge">💻 Mundo Matemático</div>
+                <div class="timer-box" id="timer-box">⏱️ <span id="timer-val">--</span>s</div>
+            </div>
+
+            <div class="question-card" id="question-card">
+                <div id="question-progress">Enigma 1 de 21</div>
+                <div id="question-text" class="question-text">Cargando reactivo...</div>
+
+                <!-- RETROALIMENTACIÓN DE RESPUESTA -->
+                <div id="answer-feedback" class="answer-feedback hidden">
+                    <div id="feedback-title" class="feedback-title"></div>
+                    <div id="feedback-detail" class="feedback-detail"></div>
+                </div>
+                
+                <!-- ==========================================
+                    ARQUEOMAT - NÚMERO ANTIGUO
+                    Representación visual del sistema numérico
+                    ========================================== -->
+                <div id="ancient-number-container"
+                    class="nexus-ancient-container hidden">
+
+                    <div class="nexus-ancient-header">
+                        <span id="ancient-system-label">
+                            SISTEMA ANTIGUO
+                        </span>
+                    </div>
+
+                    <div id="ancient-number-display"
+                        class="nexus-ancient-display">
+                    </div>
+
+                </div>
+
+                <!-- ==========================================
+                    OPERACIÓN HACKERS - CLASIFICACIÓN
+                    Cápsula interactiva de números reales
+                    ========================================== -->
+                <div id="real-classification-container"
+                    class="nexus-classification-container hidden">
+
+                    <!-- Cápsula de datos -->
+                    <div class="nexus-data-capsule-wrapper">
+
+                        <div id="real-data-capsule"
+                            class="nexus-data-capsule"
+                            draggable="true">
+
+                            <span id="real-capsule-value"></span>
+
+                        </div>
+
+                        <small class="nexus-capsule-hint">
+                            Arrastra la cápsula o selecciona un puerto
+                        </small>
+
+                    </div>
+
+
+                    <!-- Puertos de clasificación -->
+                    <div id="real-classification-ports"
+                        class="nexus-classification-ports">
+
+                        <button type="button"
+                                class="nexus-classification-port"
+                                data-category="Enteros">
+
+                            <span class="nexus-port-icon">🔌</span>
+                            <strong>ENTEROS</strong>
+                            <small>..., -2, -1, 0, 1, 2, ...</small>
+
+                        </button>
+
+
+                        <button type="button"
+                                class="nexus-classification-port"
+                                data-category="Racionales">
+
+                            <span class="nexus-port-icon">🛡️</span>
+                            <strong>RACIONALES</strong>
+                            <small>Fracciones y decimales exactos/periódicos</small>
+
+                        </button>
+
+
+                        <button type="button"
+                                class="nexus-classification-port"
+                                data-category="Irracionales">
+
+                            <span class="nexus-port-icon">🔐</span>
+                            <strong>IRRACIONALES</strong>
+                            <small>π, e, raíces no exactas...</small>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- ==========================================
+                    OPERACIÓN HACKERS - PANEL DE CABLES
+                    Relaciones matemáticas
+                    ========================================== -->
+                <div id="hackers-cables-container"
+                    class="nexus-cables-container hidden">
+
+                    <!-- Encabezado interno -->
+                    <div class="nexus-cables-status">
+                        <span>⚡ PANEL DE CONEXIONES</span>
+                        <small id="hackers-cables-progress">
+                            0 / 4 conexiones
+                        </small>
+                    </div>
+
+
+                    <!-- Área principal del panel -->
+                    <div id="hackers-cables-board"
+                        class="nexus-cables-board">
+
+                        <!--
+                            SVG donde dibujaremos los cables.
+                            Se coloca sobre el tablero, pero posteriormente
+                            CSS permitirá interactuar con los nodos inferiores.
+                        -->
+                        <svg id="hackers-cables-svg"
+                            class="nexus-cables-svg"
+                            aria-hidden="true">
+                        </svg>
+
+
+                        <!-- Columna izquierda -->
+                        <div id="hackers-cables-left"
+                            class="nexus-cables-column nexus-cables-left">
+
+                            <!--
+                                nexus.js generará aquí los nodos:
+                                ○ Conmutativa
+                                ○ Asociativa
+                                etc.
+                            -->
+
+                        </div>
+
+
+                        <!-- Columna derecha -->
+                        <div id="hackers-cables-right"
+                            class="nexus-cables-column nexus-cables-right">
+
+                            <!--
+                                nexus.js generará aquí los nodos
+                                en orden aleatorio.
+                            -->
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Mensaje interno de interacción -->
+                    <div id="hackers-cables-message"
+                        class="nexus-cables-message">
+
+                        Selecciona un conector de cada columna.
+
+                    </div>
+
+                </div>
+
+                <!-- ==========================================
+                    OPERACIÓN HACKERS - ÁRBOL DE FACTORIZACIÓN
+                    ========================================== -->
+                <div id="factor-tree-container"
+                    class="nexus-factor-tree-container hidden">
+
+                    <div class="nexus-factor-tree-header">
+                        <span>🌳 ÁRBOL DE FACTORIZACIÓN</span>
+                        <small>Completa las ramas</small>
+                    </div>
+
+
+                    <div id="factor-tree-board"
+                        class="nexus-factor-tree-board">
+
+                        <!-- Ramas del árbol -->
+                        <svg id="factor-tree-svg"
+                            class="nexus-factor-tree-svg"
+                            aria-hidden="true">
+
+                            <line id="factor-tree-line-left"></line>
+                            <line id="factor-tree-line-right"></line>
+
+                        </svg>
+
+
+                        <!-- Número que se va a factorizar -->
+                        <div class="nexus-factor-root">
+
+                            <span class="nexus-factor-label">
+                                NÚMERO
+                            </span>
+
+                            <div id="factor-tree-number"
+                                class="nexus-factor-node nexus-factor-main">
+                                24
+                            </div>
+
+                        </div>
+
+
+                        <!-- Factores -->
+                        <div class="nexus-factor-children">
+
+                            <div class="nexus-factor-child">
+
+                                <label for="factor-tree-input-left">
+                                    FACTOR A
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="factor-tree-input-left"
+                                    class="nexus-factor-input"
+                                    inputmode="numeric"
+                                    autocomplete="off"
+                                    placeholder="?"
+                                    min="1"
+                                >
+
+                            </div>
+
+
+                            <div class="nexus-factor-operation">
+                                ×
+                            </div>
+
+
+                            <div class="nexus-factor-child">
+
+                                <label for="factor-tree-input-right">
+                                    FACTOR B
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="factor-tree-input-right"
+                                    class="nexus-factor-input"
+                                    inputmode="numeric"
+                                    autocomplete="off"
+                                    placeholder="?"
+                                    min="1"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="factor-tree-message"
+                        class="nexus-factor-tree-message">
+
+                        Introduce dos factores del número.
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="btn-submit-factor-tree"
+                        class="btn-primary"
+                        onclick="checkFactorTreeAnswer()">
+
+                        ⚡ VERIFICAR FACTORIZACIÓN
+
+                    </button>
+
+                </div>
+
+
+
+
+                <!-- Opciones múltiples -->
+                <div id="answers-multiple" class="answers-grid hidden"></div>
+                
+                <!-- TABLA DE VERDAD INTERACTIVA -->
+                <div id="answers-truth-table" class="nexus-truth-container hidden">
+
+                    <div id="nexus-truth-table"></div>
+
+                    <button
+                        type="button"
+                        id="btn-submit-truth"
+                        class="btn-primary"
+                        onclick="checkTruthTableAnswer()">
+                        ⚡ VERIFICAR CÓDIGO
+                    </button>
+
+                </div>
+
+                
+
+                <!-- Consola para entrada numérica/texto directo -->
+                <div id="answers-console" class="console-box hidden">
+                    <input type="text" id="console-input" placeholder="Ingresa el valor o respuesta..." autocomplete="off">
+                    <button type="button" id="btn-submit-console" class="btn-primary" onclick="checkConsoleAnswer()">Enviar</button>
+                </div>
+            </div>
+            
+            <button class="btn-back" style="margin-top: 15px;" onclick="confirmEndGame()">🏁 Abortar Misión</button>
+        </section>
+
+    </main>
+
+    <!-- MODAL POPUP DE CONTROL DE VOLUMEN -->
+    <div id="modal-settings" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 class="modal-title">🎛️ Control de Volumen</h3>
+            <div class="volume-group">
+                <label for="vol-music">Música de Fondo 🎵</label>
+                <input type="range" id="vol-music" min="0" max="1" step="0.05" value="0.8" oninput="updateVolumes()">
+            </div>
+            <div class="volume-group">
+                <label for="vol-sfx">Efectos de Sonido 🔔</label>
+                <input type="range" id="vol-sfx" min="0" max="1" step="0.05" value="0.9" oninput="updateVolumes()">
+            </div>
+            <button class="btn-cyan-action" onclick="closeAudioSettings()">Guardar y Cerrar</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/nexus.js"></script>
+</body>
+</html>

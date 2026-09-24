@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operación Hackers: Decodificando el Sistema</title>
+    <link rel="stylesheet" href="css/hackers.css">
+</head>
+<body>
+
+    <!-- ENCABEZADO CON NAVEGACIÓN Y CONTROLES DE AUDIO INTEGRADOS -->
+    <header class="top-bar">
+        <h1 class="logo">⚡ OPERACIÓN HACKERS ⚡</h1>
+        <div class="audio-controls-group">
+            <button class="btn-audio" onclick="window.location.href='index.html?screen=menu'">🌌 Multiverso</button>
+            <button class="btn-audio" onclick="openLeaderboardModal()">🏆 Líderes</button>
+            <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">🔊 Sound ON</button>
+            <button id="btn-settings" class="btn-settings" onclick="openAudioSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <div class="game-card">
+
+        <!-- PANTALLA 1: PORTADA -->
+        <section id="screen-cover" class="screen active" style="cursor: pointer;">
+            <div class="blink-text-full">
+                Presiona <strong>[ ENTER ]</strong> para iniciar la Infiltración
+            </div>
+        </section>
+
+        <!-- PANTALLA 2: SELECCIÓN DE SERVIDOR / MODO DE HACKEO -->
+        <section id="screen-server" class="screen hidden">
+            <h2>Selecciona el Servidor a Infiltrar</h2>
+            <div class="menu-grid">
+                <button onclick="selectServer('servidor1')">🔌 Servidor 1: Firewall de Red<br><small>(Clasificación y Enteros)</small></button>
+                <button onclick="selectServer('servidor2')">🛡️ Servidor 2: Decodificador<br><small>(Propiedades, Neutros e Inversos)</small></button>
+                <button onclick="selectServer('servidor3')">🔐 Servidor 3: Cifrado Core<br><small>(Factorización, MCD y mcm)</small></button>
+                <button class="btn-root-mode" onclick="selectServer('root')">💀 MODO ROOT: Infiltración Total<br><small>(Evalúa todos los contenidos)</small></button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-cover')">⬅ Regresar a Terminal</button>
+        </section>
+
+        <!-- PANTALLA 3: DIFICULTAD / COMPLEJIDAD -->
+        <section id="screen-difficulty" class="screen hidden">
+            <h2>Nivel de Cifrado / Complejidad</h2>
+            <div class="menu-grid">
+                <button onclick="selectDifficulty(1)">Nivel 1: Cifrado Básico (Novato)</button>
+                <button onclick="selectDifficulty(2)">Nivel 2: Cifrado Intermedio (Analista)</button>
+                <button onclick="selectDifficulty(3)">Nivel 3: Cifrado Avanzado (Elite Hacker)</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-server')">⬅ Regresar a Servidores</button>
+        </section>
+
+        <!-- PANTALLA 4: MODO DE JUEGO (SOLITARIO / EQUIPOS) -->
+        <section id="screen-mode" class="screen hidden">
+            <h2>Selecciona la Modalidad de Operación</h2>
+            <div class="menu-grid">
+                <button onclick="selectGameMode('solitario')">👤 Infiltración Individual (Práctica/Evaluación)</button>
+                <button onclick="selectGameMode('equipos')">👥 Duelo Ciber-Hacker (Competencia por Equipos)</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-difficulty')">⬅ Regresar a Dificultad</button>
+        </section>
+
+        <!-- PANTALLA 5A: CONFIGURACIÓN SOLITARIO -->
+        <section id="screen-setup-solo" class="screen hidden">
+            <h2>Registro de Agente Analista</h2>
+            <form id="setup-form-solo" onsubmit="startSoloGame(event)">
+                <div class="input-group">
+                    <label for="player-name">Nombre Completo del Alumno:</label>
+                    <input type="text" id="player-name" placeholder="Ej. Juan Pérez López" required autocomplete="off">
+                </div>
+
+                <!-- SE RETIRÓ LA SELECCIÓN DE ENIGMAS EN MODO INDIVIDUAL -->
+
+                <div class="input-group">
+                    <label for="question-type-solo">Tipo de Validación:</label>
+                    <select id="question-type-solo">
+                        <option value="multiple">Opción Múltiple (4 Accesos)</option>
+                        <option value="direct">Entrada Directa por Consola</option>
+                        <option value="mixed" selected>Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">⚡ ¡INICIAR HACKEO!</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modalidad</button>
+        </section>
+
+        <!-- PANTALLA 5B: CONFIGURACIÓN EQUIPOS -->
+        <section id="screen-setup" class="screen hidden">
+            <h2>Configuración del Duelo Ciber</h2>
+            <form id="setup-form" onsubmit="startGame(event)">
+                <div class="input-group">
+                    <label for="team1-name">Nombre Escuadrón 1:</label>
+                    <input type="text" id="team1-name" value="CyberPhantom" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="team2-name">Nombre Escuadrón 2:</label>
+                    <input type="text" id="team2-name" value="NetGuardians" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="total-rounds">Sistemas a Infiltrar (Total Reactivos):</label>
+                    <select id="total-rounds">
+                        <option value="6">6 Enigmas</option>
+                        <option value="10" selected>10 Enigmas</option>
+                        <option value="16">16 Enigmas</option>
+                        <option value="20">20 Enigmas</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="question-type">Tipo de Validación:</label>
+                    <select id="question-type">
+                        <option value="multiple">Opción Múltiple</option>
+                        <option value="direct">Entrada Directa</option>
+                        <option value="mixed">Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">⚡ ¡INICIAR DUELO!</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modalidad</button>
+        </section>
+
+        <!-- PANTALLA 6: ÁREA DE JUEGO / TERMINAL -->
+        <section id="screen-game" class="screen hidden">
+            <div class="scoreboard" id="scoreboard-container">
+                <!-- Se actualiza dinámicamente -->
+            </div>
+
+            <p class="instruction" id="challenge-instruction">Decodifica la instrucción del sistema:</p>
+
+            <!-- CONTENEDOR CENTRAL DE DESAFÍO CIBERPUNK -->
+            <div class="hack-display-container" id="hack-display">
+                <!-- Aquí el JS renderiza dinámicamente el reto (Clasificación, Operación, Propiedad, MCD/mcm) -->
+            </div>
+
+            <!-- Opciones Múltiples -->
+            <div class="options-grid" id="options-container"></div>
+
+            <!-- Entrada Directa por Consola -->
+            <div id="direct-input-container" class="direct-input-container hidden">
+                <input type="text" id="direct-answer" placeholder="Introduce el valor numérico..." autocomplete="off">
+                <button id="btn-submit-answer" onclick="checkDirectAnswer()">Ejecutar Código ↵</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="game-action-buttons">
+                <button id="btn-next" class="btn-next hidden" onclick="loadNextQuestion()">Siguiente Protocolo ➔</button>
+                <button class="btn-abort" id="btn-abort-game" onclick="confirmEndGame()">🏁 Abortar Misión</button>
+            </div>
+
+
+            <!-- MODO CONEXIÓN DE CABLES (SERVIDOR 2) -->
+            <div id="cable-game-container" class="hidden">
+                <div class="cable-instructions">
+                    <p>⚡ Conecta cada propiedad aritmética con la expresión matemática que la representa.</p>
+                </div>
+
+                <!-- Lienzo para dibujar las líneas SVG de los cables -->
+                <svg id="cable-svg-canvas"></svg>
+
+                <div class="cable-columns">
+                    <!-- Columna Izquierda: Nodos de Propiedades -->
+                    <div id="cable-left-column" class="cable-column"></div>
+
+                    <!-- Columna Derecha: Nodos de Expresiones -->
+                    <div id="cable-right-column" class="cable-column"></div>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR DEL MINIJUEGO DE ÁRBOLES PRIMOS (SERVIDOR 3) -->
+            <div id="tree-game-container" class="hidden">
+                <div class="tree-instructions">
+                    🧩 Completa los nodos del árbol para descomponer el número en factores primos:
+                </div>
+                <div id="tree-canvas" class="tree-canvas"></div>
+            </div>
+
+
+        </section>
+
+        <!-- PANTALLA 7: REPORTES Y RESULTADOS -->
+        <section id="screen-results" class="screen hidden">
+            <h1 id="results-title">📋 REPORTE DE AUDITORÍA CIBERNÉTICA 📋</h1>
+            <h2 id="winner-message"></h2>
+            <div class="final-scores" id="final-scores"></div>
+            <button class="btn-start" onclick="resetToServerSelection()">Nueva Infiltración 🔄</button>
+        </section>
+
+    </div>
+
+    <!-- MODAL DE CONFIGURACIÓN DE AUDIO -->
+    <div id="modal-audio-settings" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>🎛️ Control de Volumen de Consola</h3>
+            
+            <div class="slider-group">
+                <label for="volume-bg">Fondo Sonoro Synthesizer 🎵</label>
+                <input type="range" id="volume-bg" min="0" max="1" step="0.05" value="0.5" oninput="updateVolumes()">
+            </div>
+
+            <div class="slider-group">
+                <label for="volume-sfx">Efectos de Terminal 🔔</label>
+                <input type="range" id="volume-sfx" min="0" max="1" step="0.05" value="0.3" oninput="updateVolumes()">
+            </div>
+
+            <button class="btn-start" onclick="closeAudioSettings()">Guardar y Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE TABLA GLOBAL DE LÍDERES -->
+    <div id="modal-leaderboard" class="modal-overlay hidden">
+        <div class="modal-content leaderboard-modal">
+
+            <!-- Pestañas de Servidores -->
+            <div class="leaderboard-tabs">
+                <button id="btn-tab-servidor1" class="tab-btn active" onclick="switchLeaderboardMode('servidor1')">🔌 Servidor 1</button>
+                <button id="btn-tab-servidor2" class="tab-btn" onclick="switchLeaderboardMode('servidor2')">🛡️ Servidor 2</button>
+                <button id="btn-tab-servidor3" class="tab-btn" onclick="switchLeaderboardMode('servidor3')">🔐 Servidor 3</button>
+                <button id="btn-tab-root" class="tab-btn" onclick="switchLeaderboardMode('root')">💀 Root</button>
+            </div>
+
+            <!-- Contenedor con Filtros de Nivel y Validación -->
+            <div class="leaderboard-filters-row">
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-level-select">🎯 Nivel:</label>
+                    <select id="leaderboard-level-select" class="leaderboard-select" onchange="onLeaderboardLevelChange()">
+                        <option value="1">Nivel 1: Novato</option>
+                        <option value="2">Nivel 2: Analista</option>
+                        <option value="3">Nivel 3: Elite Hacker</option>
+                    </select>
+                </div>
+
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-type-select">📝 Validación:</label>
+                    <select id="leaderboard-type-select" class="leaderboard-select" onchange="onLeaderboardTypeChange()">
+                        <option value="multiple">Opción Múltiple</option>
+                        <option value="direct">Entrada Directa</option>
+                        <option value="mixed">Mixto</option>
+                    </select>
+                </div>
+            </div>
+
+            <h3>🏆 Tabla Global de Líderes</h3>
+            <p class="leaderboard-subtitle">Top 10 - Mejores Agentes (Práctica Individual)</p>
+
+            <div class="leaderboard-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Agente</th>
+                            <th>Hackeos</th>
+                            <th>Efectividad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr>
+                            <td colspan="4">Cargando puntuaciones...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn-start" onclick="closeLeaderboardModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA INSTITUCIONAL -->
+    <footer class="institutional-footer">
+        <img src="img/main/logo.png" alt="Logo Institución" class="footer-logo" onerror="this.style.display='none'">
+        <span class="footer-text">C.E.T.i.s. N° 47</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">Roberto Gallegos Santos</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">2026</span>
+    </footer>
+
+    <!-- <script src="js/hackers.js"></script> -->
+    <script type="module" src="js/hackers.js"></script>
+</body>
+</html>

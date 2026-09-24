@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alquimia Matemática: El Taller del Mago</title>
+    <link rel="stylesheet" href="css/alquimia.css">
+</head>
+<body>
+
+    <!-- ENCABEZADO CON NAVEGACIÓN Y CONTROLES DE AUDIO -->
+    <header class="top-bar">
+        <h1 class="logo">🧪 ALQUIMIA MATEMÁTICA 🧪</h1>
+        <div class="audio-controls-group">
+            <button class="btn-audio" onclick="window.location.href='index.html?screen=menu'">🌌 Multiverso</button>
+            <button class="btn-audio" onclick="openLeaderboardModal()">🏆 Líderes</button>
+            <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">🔊 Sound ON</button>
+            <button id="btn-settings" class="btn-settings" onclick="openAudioSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <div class="game-card">
+
+        <!-- PANTALLA 1: PORTADA -->
+        <section id="screen-cover" class="screen active" style="cursor: pointer;">
+            <div class="blink-text-full">
+                Presiona <strong>[ ENTER ]</strong> para Iniciar el Grimoire
+            </div>
+        </section>
+
+        <!-- PANTALLA 2: SELECCIÓN DE TOMO / TEMA -->
+        <section id="screen-server" class="screen hidden">
+            <h2>Selecciona el Tomo de Alquimia a Estudiar</h2>
+            <div class="menu-grid">
+                <button onclick="selectServer('tomo1')">📜 Tomo 1: Unidades y Equivalencias<br><small>(Fracciones, Enteros y Concepto)</small></button>
+                <button onclick="selectServer('tomo2')">🧪 Tomo 2: Destilaciones y Reducción<br><small>(Simplificación y Operaciones)</small></button>
+                <button onclick="selectServer('tomo3')">⚖️ Tomo 3: Proporciones y Elixires<br><small>(Proporción Directa, Inversa y %)</small></button>
+                <button class="btn-root-mode" onclick="selectServer('root')">🔮 GRAN ALQUIMISTA: Prueba de Maestro<br><small>(Evalúa todos los tomos)</small></button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-cover')">⬅ Regresar a la Entrada</button>
+        </section>
+
+        <!-- PANTALLA 3: DIFICULTAD DE MEZCLA -->
+        <section id="screen-difficulty" class="screen hidden">
+            <h2>Nivel de Maestría Alquímica</h2>
+            <div class="menu-grid">
+                <button onclick="selectDifficulty(1)">Nivel 1: Aprendiz de Magia (Básico)</button>
+                <button onclick="selectDifficulty(2)">Nivel 2: Alquimista de Torre (Intermedio)</button>
+                <button onclick="selectDifficulty(3)">Nivel 3: Gran Archimago (Avanzado)</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-server')">⬅ Regresar a Tomos</button>
+        </section>
+
+        <!-- PANTALLA 4: MODO DE JUEGO (SOLITARIO / DUELO DE MAGOS) -->
+        <section id="screen-mode" class="screen hidden">
+            <h2>Selecciona la Modalidad de Alquimia</h2>
+            <div class="menu-grid">
+                <button onclick="selectGameMode('solitario')">🧙‍♂️ Experimento Solitario (Práctica/Evaluación)</button>
+                <button onclick="selectGameMode('equipos')">⚔️ Duelo de Gremios (Competencia por Equipos)</button>
+            </div>
+            <button class="btn-back" onclick="showScreen('screen-difficulty')">⬅ Regresar a Maestría</button>
+        </section>
+
+        <!-- PANTALLA 5A: REGISTRO APRENDIZ SOLITARIO -->
+        <section id="screen-setup-solo" class="screen hidden">
+            <h2>Registro de Aprendiz de Magia</h2>
+            <form id="setup-form-solo" onsubmit="startSoloGame(event)">
+                <div class="input-group">
+                    <label for="player-name">Nombre Completo del Alumno:</label>
+                    <input type="text" id="player-name" placeholder="Ej. Luna Valiente" required autocomplete="off">
+                </div>
+
+                <div class="infinite-mode-notice">
+                    <span>♾️</span> <strong>Modo Práctica Ilimitada:</strong> Podrás resolver tantas pociones como desees. La sesión terminará cuando hagas clic en <em>"Salir del Taller"</em>.
+                </div>
+
+                <div class="input-group">
+                    <label for="question-type-solo">Tipo de Calibración:</label>
+                    <select id="question-type-solo">
+                        <option value="multiple">Opción Múltiple (4 Ingredientes)</option>
+                        <option value="direct">Entrada Directa en Caldero</option>
+                        <option value="mixed" selected>Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">✨ ¡COMENZAR MEZCLA! ✨</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modalidad</button>
+        </section>
+
+        <!-- PANTALLA 5B: CONFIGURACIÓN DE GREMIOS (EQUIPOS) -->
+        <section id="screen-setup" class="screen hidden">
+            <h2>Configuración del Duelo de Gremios</h2>
+            <form id="setup-form" onsubmit="startGame(event)">
+                <div class="input-group">
+                    <label for="team1-name">Nombre Gremio 1:</label>
+                    <input type="text" id="team1-name" value="Fénix Dorado" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="team2-name">Nombre Gremio 2:</label>
+                    <input type="text" id="team2-name" value="Sombra Estelar" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="total-rounds">Total de Encantamientos (Reactivos):</label>
+                    <select id="total-rounds">
+                        <option value="6">6 Enigmas</option>
+                        <option value="10" selected>10 Enigmas</option>
+                        <option value="16">16 Enigmas</option>
+                        <option value="20">20 Enigmas</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="question-type">Tipo de Validación:</label>
+                    <select id="question-type">
+                        <option value="multiple">Opción Múltiple</option>
+                        <option value="direct">Entrada Directa</option>
+                        <option value="mixed">Mixto (Aleatorio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-start">⚔️ ¡INICIAR DUELO DE MAGIA!</button>
+            </form>
+            <button class="btn-back" onclick="showScreen('screen-mode')">⬅ Regresar a Modalidad</button>
+        </section>
+
+        <!-- PANTALLA 6: ÁREA DE JUEGO / TALLER DE MEZCLAS -->
+        <section id="screen-game" class="screen hidden">
+            <div class="scoreboard" id="scoreboard-container">
+                <!-- Se actualiza dinámicamente -->
+            </div>
+
+            <p class="instruction" id="challenge-instruction">Lee detenidamente el pergamino:</p>
+
+            <!-- CONTENEDOR CENTRAL DE DESAFÍO ALQUÍMICO (Texto/Estándar) -->
+            <div class="hack-display-container" id="hack-display">
+                <!-- Aquí JS renderiza dinámicamente la fórmula o problema -->
+            </div>
+
+            <!-- NUEVO REACTIVO: BALANZA DE TRANSMUTACIÓN -->
+            <div id="balance-game-container" class="balance-container hidden">
+                <div class="balance-scale-wrapper">
+                    <div class="balance-pan left-pan" id="balance-left-pan">?</div>
+                    <div class="balance-pivot">⚖️</div>
+                    <div class="balance-pan right-pan" id="balance-right-pan">?</div>
+                </div>
+            </div>
+
+            <!-- NUEVO REACTIVO: SECUENCIA DE PASOS -->
+            <div id="sequence-game-container" class="sequence-container hidden">
+                <div id="sequence-list" class="sequence-list"></div>
+                <button id="btn-submit-sequence" class="btn-start" onclick="checkSequenceAnswer()">🧪 Destilar Fórmula ↵</button>
+            </div>
+
+            <!-- NUEVO REACTIVO: SELECCIÓN MÚLTIPLE DE FRASCOS -->
+            <div id="multi-select-container" class="multi-select-container hidden">
+                <div id="jars-grid" class="jars-grid"></div>
+                <button id="btn-submit-multi" class="btn-start" onclick="checkMultiSelectAnswer()">✨ Mezclar Selección ↵</button>
+            </div>
+
+            <!-- NUEVO REACTIVO: ÁRBOLES DE FACTORIZACIÓN ALQUÍMICA -->
+            <div id="tree-game-container" class="tree-container hidden">
+                <svg id="tree-svg-canvas" class="tree-svg"></svg>
+                <div id="tree-nodes-container" class="tree-nodes"></div>
+            </div>
+
+            <!-- Opciones Múltiples Estándar -->
+            <div class="options-grid" id="options-container"></div>
+
+            <!-- Entrada Directa por Consola / Caldero Estándar -->
+            <div id="direct-input-container" class="direct-input-container hidden">
+                <input type="text" id="direct-answer" placeholder="Escribe tu respuesta (ej. 3/4)..." autocomplete="off">
+                <button id="btn-submit-answer" onclick="checkDirectAnswer()">Lanzar Hechizo ↵</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="game-action-buttons">
+                <button id="btn-next" class="btn-next hidden" onclick="loadNextQuestion()">Siguiente Mezcla ➔</button>
+                <button class="btn-abort" id="btn-abort-game" onclick="confirmEndGame()">🏁 Salir del Taller</button>
+            </div>
+        </section>
+
+        <!-- PANTALLA 7: REPORTES Y RESULTADOS -->
+        <section id="screen-results" class="screen hidden">
+            <h1 id="results-title">📜 REPORTE DE EVALUACIÓN ALQUÍMICA 📜</h1>
+            <h2 id="winner-message"></h2>
+            <div class="final-scores" id="final-scores"></div>
+            <button class="btn-start" onclick="resetToServerSelection()">Nuevo Experimento 🔄</button>
+        </section>
+
+    </div>
+
+    <!-- MODAL DE TABLA GLOBAL DE LÍDERES -->
+    <div id="modal-leaderboard" class="modal-overlay hidden">
+        <div class="modal-content leaderboard-modal">
+
+            <!-- Pestañas de Tomos -->
+            <div class="leaderboard-tabs">
+                <button id="btn-tab-tomo1" class="tab-btn active" onclick="switchLeaderboardMode('tomo1')">📜 Tomo 1</button>
+                <button id="btn-tab-tomo2" class="tab-btn" onclick="switchLeaderboardMode('tomo2')">🧪 Tomo 2</button>
+                <button id="btn-tab-tomo3" class="tab-btn" onclick="switchLeaderboardMode('tomo3')">⚖️ Tomo 3</button>
+                <button id="btn-tab-root" class="tab-btn" onclick="switchLeaderboardMode('root')">🔮 Gran Alquimista</button>
+            </div>
+
+            <!-- Filtros de Nivel y Validación -->
+            <div class="leaderboard-filters-row">
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-level-select">🎯 Maestría:</label>
+                    <select id="leaderboard-level-select" class="leaderboard-select" onchange="onLeaderboardLevelChange()">
+                        <option value="1">Nivel 1: Aprendiz</option>
+                        <option value="2">Nivel 2: Alquimista</option>
+                        <option value="3">Nivel 3: Archimago</option>
+                    </select>
+                </div>
+
+                <div class="leaderboard-filter-group">
+                    <label for="leaderboard-type-select">📝 Calibración:</label>
+                    <select id="leaderboard-type-select" class="leaderboard-select" onchange="onLeaderboardTypeChange()">
+                        <option value="multiple">Opción Múltiple</option>
+                        <option value="direct">Entrada Directa</option>
+                        <option value="mixed">Mixto</option>
+                    </select>
+                </div>
+            </div>
+
+            <h3>🏆 Tabla Global de Líderes</h3>
+            <p class="leaderboard-subtitle">Top 10 - Mejores Alquimistas (Práctica Individual)</p>
+
+            <div class="leaderboard-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Aprendiz</th>
+                            <th>Pociones</th>
+                            <th>Efectividad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr>
+                            <td colspan="4">Cargando puntuaciones...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn-start" onclick="closeLeaderboardModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIGURACIÓN DE AUDIO -->
+    <div id="modal-audio-settings" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>🎛️ Control de Volumen Místico</h3>
+            
+            <div class="slider-group">
+                <label for="volume-bg">Música de Ambiente 🎶</label>
+                <input type="range" id="volume-bg" min="0" max="1" step="0.05" value="0.5" oninput="updateVolumes()">
+            </div>
+
+            <div class="slider-group">
+                <label for="volume-sfx">Efectos Mágicos ✨</label>
+                <input type="range" id="volume-sfx" min="0" max="1" step="0.05" value="0.3" oninput="updateVolumes()">
+            </div>
+
+            <button class="btn-start" onclick="closeAudioSettings()">Guardar y Cerrar</button>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA INSTITUCIONAL -->
+    <footer class="institutional-footer">
+        <img src="img/main/logo.png" alt="Logo Institución" class="footer-logo" onerror="this.style.display='none'">
+        <span class="footer-text">C.E.T.i.s. N° 47</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">Roberto Gallegos Santos</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-text">2026</span>
+    </footer>
+
+    <script type="module" src="js/alquimia.js"></script>
+</body>
+</html>

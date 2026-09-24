@@ -1,0 +1,853 @@
+/* ==========================================
+   1. ESTRUCTURA GLOBAL Y FONDO CIBERPUNK
+   ========================================== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #060913 url('../img/hackers/fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #e0e6ed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================
+   2. BARRA SUPERIOR (TOP BAR)
+   ========================================== */
+.top-bar {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    background: rgba(10, 15, 29, 0.9);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid #00f0ff;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+    box-sizing: border-box;
+}
+
+.logo {
+    font-size: 1.3rem;
+    color: #00f0ff;
+    letter-spacing: 2px;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+    font-family: 'Consolas', monospace;
+}
+
+.audio-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-audio, .btn-settings {
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid #00f0ff;
+    color: #00f0ff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-settings {
+    padding: 6px 10px;
+}
+
+.btn-audio:hover, .btn-settings:hover {
+    background: #00f0ff;
+    color: #0a0f1d;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
+}
+
+/* ==========================================
+   3. TARJETA PRINCIPAL DEL JUEGO
+   ========================================== */
+.game-card {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 850px;
+    background: rgba(13, 20, 36, 0.94);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 240, 255, 0.2);
+    border: 1.5px solid #00f0ff;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    margin: auto 0;
+    transform: translateY(-20px);
+    box-sizing: border-box;
+}
+
+.screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================
+   4. PORTADA DE TERMINAL
+   ========================================== */
+#screen-cover {
+    background: url('../img/hackers/portada2.png') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    min-height: 480px;
+    height: 60vh;
+    border-radius: 10px;
+    border: 2px solid #00f0ff;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+#screen-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, rgba(10, 15, 29, 0.95), transparent);
+    z-index: 1;
+}
+
+.blink-text-full {
+    position: relative;
+    z-index: 2;
+    color: #00ff66;
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 255, 102, 0.8);
+    background: rgba(10, 15, 29, 0.75);
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: 1px solid #00ff66;
+    backdrop-filter: blur(4px);
+    animation: pulse 1.6s infinite;
+    font-family: 'Consolas', monospace;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.97); }
+}
+
+/* ==========================================
+   5. BOTONES, FORMULARIOS Y MENÚS
+   ========================================== */
+.menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+    max-width: 380px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #00f0ff;
+    font-size: 0.95rem;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #00f0ff;
+    background: rgba(10, 15, 29, 0.8);
+    color: #ffffff;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.input-group input:focus, .input-group select:focus {
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+button {
+    font-size: 1.05rem;
+    padding: 12px 20px;
+    border: 1px solid #00f0ff;
+    background: rgba(0, 240, 255, 0.08);
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button:hover:not(:disabled) {
+    background: #00f0ff;
+    color: #0a0f1d;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-root-mode {
+    border-color: #ff0055;
+    background: rgba(255, 0, 85, 0.1);
+    color: #ff4d88;
+}
+
+.btn-root-mode:hover:not(:disabled) {
+    background: #ff0055;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.8);
+}
+
+.btn-start {
+    background: #00ff66;
+    border-color: #00ff66;
+    color: #0a0f1d;
+    font-size: 1.2rem;
+    margin-top: 15px;
+}
+
+.btn-start:hover {
+    background: #00cc52;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.7);
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #718096;
+    color: #a0aec0;
+    margin-top: 25px;
+    font-size: 0.9rem;
+    padding: 8px 18px;
+}
+
+.btn-back:hover {
+    background: #718096;
+    color: #ffffff;
+}
+
+.btn-abort {
+    background: rgba(255, 0, 85, 0.15);
+    border-color: #ff0055;
+    color: #ff4d88;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+}
+
+.btn-abort:hover {
+    background: #ff0055;
+    color: #ffffff;
+}
+
+/* ==========================================
+   6. TABLERO Y ÁREA DE RETO (TERMINAL)
+   ========================================== */
+.scoreboard {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 12px 20px;
+    background: rgba(0, 240, 255, 0.05);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: 'Consolas', monospace;
+}
+
+.active-team {
+    color: #00ff66;
+    text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+}
+
+.instruction {
+    font-size: 1.15rem;
+    color: #00f0ff;
+    margin: 10px 0;
+}
+
+.hack-display-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    min-height: 140px;
+    margin: 15px 0;
+    padding: 20px;
+    background: #080d1a;
+    border: 1.5px dashed #00f0ff;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Consolas', monospace;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.direct-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto 10px;
+}
+
+.direct-input-container input {
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1.5px solid #00f0ff;
+    background: #080d1a;
+    color: #00ff66;
+    width: 65%;
+    text-align: center;
+    font-family: 'Consolas', monospace;
+}
+
+.feedback {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 15px;
+    min-height: 30px;
+    font-family: 'Consolas', monospace;
+}
+
+.btn-next {
+    background: #00f0ff;
+    color: #0a0f1d;
+}
+
+/* ==========================================
+   7. MODAL Y PIE DE PÁGINA
+   ========================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #0d1424;
+    border: 2px solid #00f0ff;
+    border-radius: 12px;
+    padding: 25px 30px;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+    text-align: center;
+}
+
+.slider-group {
+    margin: 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+    color: #ffffff;
+}
+
+.slider-group input[type="range"] {
+    width: 100%;
+    accent-color: #00f0ff;
+}
+
+.institutional-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+    background: rgba(10, 15, 29, 0.9);
+    backdrop-filter: blur(4px);
+    border-top: 1px solid rgba(0, 240, 255, 0.2);
+    z-index: 90;
+    font-size: 0.9rem;
+    color: #a0aec0;
+}
+
+.footer-logo {
+    height: 40px; /* Tamaño sutil para el logo */
+    width: auto;
+    object-fit: contain;
+}
+
+.footer-separator { color: #00f0ff; }
+
+/* ==========================================
+   MODAL DE TABLA GLOBAL DE LÍDERES (ESTILO HACKER)
+   ========================================== */
+.leaderboard-modal {
+    max-width: 580px;
+    background: #0a0f1d;
+    border: 2px solid #00f0ff;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.leaderboard-subtitle {
+    color: #a0aec0;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.leaderboard-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.leaderboard-tabs .tab-btn {
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid #00f0ff;
+    color: #00f0ff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: 'Consolas', monospace;
+    transition: all 0.2s ease;
+}
+
+.leaderboard-tabs .tab-btn.active, 
+.leaderboard-tabs .tab-btn:hover {
+    background: #00f0ff;
+    color: #0a0f1d;
+    font-weight: bold;
+}
+
+.leaderboard-filters-row {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-bottom: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px dashed rgba(0, 240, 255, 0.3);
+}
+
+.leaderboard-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-family: 'Consolas', monospace;
+}
+
+.leaderboard-select {
+    background: #050811;
+    color: #00ff66;
+    border: 1px solid #00f0ff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    outline: none;
+    font-size: 0.85rem;
+}
+
+.leaderboard-container {
+    max-height: 280px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 6px;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+}
+
+.leaderboard-table th, 
+.leaderboard-table td {
+    padding: 8px 10px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.leaderboard-table th {
+    background: rgba(0, 240, 255, 0.15);
+    color: #00f0ff;
+}
+
+.leaderboard-table tr:hover {
+    background: rgba(0, 240, 255, 0.05);
+}
+
+/* ==========================================
+   8. INTERFAZ INTERACTIVA: CÁPSULAS DE CLASIFICACIÓN
+   ========================================== */
+.matrix-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra cápsula y contenedores horizontalmente */
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.ports-grid {
+    display: flex;
+    justify-content: center; /* Centra las cajas objetivo */
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    flex-wrap: wrap; /* Mantiene la adaptabilidad si la pantalla es estrecha */
+}
+
+.capsules-pool {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    min-height: 50px;
+}
+
+.capsule-btn {
+    background: rgba(0, 240, 255, 0.15);
+    border: 1.5px solid #00f0ff;
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    transition: all 0.2s ease;
+}
+
+.capsule-btn:hover {
+    background: #00f0ff;
+    color: #0a0f1d;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.8);
+}
+
+.capsule-btn.selected {
+    background: #00ff66 !important;
+    color: #0a0f1d !important;
+    border-color: #00ff66 !important;
+    box-shadow: 0 0 18px rgba(0, 255, 102, 0.9) !important;
+    transform: scale(1.08);
+}
+
+/* Forzar centrado del contenedor dinámico en modo Drag & Drop */
+#options-container.matrix-active {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+
+
+/* ==========================================
+   DRAG AND DROP REAL: CÁPSULAS DE CLASIFICACIÓN
+   ========================================== */
+.draggable-capsule {
+    background: #00f0ff;
+    color: #0a0f1d;
+    font-size: 1.8rem;
+    font-weight: bold;
+    padding: 12px 28px;
+    border-radius: 30px;
+    cursor: grab;
+    user-select: none;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.7);
+    display: inline-block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Consolas', monospace;
+}
+
+.draggable-capsule:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+}
+
+.port-target {
+    background: rgba(10, 15, 29, 0.9);
+    border: 2px dashed #00f0ff;
+    border-radius: 12px;
+    padding: 20px 15px;
+    min-width: 140px;
+    text-align: center;
+    transition: all 0.25s ease;
+}
+
+/* Efecto visual al arrastrar la cápsula sobre el contenedor */
+.port-target.drag-over {
+    background: rgba(0, 255, 102, 0.2) !important;
+    border-color: #00ff66 !important;
+    border-style: solid !important;
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.6) !important;
+    transform: scale(1.03);
+}
+
+.port-target:hover {
+    border-style: solid;
+    background: rgba(0, 240, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+.port-target h4 {
+    margin: 0 0 5px 0;
+    color: #00f0ff;
+    font-size: 0.95rem;
+}
+
+.port-target span {
+    font-size: 0.8rem;
+    color: #a0aec0;
+}
+
+/* ==========================================
+   FASE 2: CONEXIÓN DE CABLES (SERVIDOR 2)
+   ========================================== */
+#cable-game-container {
+    position: relative;
+    width: 100%;
+    max-width: 760px;
+    margin: 25px auto 15px auto; /* Centrado horizontal y margen vertical superior/inferior */
+    padding: 20px 25px;
+    background: rgba(10, 15, 25, 0.85);
+    border: 2px solid #00ffcc;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.25);
+    border-radius: 8px;
+    box-sizing: border-box; /* Asegura que el padding no desborde el ancho */
+}
+
+.cable-instructions {
+    text-align: center;
+    color: #00ffcc;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* SVG cubre todo el contenedor para dibujar líneas */
+#cable-svg-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Permite hacer clic a través del SVG */
+    z-index: 2;
+}
+
+.cable-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 120px; /* Espacio para ver cruzar las líneas */
+    position: relative;
+    z-index: 3;
+}
+
+.cable-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+}
+
+.cable-node {
+    background: rgba(0, 20, 30, 0.9);
+    border: 2px solid #0088cc;
+    color: #e0e0e0;
+    padding: 12px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    user-select: none;
+    position: relative;
+}
+
+.cable-node:hover {
+    border-color: #00ffcc;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+.cable-node.selected {
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px #ff00ff;
+    background: rgba(40, 0, 40, 0.9);
+}
+
+.cable-node.matched {
+    border-color: #00ff00;
+    background: rgba(0, 40, 0, 0.9);
+    color: #00ff00;
+    cursor: default;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+}
+
+/* Estilo para las líneas SVG dibujadas */
+.cable-line {
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke 0.3s ease;
+}
+
+.cable-line.pending {
+    stroke: #ff00ff;
+    stroke-dasharray: 6;
+    animation: dash 1s linear infinite;
+}
+
+.cable-line.correct {
+    stroke: #00ff00;
+    filter: drop-shadow(0px 0px 5px #00ff00);
+}
+
+/* Espaciado para la zona del mensaje de feedback y botones */
+#feedback {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 24px;
+}
+
+/* Margen para dar aire a los botones de acción ("Siguiente Protocolo", etc.) */
+#btn-next, #btn-abort-game {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+@keyframes dash {
+    to { stroke-dashoffset: -12; }
+}
+
+/* ==========================================
+   FASE 3: ÁRBOL INTERACTIVO DE PRIMOS (SERVIDOR 3)
+   ========================================== */
+#tree-game-container {
+    position: relative;
+    width: 100%;
+    max-width: 760px;
+    margin: 25px auto 15px auto;
+    padding: 20px 25px;
+    background: rgba(10, 15, 25, 0.85);
+    border: 2px solid #00f0ff;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.tree-instructions {
+    text-align: center;
+    color: #00f0ff;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.tree-canvas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tree-level {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tree-node {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #0a0f1d;
+    border: 2px solid #00f0ff;
+    color: #00f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.tree-node.prime {
+    border-color: #00ff66;
+    color: #00ff66;
+    box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
+}
+
+.tree-input {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #050811;
+    border: 2px dashed #ff0055;
+    color: #fff;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    outline: none;
+    box-shadow: 0 0 8px rgba(255, 0, 85, 0.4);
+}
+
+.tree-input:focus {
+    border-color: #00f0ff;
+    box-shadow: 0 0 12px #00f0ff;
+}
+
+
+

@@ -1,0 +1,597 @@
+/* ==========================================
+   1. ESTRUCTURA GLOBAL Y FONDO PIRATA
+   ========================================== */
+body {
+    font-family: 'Palatino Linotype', 'Book Antiqua', 'Georgia', serif;
+    background: #09131a url('../img/navegantes/fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #f7e7ce;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================
+   2. BARRA SUPERIOR NAVAL
+   ========================================== */
+.top-bar {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    background: rgba(10, 25, 35, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    box-sizing: border-box;
+}
+
+.logo {
+    font-size: 1.3rem;
+    color: #f39c12;
+    letter-spacing: 2px;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
+}
+
+.audio-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-audio, .btn-settings {
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid #d4af37;
+    color: #f39c12;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-settings { padding: 6px 10px; }
+
+.btn-audio:hover, .btn-settings:hover {
+    background: #d4af37;
+    color: #0b1a24;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
+}
+
+/* ==========================================
+   3. TARJETA PRINCIPAL (PERGAMINO Y MADERA)
+   ========================================== */
+.game-card {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 850px;
+    background: rgba(15, 30, 42, 0.95);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.9), 0 0 20px rgba(212, 175, 55, 0.2);
+    border: 1.5px solid #d4af37;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    margin: auto 0;
+    transform: translateY(-20px);
+    box-sizing: border-box;
+}
+
+.screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================
+   4. PORTADA CORSARIA
+   ========================================== */
+#screen-cover {
+    background: url('../img/navegantes/portada.png') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    min-height: 480px;
+    height: 60vh;
+    border-radius: 10px;
+    border: 2px solid #d4af37;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+#screen-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, rgba(10, 25, 35, 0.95), transparent);
+    z-index: 1;
+}
+
+.blink-text-full {
+    position: relative;
+    z-index: 2;
+    color: #f39c12;
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(243, 156, 18, 0.8);
+    background: rgba(10, 25, 35, 0.88);
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: 1px solid #d4af37;
+    backdrop-filter: blur(4px);
+    animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.97); }
+}
+
+/* ==========================================
+   5. BOTONES Y FORMULARIOS
+   ========================================== */
+.menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+    max-width: 380px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #f39c12;
+    font-size: 0.95rem;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #d4af37;
+    background: rgba(10, 25, 35, 0.85);
+    color: #ffffff;
+    box-sizing: border-box;
+    outline: none;
+}
+
+button {
+    font-size: 1.05rem;
+    padding: 12px 20px;
+    border: 1px solid #d4af37;
+    background: rgba(212, 175, 55, 0.15);
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button:hover:not(:disabled) {
+    background: #d4af37;
+    color: #0b1a24;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-root-mode {
+    border-color: #f39c12;
+    background: rgba(243, 156, 18, 0.18);
+    color: #f39c12;
+}
+
+.btn-start {
+    background: #1b6a38;
+    border-color: #2ecc71;
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin-top: 15px;
+}
+
+.btn-start:hover {
+    background: #27ae60;
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.7);
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #718096;
+    color: #a0aec0;
+    margin-top: 25px;
+    font-size: 0.9rem;
+    padding: 8px 18px;
+}
+
+.btn-abort {
+    background: rgba(231, 76, 60, 0.15);
+    border-color: #e74c3c;
+    color: #f1948a;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+}
+
+.btn-abort:hover {
+    background: #e74c3c;
+    color: #ffffff;
+}
+
+/* ==========================================
+   6. TABLERO DE MAPA Y RETOS
+   ========================================== */
+.scoreboard {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 12px 20px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.active-team {
+    color: #f39c12;
+    text-shadow: 0 0 8px rgba(243, 156, 18, 0.6);
+}
+
+.instruction {
+    font-size: 1.15rem;
+    color: #f7e7ce;
+    margin: 10px 0;
+}
+
+.hack-display-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    min-height: 140px;
+    margin: 15px 0;
+    padding: 20px;
+    background: #0a1722;
+    border: 1.5px dashed #d4af37;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.direct-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto 10px;
+}
+
+.direct-input-container input {
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1.5px solid #d4af37;
+    background: #0a1722;
+    color: #f39c12;
+    width: 65%;
+    text-align: center;
+}
+
+.feedback {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 15px;
+    min-height: 30px;
+}
+
+.btn-next {
+    background: #d4af37;
+    color: #0b1a24;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #0f1e2a;
+    border: 2px solid #d4af37;
+    border-radius: 12px;
+    padding: 25px 30px;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+    text-align: center;
+}
+
+.slider-group {
+    margin: 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+    color: #ffffff;
+}
+
+.slider-group input[type="range"] {
+    width: 100%;
+    accent-color: #d4af37;
+}
+
+.institutional-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+    background: rgba(10, 25, 35, 0.92);
+    backdrop-filter: blur(4px);
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    z-index: 90;
+    font-size: 0.9rem;
+    color: #a0aec0;
+}
+
+.footer-logo { height: 40px; }
+.footer-separator { color: #d4af37; }
+
+.infinite-mode-notice {
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px dashed #d4af37;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    font-size: 0.9rem;
+    color: #f7e7ce;
+    text-align: left;
+    max-width: 380px;
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   INTERACTIVIDAD AVANZADA (DRAG, SVG, SEQUENCES)
+   ========================================== */
+.game-interactive-container {
+    width: 100%;
+    margin: 15px 0;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Drag & Drop Coordenadas */
+.drag-source-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.drag-item {
+    background: #d4af37;
+    color: #0b1a24;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: grab;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    user-select: none;
+}
+
+.drag-targets-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.drag-target {
+    background: rgba(10, 25, 35, 0.85);
+    border: 2px dashed #d4af37;
+    border-radius: 8px;
+    padding: 15px;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.3s;
+}
+
+.drag-target.drag-over {
+    background: rgba(212, 175, 55, 0.25);
+    border-style: solid;
+}
+
+/* Trazo SVG de Líneas */
+#cable-svg-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cable-columns-wrapper {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+    gap: 20px;
+}
+
+.cable-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 48%;
+}
+
+.cable-node {
+    background: rgba(10, 25, 35, 0.9);
+    border: 1.5px solid #d4af37;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.cable-node.selected {
+    background: #d4af37;
+    color: #0b1a24;
+    font-weight: bold;
+}
+
+.cable-node.matched {
+    border-color: #2ecc71;
+    color: #2ecc71;
+    cursor: default;
+    opacity: 0.8;
+}
+
+/* Secuencia de Navegación */
+.sequence-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sequence-item {
+    background: rgba(10, 25, 35, 0.9);
+    border: 1px solid #d4af37;
+    padding: 10px 15px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sequence-controls button {
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    margin-left: 4px;
+}
+
+/* Línea temporal/activa durante la selección */
+.cable-line {
+    stroke: #d4af37;
+    stroke-width: 4;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.8));
+    transition: all 0.2s ease;
+}
+
+/* Línea completada con éxito */
+.cable-line.correct {
+    stroke: #2ecc71;
+    filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.9));
+}
+
+
+/* LEADERBOARD (BITÁCORA) */
+.leaderboard-modal { max-width: 550px !important; width: 95%; }
+.leaderboard-tabs { display: flex; gap: 6px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap; }
+.tab-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border: 1px solid #d4af37;
+    background: rgba(212, 175, 55, 0.15);
+    color: #f7e7ce;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.tab-btn.active, .tab-btn:hover {
+    background: #d4af37;
+    color: #0b1a24;
+    font-weight: bold;
+}
+.leaderboard-filters-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 15px;
+    background: rgba(10, 25, 35, 0.6);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+.leaderboard-filter-group { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #f39c12; }
+.leaderboard-select {
+    background: rgba(10, 25, 35, 0.9);
+    color: #ffffff;
+    border: 1px solid #d4af37;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.85rem;
+}
+.leaderboard-subtitle { font-size: 0.85rem; color: #f39c12; margin-top: -8px; margin-bottom: 12px; }
+.leaderboard-container { max-height: 260px; overflow-y: auto; margin-bottom: 18px; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 8px; background: rgba(9, 19, 26, 0.8); }
+.leaderboard-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.leaderboard-table th, .leaderboard-table td { padding: 10px 12px; text-align: center; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
+.leaderboard-table th { background: rgba(212, 175, 55, 0.25); color: #f39c12; position: sticky; top: 0; z-index: 2; }
+.leaderboard-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.03); }
+.leaderboard-table tbody tr:hover { background: rgba(212, 175, 55, 0.1); }

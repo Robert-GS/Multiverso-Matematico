@@ -1,0 +1,636 @@
+/* ==========================================
+   1. ESTRUCTURA GLOBAL Y FONDO ESPACIAL
+   ========================================== */
+body {
+    font-family: 'Rajdhani', 'Segoe UI', Roboto, sans-serif;
+    background: #050814 url('../img/horizonte/fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #e0e6ed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================
+   2. BARRA SUPERIOR ESPACIAL
+   ========================================== */
+.top-bar {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    background: rgba(13, 20, 41, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid #00f3ff;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+    box-sizing: border-box;
+}
+
+.logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    color: #00f3ff;
+    letter-spacing: 2px;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+}
+
+.audio-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-audio, .btn-settings {
+    background: rgba(0, 243, 255, 0.12);
+    border: 1px solid #00f3ff;
+    color: #00f3ff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-settings { padding: 6px 10px; }
+
+.btn-audio:hover, .btn-settings:hover {
+    background: #00f3ff;
+    color: #050814;
+    box-shadow: 0 0 12px rgba(0, 243, 255, 0.8);
+}
+
+/* ==========================================
+   3. TARJETA PRINCIPAL (ESTACIÓN ESPACIAL)
+   ========================================== */
+.game-card {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 850px;
+    background: rgba(13, 20, 41, 0.95);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.9), 0 0 20px rgba(157, 78, 221, 0.3);
+    border: 1.5px solid #9d4edd;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    margin: auto 0;
+    transform: translateY(-20px);
+    box-sizing: border-box;
+}
+
+.screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.screen h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: #00f3ff;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+/* ==========================================
+   4. PORTADA CÓSMICA
+   ========================================== */
+#screen-cover {
+    background: url('../img/horizonte/portada.png') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    min-height: 480px;
+    height: 60vh;
+    border-radius: 10px;
+    border: 2px solid #00f3ff;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+#screen-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, rgba(5, 8, 20, 0.95), transparent);
+    z-index: 1;
+}
+
+.blink-text-full {
+    position: relative;
+    z-index: 2;
+    color: #ffd166;
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 209, 102, 0.8);
+    background: rgba(13, 20, 41, 0.88);
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: 1px solid #00f3ff;
+    backdrop-filter: blur(4px);
+    animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.97); }
+}
+
+/* ==========================================
+   5. BOTONES Y FORMULARIOS
+   ========================================== */
+.menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+    max-width: 380px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #ffd166;
+    font-size: 0.95rem;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #00f3ff;
+    background: rgba(5, 8, 20, 0.85);
+    color: #ffffff;
+    box-sizing: border-box;
+    outline: none;
+}
+
+button {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.05rem;
+    padding: 12px 20px;
+    border: 1px solid #00f3ff;
+    background: rgba(0, 243, 255, 0.15);
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button:hover:not(:disabled) {
+    background: #00f3ff;
+    color: #050814;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-root-mode {
+    border-color: #ffd166;
+    background: rgba(255, 209, 102, 0.18);
+    color: #ffd166;
+}
+
+.btn-start {
+    background: rgba(6, 214, 160, 0.2);
+    border-color: #06d6a0;
+    color: #06d6a0;
+    font-size: 1.2rem;
+    margin-top: 15px;
+}
+
+.btn-start:hover {
+    background: #06d6a0;
+    color: #050814;
+    box-shadow: 0 0 15px rgba(6, 214, 160, 0.7);
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #718096;
+    color: #a0aec0;
+    margin-top: 25px;
+    font-size: 0.9rem;
+    padding: 8px 18px;
+}
+
+.btn-abort {
+    background: rgba(255, 77, 109, 0.15);
+    border-color: #ff4d6d;
+    color: #ff4d6d;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+}
+
+.btn-abort:hover {
+    background: #ff4d6d;
+    color: #ffffff;
+}
+
+/* ==========================================
+   6. TABLERO DE PANEL Y RETOS
+   ========================================== */
+.scoreboard {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 12px 20px;
+    background: rgba(157, 78, 221, 0.12);
+    border: 1px solid rgba(157, 78, 221, 0.4);
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.active-team {
+    color: #00f3ff;
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
+}
+
+.instruction {
+    font-size: 1.15rem;
+    color: #ffd166;
+    margin: 10px 0;
+}
+
+.hack-display-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    min-height: 140px;
+    margin: 15px 0;
+    padding: 20px;
+    background: rgba(5, 8, 20, 0.9);
+    border: 1.5px dashed #00f3ff;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.direct-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto 10px;
+}
+
+.direct-input-container input {
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1.5px solid #00f3ff;
+    background: #050814;
+    color: #00f3ff;
+    width: 65%;
+    text-align: center;
+}
+
+.feedback {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 15px;
+    min-height: 30px;
+}
+
+.btn-next {
+    background: #00f3ff;
+    color: #050814;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #0d1429;
+    border: 2px solid #00f3ff;
+    border-radius: 12px;
+    padding: 25px 30px;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+    text-align: center;
+}
+
+.slider-group {
+    margin: 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+    color: #ffffff;
+}
+
+.slider-group input[type="range"] {
+    width: 100%;
+    accent-color: #00f3ff;
+}
+
+.institutional-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+    background: rgba(13, 20, 41, 0.92);
+    backdrop-filter: blur(4px);
+    border-top: 1px solid rgba(0, 243, 255, 0.2);
+    z-index: 90;
+    font-size: 0.9rem;
+    color: #a0aec0;
+}
+
+.footer-logo { height: 40px; }
+.footer-separator { color: #00f3ff; }
+
+.infinite-mode-notice {
+    background: rgba(157, 78, 221, 0.15);
+    border: 1px dashed #9d4edd;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    font-size: 0.9rem;
+    color: #e0e6ed;
+    text-align: left;
+    max-width: 380px;
+    box-sizing: border-box;
+}
+
+/* LEADERBOARD (TABLA DE LÍDERES) */
+.leaderboard-modal { max-width: 550px !important; width: 95%; }
+.leaderboard-tabs { display: flex; gap: 6px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap; }
+.tab-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border: 1px solid #00f3ff;
+    background: rgba(0, 243, 255, 0.15);
+    color: #e0e6ed;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.tab-btn.active, .tab-btn:hover {
+    background: #00f3ff;
+    color: #050814;
+    font-weight: bold;
+}
+.leaderboard-filters-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 15px;
+    background: rgba(5, 8, 20, 0.6);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 243, 255, 0.3);
+}
+.leaderboard-filter-group { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #ffd166; }
+.leaderboard-select {
+    background: rgba(5, 8, 20, 0.9);
+    color: #ffffff;
+    border: 1px solid #00f3ff;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.85rem;
+}
+
+/* ==========================================
+   ESTILOS DE NUEVOS REACTIVOS CÓSMICOS
+   ========================================== */
+
+/* BALANZA GRAVITATORIA */
+.balance-container {
+    margin: 20px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.balance-scale-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 450px;
+}
+
+.balance-pan {
+    flex: 1;
+    background: rgba(0, 243, 255, 0.1);
+    border: 2px solid #00f3ff;
+    border-radius: 12px;
+    padding: 20px 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00f3ff;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+.balance-pivot {
+    font-size: 2.5rem;
+}
+
+/* SECUENCIA DE TELEMETRÍA */
+.sequence-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 15px auto;
+}
+
+.sequence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sequence-item {
+    background: rgba(157, 78, 221, 0.15);
+    border: 1px solid #9d4edd;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    font-size: 0.95rem;
+}
+
+.sequence-arrows button {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    margin-left: 4px;
+    background: rgba(0, 243, 255, 0.2);
+    border: 1px solid #00f3ff;
+    color: #00f3ff;
+    border-radius: 4px;
+}
+
+/* ESCÁNER DE SATÉLITES (SELECCIÓN MÚLTIPLE) */
+.multi-select-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 15px auto;
+}
+
+.jars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.jar-card {
+    background: rgba(5, 8, 20, 0.85);
+    border: 1.5px solid #00f3ff;
+    border-radius: 8px;
+    padding: 15px 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.25s ease;
+}
+
+.jar-card input {
+    display: none;
+}
+
+.jar-icon {
+    font-size: 1.8rem;
+}
+
+.jar-label {
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #ffd166;
+    margin-top: 6px;
+}
+
+.jar-card:has(input:checked) {
+    border-color: #06d6a0;
+    background: rgba(6, 214, 160, 0.15);
+    box-shadow: 0 0 12px rgba(6, 214, 160, 0.5);
+}
+
+/* RED DE NODOS ESPACIALES */
+.tree-container {
+    width: 100%;
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tree-nodes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.tree-node {
+    background: rgba(0, 243, 255, 0.15);
+    border: 2px solid #00f3ff;
+    color: #00f3ff;
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.tree-branch {
+    display: flex;
+    gap: 20px;
+}
+
+.tree-node-input {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 2px solid #9d4edd;
+    background: rgba(5, 8, 20, 0.9);
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    outline: none;
+}
+
+.tree-node-input:focus {
+    border-color: #00f3ff;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+}
+
+.leaderboard-subtitle { font-size: 0.85rem; color: #ffd166; margin-top: -8px; margin-bottom: 12px; }
+.leaderboard-container { max-height: 260px; overflow-y: auto; margin-bottom: 18px; border: 1px solid rgba(0, 243, 255, 0.2); border-radius: 8px; background: rgba(5, 8, 20, 0.8); }
+.leaderboard-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.leaderboard-table th, .leaderboard-table td { padding: 10px 12px; text-align: center; border-bottom: 1px solid rgba(0, 243, 255, 0.1); }
+.leaderboard-table th { background: rgba(0, 243, 255, 0.25); color: #00f3ff; position: sticky; top: 0; z-index: 2; }
+.leaderboard-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.03); }
+.leaderboard-table tbody tr:hover { background: rgba(0, 243, 255, 0.1); }

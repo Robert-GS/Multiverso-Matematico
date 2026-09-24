@@ -1,3 +1,5 @@
+import { saveScore, getTopScores } from './leaderboard.js';
+
 // ==========================================
 // 1. ESTADO DEL JUEGO Y VARIABLES
 // ==========================================
@@ -6,7 +8,7 @@ let maxAttempts = 3;
 let currentAttempts = 3;
 let currentExpression = "";
 let currentTableData = [];
-let userSwitches = []; // Array de booleans [true, false, ...]
+let userSwitches = [];
 let isTableLocked = false;
 
 // Variables de estadísticas y reporte
@@ -17,7 +19,7 @@ let totalCheckAttempts = 0;
 let hasAttemptedCurrentExercise = false;
 
 // ==========================================
-// 1. SISTEMA DE AUDIO Y SONIDOS
+// 2. SISTEMA DE AUDIO Y SONIDOS
 // ==========================================
 const sounds = {
     bg: new Audio('audio/logix/bg-music2.mp3'),
@@ -51,8 +53,10 @@ function applyVolumes() {
 }
 
 function updateVolumes() {
-    bgVolume = parseFloat(document.getElementById('volume-bg').value);
-    sfxVolume = parseFloat(document.getElementById('volume-sfx').value);
+    const bgInput = document.getElementById('volume-bg');
+    const sfxInput = document.getElementById('volume-sfx');
+    if (bgInput) bgVolume = parseFloat(bgInput.value);
+    if (sfxInput) sfxVolume = parseFloat(sfxInput.value);
     applyVolumes();
 }
 
@@ -70,11 +74,13 @@ function playSFX(type) {
 }
 
 function openAudioSettings() {
-    document.getElementById('modal-audio-settings').classList.remove('hidden');
+    const modal = document.getElementById('modal-audio-settings');
+    if (modal) modal.classList.remove('hidden');
 }
 
 function closeAudioSettings() {
-    document.getElementById('modal-audio-settings').classList.add('hidden');
+    const modal = document.getElementById('modal-audio-settings');
+    if (modal) modal.classList.add('hidden');
 }
 
 document.addEventListener('click', function(event) {
@@ -83,11 +89,21 @@ document.addEventListener('click', function(event) {
     }
 });
 
-applyVolumes();
+// Inicializar volúmenes al cargar
+document.addEventListener('DOMContentLoaded', () => {
+    applyVolumes();
+    
+    const bgInput = document.getElementById('volume-bg');
+    const sfxInput = document.getElementById('volume-sfx');
+    if (bgInput) bgInput.value = bgVolume;
+    if (sfxInput) sfxInput.value = sfxVolume;
+});
 
-const screenCover = document.getElementById('screen-cover');
-
+// ==========================================
+// 3. NAVEGACIÓN Y TECLADO
+// ==========================================
 function startFromCover() {
+    const screenCover = document.getElementById('screen-cover');
     if (screenCover && !screenCover.classList.contains('hidden')) {
         showScreen('screen-setup'); 
     }
@@ -99,9 +115,12 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-if (screenCover) {
-    screenCover.addEventListener('click', startFromCover);
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const screenCover = document.getElementById('screen-cover');
+    if (screenCover) {
+        screenCover.addEventListener('click', startFromCover);
+    }
+});
 
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
@@ -109,12 +128,8 @@ function showScreen(id) {
     if (target) target.classList.remove('hidden');
 }
 
-function selectVariables(num) {
-    numVariables = num;
-}
-
 // ==========================================
-// 2. GENERADOR DE EXPRESIONES Y TABLAS
+// 4. GENERADOR DE EXPRESIONES Y TABLAS
 // ==========================================
 function generateRandomExpression(numVars) {
     if (numVars === 2) {
@@ -197,7 +212,7 @@ function evaluateRow(expr, values) {
 }
 
 // ==========================================
-// 3. INICIO DE PARTIDA Y RENDERING
+// 5. INICIO DE PARTIDA Y RENDERING
 // ==========================================
 function startGame() {
     const nameInput = document.getElementById('student-name');
@@ -209,7 +224,6 @@ function startGame() {
         return;
     }
 
-    // Reiniciar contadores estadísticos
     totalAttemptedExercises = 0;
     totalCorrectExercises = 0;
     totalCheckAttempts = 0;
@@ -224,7 +238,7 @@ function startGame() {
 function loadNextDoor() {
     currentAttempts = maxAttempts;
     isTableLocked = false;
-    hasAttemptedCurrentExercise = false; // Reset para la nueva puerta
+    hasAttemptedCurrentExercise = false;
     
     document.getElementById('door-status').className = "door-status locked";
     document.getElementById('door-status').innerText = "🔒 PUERTA BLOQUEADA";
@@ -286,8 +300,7 @@ function renderTable() {
 
 function toggleSwitch(index) {
     if (isTableLocked) return;
-    sounds.click.currentTime = 0;
-    sounds.click.play().catch(() => {});
+    playSFX('click');
     userSwitches[index] = !userSwitches[index];
     renderTable();
 }
@@ -297,16 +310,15 @@ function updateAttemptsDisplay() {
 }
 
 // ==========================================
-// 4. VERIFICACIÓN DE CÓDIGO
+// 6. VERIFICACIÓN DE CÓDIGO
 // ==========================================
 function checkAnswer() {
-    // Si es el primer intento en esta puerta, incrementamos los ejercicios intentados
     if (!hasAttemptedCurrentExercise) {
         totalAttemptedExercises++;
         hasAttemptedCurrentExercise = true;
     }
 
-    totalCheckAttempts++; // Contamos cada clic de verificación
+    totalCheckAttempts++;
 
     let isCorrect = true;
 
@@ -321,10 +333,9 @@ function checkAnswer() {
     const feedback = document.getElementById('feedback');
 
     if (isCorrect) {
-        sounds.correct.currentTime = 0;
-        sounds.correct.play().catch(() => {});
+        playSFX('correct');
         isTableLocked = true;
-        totalCorrectExercises++; // Incrementamos los aciertos
+        totalCorrectExercises++;
         
         document.getElementById('door-status').className = "door-status unlocked";
         document.getElementById('door-status').innerText = "🔓 ¡PUERTA DESBLOQUEADA!";
@@ -335,8 +346,7 @@ function checkAnswer() {
         document.getElementById('btn-next').classList.remove('hidden');
         renderTable();
     } else {
-        sounds.wrong.currentTime = 0;
-        sounds.wrong.play().catch(() => {});
+        playSFX('wrong');
         currentAttempts--;
         updateAttemptsDisplay();
 
@@ -368,10 +378,9 @@ function confirmEndGame() {
 }
 
 // ==========================================
-// 5. MOSTRAR REPORTE DE RESULTADOS
+// 7. MOSTRAR REPORTE DE RESULTADOS
 // ==========================================
-function showReportScreen() {
-    // Cálculo de estadísticas
+async function showReportScreen() {
     const avgAttempts = totalAttemptedExercises > 0 
         ? (totalCheckAttempts / totalAttemptedExercises).toFixed(1) 
         : "0.0";
@@ -380,7 +389,6 @@ function showReportScreen() {
         ? Math.round((totalCorrectExercises / totalAttemptedExercises) * 100) 
         : 0;
 
-    // Renderizar datos en el DOM
     document.getElementById('res-student-name').innerText = studentName;
     document.getElementById('res-game-type').innerText = `${numVariables} Variables (${numVariables === 2 ? '4 Filas' : '8 Filas'})`;
     document.getElementById('res-max-attempts').innerText = maxAttempts;
@@ -390,4 +398,107 @@ function showReportScreen() {
     document.getElementById('res-effectiveness').innerText = `${effectiveness}%`;
 
     showScreen('screen-results');
+
+    if (totalAttemptedExercises > 0) {
+        try {
+            await saveScore({
+                gameId: 'logix',
+                gameTitle: 'Salida Lógica',
+                studentName: studentName,
+                mode: numVariables,
+                score: totalCorrectExercises,
+                effectiveness: effectiveness,
+                details: `${numVariables} Variables (${maxAttempts} int/puerta)`
+            });
+        } catch (err) {
+            console.error("Error al guardar puntuación:", err);
+        }
+    }
 }
+
+// ==========================================
+// 8. TABLA GLOBAL DE LÍDERES
+// ==========================================
+let currentLeaderboardMode = 2; // Estado global: por defecto inicia en 2 variables
+
+// FUNCIÓN PARA CAMBIAR DE PESTAÑA (2 O 3 VARIABLES)
+async function switchLeaderboardMode(mode) {
+    currentLeaderboardMode = Number(mode);
+    
+    // Actualizar visualmente la pestaña activa
+    const btn2 = document.getElementById('btn-tab-2');
+    const btn3 = document.getElementById('btn-tab-3');
+    
+    if (btn2 && btn3) {
+        btn2.classList.toggle('active', currentLeaderboardMode === 2);
+        btn3.classList.toggle('active', currentLeaderboardMode === 3);
+    }
+
+    // Volver a cargar la tabla con el modo seleccionado
+    await loadLeaderboard();
+}
+
+// ABRIR EL MODAL (POR DEFECTO EN EL MODO ACTUAL)
+async function openLeaderboardModal() {
+    const modal = document.getElementById('modal-leaderboard');
+    if (modal) modal.classList.remove('hidden');
+    await loadLeaderboard();
+}
+
+function closeLeaderboardModal() {
+    const modal = document.getElementById('modal-leaderboard');
+    if (modal) modal.classList.add('hidden');
+}
+
+// CARGAR LA TABLA DESDE FIREBASE
+async function loadLeaderboard() {
+    const tbody = document.getElementById('leaderboard-body');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="4">Cargando puntuaciones...</td></tr>';
+
+    try {
+        // Le pasamos la constante 'logix' y el modo actual (2 o 3)
+        const scores = await getTopScores('logix', currentLeaderboardMode, 10);
+
+        if (!scores || scores.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4">Aún no hay puntuaciones en el modo ${currentLeaderboardMode} variables. ¡Sé el primero!</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = '';
+        scores.forEach((item, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}</td>
+                <td><strong>${item.studentName}</strong></td>
+                <td>${item.score}</td>
+                <td>${item.effectiveness}%</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (e) {
+        console.error("Error cargando leaderboard:", e);
+        tbody.innerHTML = '<tr><td colspan="4">No se pudo cargar la tabla de líderes.</td></tr>';
+    }
+}
+
+// ==========================================
+// 9. EXPOSICIÓN GLOBAL A WINDOW
+// ==========================================
+window.startGame = startGame;
+window.checkAnswer = checkAnswer;
+window.loadNextDoor = loadNextDoor;
+window.confirmEndGame = confirmEndGame;
+window.showScreen = showScreen;
+window.toggleAudio = toggleAudio;
+window.openAudioSettings = openAudioSettings;
+window.closeAudioSettings = closeAudioSettings;
+window.updateVolumes = updateVolumes;
+window.toggleSwitch = toggleSwitch;
+window.openLeaderboardModal = openLeaderboardModal;
+window.closeLeaderboardModal = closeLeaderboardModal;
+// Al final de tu archivo JavaScript (donde declaraste la función)
+window.switchLeaderboardMode = switchLeaderboardMode;
+window.openLeaderboardModal = openLeaderboardModal;
+window.closeLeaderboardModal = closeLeaderboardModal;

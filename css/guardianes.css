@@ -1,0 +1,539 @@
+/* ==========================================
+   1. ESTRUCTURA GLOBAL Y FONDO MÍSTICO
+   ========================================== */
+body {
+    font-family: 'Palatino Linotype', 'Book Antiqua', 'Georgia', serif;
+    background: #0d130e url('../img/guardianes/fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #f0e6d2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================
+   2. BARRA SUPERIOR TEMPLARIA
+   ========================================== */
+.top-bar {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    background: rgba(13, 26, 17, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    box-sizing: border-box;
+}
+
+.logo {
+    font-size: 1.3rem;
+    color: #2ecc71;
+    letter-spacing: 2px;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(46, 204, 113, 0.7);
+}
+
+.audio-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-audio, .btn-settings {
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid #d4af37;
+    color: #f39c12;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-settings { padding: 6px 10px; }
+
+.btn-audio:hover, .btn-settings:hover {
+    background: #d4af37;
+    color: #0b1a24;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
+}
+
+/* ==========================================
+   3. TARJETA PRINCIPAL (TEMPLO MÍSTICO)
+   ========================================== */
+.game-card {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 850px;
+    background: rgba(16, 28, 20, 0.95);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.9), 0 0 20px rgba(46, 204, 113, 0.2);
+    border: 1.5px solid #d4af37;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    margin: auto 0;
+    transform: translateY(-20px);
+    box-sizing: border-box;
+}
+
+.screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================
+   4. PORTADA ANCESTRAL
+   ========================================== */
+#screen-cover {
+    background: url('../img/guardianes/portada.png') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    min-height: 480px;
+    height: 60vh;
+    border-radius: 10px;
+    border: 2px solid #d4af37;
+    box-shadow: 0 0 25px rgba(46, 204, 113, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+#screen-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, rgba(13, 26, 17, 0.95), transparent);
+    z-index: 1;
+}
+
+.blink-text-full {
+    position: relative;
+    z-index: 2;
+    color: #2ecc71;
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(46, 204, 113, 0.8);
+    background: rgba(13, 26, 17, 0.88);
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: 1px solid #d4af37;
+    backdrop-filter: blur(4px);
+    animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.97); }
+}
+
+/* ==========================================
+   5. BOTONES Y FORMULARIOS
+   ========================================== */
+.menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+    max-width: 380px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #d4af37;
+    font-size: 0.95rem;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #d4af37;
+    background: rgba(13, 26, 17, 0.85);
+    color: #ffffff;
+    box-sizing: border-box;
+    outline: none;
+}
+
+button {
+    font-size: 1.05rem;
+    padding: 12px 20px;
+    border: 1px solid #d4af37;
+    background: rgba(212, 175, 55, 0.15);
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button:hover:not(:disabled) {
+    background: #d4af37;
+    color: #0d130e;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-root-mode {
+    border-color: #2ecc71;
+    background: rgba(46, 204, 113, 0.18);
+    color: #2ecc71;
+}
+
+.btn-start {
+    background: #1b6a38;
+    border-color: #2ecc71;
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin-top: 15px;
+}
+
+.btn-start:hover {
+    background: #27ae60;
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.7);
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #718096;
+    color: #a0aec0;
+    margin-top: 25px;
+    font-size: 0.9rem;
+    padding: 8px 18px;
+}
+
+.btn-abort {
+    background: rgba(231, 76, 60, 0.15);
+    border-color: #e74c3c;
+    color: #f1948a;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+}
+
+.btn-abort:hover {
+    background: #e74c3c;
+    color: #ffffff;
+}
+
+/* ==========================================
+   6. TABLERO Y DESAFÍOS DEL TEMPLO
+   ========================================== */
+.scoreboard {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 12px 20px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.active-team {
+    color: #2ecc71;
+    text-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
+}
+
+.instruction {
+    font-size: 1.15rem;
+    color: #f0e6d2;
+    margin: 10px 0;
+}
+
+.hack-display-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    min-height: 140px;
+    margin: 15px 0;
+    padding: 20px;
+    background: #09140c;
+    border: 1.5px dashed #d4af37;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.direct-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto 10px;
+}
+
+.direct-input-container input {
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1.5px solid #d4af37;
+    background: #09140c;
+    color: #2ecc71;
+    width: 65%;
+    text-align: center;
+}
+
+.feedback {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 15px;
+    min-height: 30px;
+}
+
+.btn-next {
+    background: #d4af37;
+    color: #0d130e;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #101c14;
+    border: 2px solid #d4af37;
+    border-radius: 12px;
+    padding: 25px 30px;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 0 25px rgba(46, 204, 113, 0.4);
+    text-align: center;
+}
+
+.slider-group {
+    margin: 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+    color: #ffffff;
+}
+
+.slider-group input[type="range"] {
+    width: 100%;
+    accent-color: #d4af37;
+}
+
+.institutional-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+    background: rgba(13, 26, 17, 0.92);
+    backdrop-filter: blur(4px);
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    z-index: 90;
+    font-size: 0.9rem;
+    color: #a0aec0;
+}
+
+.footer-logo { height: 40px; }
+.footer-separator { color: #d4af37; }
+
+.infinite-mode-notice {
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px dashed #d4af37;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    font-size: 0.9rem;
+    color: #f0e6d2;
+    text-align: left;
+    max-width: 380px;
+    box-sizing: border-box;
+}
+
+/* Módulos de Juego */
+.game-module-container {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(20, 15, 30, 0.6);
+  border: 1px solid #d4af37;
+  border-radius: 8px;
+}
+
+/* Balanza Templaria */
+.balance-scale {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+  border-radius: 8px;
+}
+.scale-pan {
+  min-width: 120px;
+  min-height: 50px;
+  border-bottom: 3px solid #d4af37;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Drag & Drop y Secuencia */
+.slots-container, .bank-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.draggable-item {
+  background: #2a1b40;
+  border: 1px solid #9370db;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: grab;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.draggable-item:active { cursor: grabbing; }
+
+/* Selección Múltiple */
+.stamp-card {
+  background: #1e1b2e;
+  border: 2px solid #5c4084;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.stamp-card.selected {
+  border-color: #ffd700;
+  background: #3b2a56;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+/* Contenedor principal de Selección Múltiple */
+#multi-select-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem; /* Espaciado automático uniforme entre elementos */
+  padding: 1.5rem 1rem 2rem 1rem; /* Padding inferior extra para dar respiro al borde */
+}
+
+/* Ajuste específico para el botón de confirmación */
+#btn-submit-multi {
+  margin-top: 1rem; /* Separa el botón de la cuadrícula de sellos */
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#btn-submit-multi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+
+/* LEADERBOARD (TABLA DE HONOR DEL TEMPLO) */
+.leaderboard-modal { max-width: 550px !important; width: 95%; }
+.leaderboard-tabs { display: flex; gap: 6px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap; }
+.tab-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border: 1px solid #d4af37;
+    background: rgba(212, 175, 55, 0.15);
+    color: #f0e6d2;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.tab-btn.active, .tab-btn:hover {
+    background: #d4af37;
+    color: #0d130e;
+    font-weight: bold;
+}
+.leaderboard-filters-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 15px;
+    background: rgba(13, 26, 17, 0.6);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+.leaderboard-filter-group { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #d4af37; }
+.leaderboard-select {
+    background: rgba(13, 26, 17, 0.9);
+    color: #ffffff;
+    border: 1px solid #d4af37;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.85rem;
+}
+.leaderboard-subtitle { font-size: 0.85rem; color: #2ecc71; margin-top: -8px; margin-bottom: 12px; }
+.leaderboard-container { max-height: 260px; overflow-y: auto; margin-bottom: 18px; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 8px; background: rgba(9, 20, 12, 0.8); }
+.leaderboard-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.leaderboard-table th, .leaderboard-table td { padding: 10px 12px; text-align: center; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
+.leaderboard-table th { background: rgba(212, 175, 55, 0.25); color: #d4af37; position: sticky; top: 0; z-index: 2; }
+.leaderboard-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.03); }
+.leaderboard-table tbody tr:hover { background: rgba(46, 204, 113, 0.1); }

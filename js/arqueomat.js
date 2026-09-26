@@ -305,9 +305,19 @@ function renderMesopotamian(num, container) {
         temp = Math.floor(temp / 60);
     }
 
-    base60Digits.forEach(val => {
+    base60Digits.forEach((val, index) => {
         const digitGroup = document.createElement('div');
         digitGroup.className = 'meso-digit-group';
+
+        // Valor posicional sexagesimal del grupo
+        const potencia = base60Digits.length - 1 - index;
+        const multiplier = Math.pow(60, potencia);
+
+        const tag = document.createElement('span');
+        tag.className = 'meso-level-tag';
+        tag.innerText = `(x${multiplier.toLocaleString()})`;
+
+        digitGroup.appendChild(tag);
 
         let tens = Math.floor(val / 10);
         let ones = val % 10;

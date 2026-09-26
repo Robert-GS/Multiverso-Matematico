@@ -406,6 +406,209 @@
             <button class="btn-back" style="margin-top: 15px;" onclick="confirmEndGame()">🏁 Abortar Misión</button>
         </section>
 
+
+        <!-- ==========================================
+             PANTALLA 5: REPORTE FINAL - SOLITARIO
+             ========================================== -->
+        <section id="screen-report" class="screen hidden">
+
+            <div class="nexus-report">
+
+                <div class="report-header">
+                    <div class="report-icon">⚡</div>
+
+                    <div>
+                        <h2>REPORTE DE INFILTRACIÓN</h2>
+                        <p>Evaluación integral de los siete mundos matemáticos</p>
+                    </div>
+                </div>
+
+
+                <!-- IDENTIFICACIÓN Y CONDICIONES -->
+                <div class="report-info-grid">
+
+                    <div class="report-info-item">
+                        <span class="report-label">JUGADOR</span>
+                        <strong id="report-player">---</strong>
+                    </div>
+
+                    <div class="report-info-item">
+                        <span class="report-label">REACTIVOS</span>
+                        <strong id="report-quantity">---</strong>
+                    </div>
+
+                    <div class="report-info-item">
+                        <span class="report-label">TIEMPO POR REACTIVO</span>
+                        <strong id="report-timer">---</strong>
+                    </div>
+
+                </div>
+
+
+                <!-- RESULTADO GLOBAL -->
+                <div class="report-global">
+
+                    <h3>RESULTADO GLOBAL</h3>
+
+                    <div class="report-score">
+                        <span id="report-correct">0</span>
+                        <span class="report-score-divider">/</span>
+                        <span id="report-total">0</span>
+                    </div>
+
+                    <div class="report-effectiveness">
+                        EFECTIVIDAD:
+                        <strong id="report-effectiveness">0%</strong>
+                    </div>
+
+
+                    <div class="report-summary-grid">
+
+                        <div class="report-summary-item">
+                            <span>✓ Correctas</span>
+                            <strong id="report-summary-correct">0</strong>
+                        </div>
+
+                        <div class="report-summary-item">
+                            <span>✕ Incorrectas</span>
+                            <strong id="report-summary-wrong">0</strong>
+                        </div>
+
+                        <div class="report-summary-item">
+                            <span>⏱ Tiempo agotado</span>
+                            <strong id="report-summary-timeout">0</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESEMPEÑO POR MUNDO -->
+                <div class="report-worlds">
+
+                    <h3>DESEMPEÑO POR MUNDO</h3>
+
+                    <div id="report-worlds-list"
+                         class="report-worlds-list">
+
+                        <!--
+                            nexus.js generará aquí
+                            las siete filas de desempeño.
+                        -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- EVIDENCIA -->
+                <div class="report-evidence">
+                    📸 <strong>Guarda una captura de este reporte</strong>
+                    como evidencia de tu participación.
+                </div>
+
+
+                <!-- ACCIONES -->
+                <div class="report-actions">
+
+                    <button type="button"
+                            class="btn-primary"
+                            onclick="restartGame()">
+                        🔄 NUEVA INFILTRACIÓN
+                    </button>
+
+                    <button type="button"
+                            class="btn-back"
+                            onclick="returnToCover()">
+                        🌌 VOLVER AL NEXUS
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+             PANTALLA 6: RESULTADO - EQUIPOS
+             ========================================== -->
+        <section id="screen-team-result" class="screen hidden">
+
+            <div class="nexus-team-result">
+
+                <div class="team-result-icon">
+                    🏆
+                </div>
+
+                <h2>INFILTRACIÓN COMPLETADA</h2>
+
+                <div class="team-winner-label">
+                    EQUIPO GANADOR
+                </div>
+
+                <div id="team-winner-name"
+                     class="team-winner-name">
+                    ---
+                </div>
+
+
+                <div class="team-final-score">
+
+                    <div class="team-score-card">
+
+                        <span id="team-result-name-1">
+                            Equipo A
+                        </span>
+
+                        <strong id="team-result-score-1">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="team-score-vs">
+                        VS
+                    </div>
+
+
+                    <div class="team-score-card">
+
+                        <span id="team-result-name-2">
+                            Equipo B
+                        </span>
+
+                        <strong id="team-result-score-2">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="team-result-actions">
+
+                    <button type="button"
+                            class="btn-primary"
+                            onclick="restartGame()">
+                        ⚔️ NUEVO DUELO
+                    </button>
+
+                    <button type="button"
+                            class="btn-back"
+                            onclick="returnToCover()">
+                        🌌 VOLVER AL NEXUS
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
     </main>
 
     <!-- MODAL POPUP DE CONTROL DE VOLUMEN -->
@@ -422,6 +625,128 @@
             </div>
             <button class="btn-cyan-action" onclick="closeAudioSettings()">Guardar y Cerrar</button>
         </div>
+    </div>
+
+
+    <!-- ======================================================
+        MODAL - TABLA DE POSICIONES
+        ====================================================== -->
+
+    <div id="modal-leaderboard" class="modal hidden">
+
+        <div class="modal-content nexus-leaderboard-modal">
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeLeaderboardModal()"
+                aria-label="Cerrar tabla de posiciones">
+                ✕
+            </button>
+
+            <div class="leaderboard-header">
+                <div class="leaderboard-icon">🏆</div>
+
+                <div>
+                    <h2>TABLA DE POSICIONES</h2>
+                    <p>Los mejores infiltrados de El Nexus</p>
+                </div>
+            </div>
+
+
+            <!-- FILTROS -->
+
+            <div class="leaderboard-filters">
+
+                <label>
+                    <span>Reactivos</span>
+
+                    <select
+                        id="leaderboard-quantity-select"
+                        onchange="onLeaderboardFilterChange()">
+
+                        <option value="14" selected>
+                            14 reactivos
+                        </option>
+
+                        <option value="21">
+                            21 reactivos
+                        </option>
+
+                        <option value="35">
+                            35 reactivos
+                        </option>
+
+                    </select>
+                </label>
+
+
+                <label>
+                    <span>Temporizador</span>
+
+                    <select
+                        id="leaderboard-timer-select"
+                        onchange="onLeaderboardFilterChange()">
+
+                        <option value="0" selected>
+                            Sin límite
+                        </option>
+
+                        <option value="30">
+                            30 segundos
+                        </option>
+
+                        <option value="45">
+                            45 segundos
+                        </option>
+
+                        <option value="60">
+                            60 segundos
+                        </option>
+
+                    </select>
+                </label>
+
+            </div>
+
+
+            <!-- TABLA -->
+
+            <div class="leaderboard-table-wrapper">
+
+                <table class="leaderboard-table">
+
+                    <thead>
+                        <tr>
+                            <th>POS.</th>
+                            <th>JUGADOR</th>
+                            <th>ACIERTOS</th>
+                            <th>EFECTIVIDAD</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="leaderboard-body">
+
+                        <tr>
+                            <td colspan="4">
+                                Cargando registros...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="leaderboard-footer">
+                Solo se comparan partidas realizadas
+                bajo las mismas condiciones.
+            </div>
+
+        </div>
+
     </div>
 
     <script type="module" src="js/nexus.js"></script>

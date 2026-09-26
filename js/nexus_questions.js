@@ -76,6 +76,7 @@ function crearReactivoBase(
 ) {
 
     const reactivo = {
+        areaId: area.id,
         areaNombre: area.nombre,
         areaIcono: area.icono,
         tipo: tipo,
@@ -150,6 +151,12 @@ export function generarPoolNexus(totalDeseado = 21) {
 
         const reactivo =
             crearReactivoAleatorioPorArea(area);
+
+        if (!reactivo) {
+            console.error(
+                `🚨 GENERADOR FALLIDO → mundo: ${area.nombre} | id: ${area.id} | ciclo: ${i + 1}`
+            );
+        }
 
         pool.push(reactivo);
     }
@@ -380,7 +387,7 @@ function crearReactivoTablaVerdad(area) {
 
 
     return {
-
+        areaId: area.id,
         areaNombre: area.nombre,
         areaIcono: area.icono,
 
@@ -646,7 +653,7 @@ function crearReactivoNumeroAntiguo(area) {
 
 
     const reactivo = {
-
+       
         areaNombre: area.nombre,
         areaIcono: area.icono,
 
@@ -974,7 +981,7 @@ function crearReactivoClasificacionReal(area) {
 
 
     return {
-
+        areaId: area.id,
         areaNombre: area.nombre,
         areaIcono: area.icono,
 
@@ -1095,7 +1102,7 @@ function crearReactivoCablesHackers(area) {
 
 
     return {
-
+        areaId: area.id,
         areaNombre: area.nombre,
         areaIcono: area.icono,
 
@@ -1151,7 +1158,7 @@ function crearReactivoArbolFactorizacion(area) {
 
 
     return {
-
+        areaId: area.id,
         areaNombre: area.nombre,
         areaIcono: area.icono,
 
@@ -1749,6 +1756,7 @@ function crearReactivoPotencias(area) {
 
     const tipo = entero(1, 10);
     //const tipo = 9;
+    console.log('🏴‍☠️ Navegantes generó tipo:', tipo);
 
 
     // ------------------------------------------------------
@@ -2061,7 +2069,43 @@ function crearReactivoPotencias(area) {
         );
     }
 
+    // ------------------------------------------------------
+    // Radical ↔ exponente fraccionario
+    // ------------------------------------------------------
 
+    if (tipo === 10) {
+
+        const base = entero(2, 9);
+
+        const indice =
+            elegir([2, 3, 4, 5]);
+
+        const respuesta =
+            `$${base}^{\\frac{1}{${indice}}}$`;
+
+        const opciones = [
+            respuesta,
+            `$${base}^{${indice}}$`,
+            `$${base}^{\\frac{${indice}}{1}}$`,
+            `$${indice}^{\\frac{1}{${base}}}$`
+        ];
+
+        return crearReactivoBase(
+            area,
+            'opcion_multiple',
+            `🌌 Expresa el radical como una potencia:
+            $\\sqrt[${indice}]{${base}}$`,
+            respuesta,
+            opciones
+        );
+    }
+
+    console.error(
+        '🚨 Navegantes llegó al final SIN generar reactivo. Tipo:',
+        tipo
+    );
+
+    return undefined;
 }
 
 
@@ -2570,4 +2614,76 @@ function crearReactivoJerarquia(area) {
         );
     }
 
+}
+
+// ======================================================
+// DIAGNÓSTICO TEMPORAL — OPERACIÓN HACKERS
+// ======================================================
+
+export function probarHackers(cantidad = 100) {
+
+    const area = NEXUS_AREAS.find(
+        area => area.id === 'reales'
+    );
+
+    console.group(
+        `🧪 PRUEBA DE ESTRÉS — OPERACIÓN HACKERS (${cantidad} reactivos)`
+    );
+
+    let fallos = 0;
+
+    for (let i = 1; i <= cantidad; i++) {
+
+        const reactivo =
+            crearReactivoReales(area);
+
+        if (!reactivo) {
+
+            fallos++;
+
+            console.error(
+                `🚨 Reactivo ${i}: UNDEFINED`
+            );
+
+            continue;
+        }
+
+        const requiereOpciones =
+            reactivo.tipo === 'opcion_multiple' ||
+            reactivo.tipo === 'verdadero_falso';
+
+        if (
+            requiereOpciones &&
+            (!Array.isArray(reactivo.opciones) ||
+             reactivo.opciones.length === 0)
+        ) {
+
+            fallos++;
+
+            console.error(
+                `🚨 Reactivo ${i}: SIN OPCIONES`,
+                reactivo
+            );
+
+            continue;
+        }
+
+        console.log(
+            `✅ ${i}`,
+            reactivo.tipo,
+            reactivo.pregunta,
+            reactivo.opciones ?? '(interfaz especial)'
+        );
+    }
+
+    console.log(
+        `🏁 Prueba terminada: ${cantidad} generados | ${fallos} anomalías`
+    );
+
+    console.groupEnd();
+
+    return {
+        generados: cantidad,
+        fallos
+    };
 }

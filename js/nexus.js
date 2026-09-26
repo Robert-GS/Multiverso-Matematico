@@ -1,4 +1,5 @@
-import { generarPoolNexus } from './nexus_questions.js';
+import { generarPoolNexus, probarHackers } from './nexus_questions.js';
+import { saveScore, getTopScores } from './leaderboard.js';
 
 // ==========================================
 // 1. SISTEMA DE AUDIO Y NAVEGACIÓN
@@ -7,6 +8,7 @@ const sounds = {
     bg: new Audio('audio/nexus/bg-music.mp3'),
     correct: new Audio('audio/nexus/correct.mp3'),
     wrong: new Audio('audio/nexus/wrong.mp3'),
+    victory: new Audio('audio/nexus/victory.mp3'),
     click: new Audio('audio/nexus/click.mp3')
 };
 sounds.bg.loop = true;
@@ -59,6 +61,12 @@ function showScreen(screenId) {
     const target = document.getElementById(screenId);
     if (target) target.classList.remove('hidden');
 }
+
+document.addEventListener('click', function(event) {
+    if (event.target.tagName === 'BUTTON' || event.target.closest('button')) {
+        playSFX('click');
+    }
+});
 
 // Función para procesar y renderizar expresiones de MathJax / KaTeX ($...$)
 function renderizarMath(contenedorId = 'question-card') {
@@ -117,6 +125,7 @@ let gameState = {
     puntuacionEquipoB: 0,
     timerInterval: null,
     tiempoRestante: 0,
+    estadisticas: null,
     respuestaBloqueada: false
 };
 
@@ -156,6 +165,47 @@ function selectGameMode(mode) {
     showScreen('screen-config-2');
 }
 
+function crearEstadisticasPartida() {
+    return {
+        totalRespondidos: 0,
+        correctas: 0,
+        incorrectas: 0,
+        agotadosPorTiempo: 0,
+
+        porMundo: {
+            logica: {
+                total: 0,
+                correctas: 0
+            },
+            numeracion: {
+                total: 0,
+                correctas: 0
+            },
+            reales: {
+                total: 0,
+                correctas: 0
+            },
+            fracciones: {
+                total: 0,
+                correctas: 0
+            },
+            potencias: {
+                total: 0,
+                correctas: 0
+            },
+            medicion: {
+                total: 0,
+                correctas: 0
+            },
+            jerarquia: {
+                total: 0,
+                correctas: 0
+            }
+        }
+    };
+}
+
+
 function iniciarPartida(event) {
     if (event) event.preventDefault();
 
@@ -174,12 +224,33 @@ function iniciarPartida(event) {
 
     gameState.indicePregunta = 0;
     gameState.turnoActual = 0;
+    gameState.estadisticas = crearEstadisticasPartida();
     gameState.puntuacionSolitario = 0;
     gameState.puntuacionEquipoA = 0;
     gameState.puntuacionEquipoB = 0;
 
+    
+
     // Se generan reactivos aleatorios con la misma lógica dinámica de Hackers
     gameState.poolPreguntas = generarPoolNexus(gameState.cantidadTotal);
+
+    console.table(
+        gameState.poolPreguntas.map((r, i) => ({
+            numero: i + 1,
+            mundo: r?.areaNombre ?? '⚠️ UNDEFINED',
+            tipo: r?.tipo ?? '⚠️ UNDEFINED',
+            pregunta: r?.pregunta ?? '⚠️ SIN REACTIVO',
+            opciones: r?.opciones?.length ?? 0
+        }))
+    );
+
+    gameState.poolPreguntas.forEach((r, i) => {
+        if (!r) {
+            console.error(
+                `🚨 Reactivo undefined en posición ${i + 1}`
+            );
+        }
+    });
 
     showScreen('screen-game');
     cargarPreguntaActual();
@@ -213,6 +284,9 @@ function cargarPreguntaActual() {
 
 
     const reactivo = gameState.poolPreguntas[gameState.indicePregunta];
+    console.log('🔬 REACTIVO ACTUAL:', reactivo);
+    console.log('🔬 TIPO:', reactivo.tipo);
+    console.log('🔬 OPCIONES:', reactivo.opciones);
     const turnIndicator = document.getElementById('turn-indicator');
     const areaBadge = document.getElementById('area-badge');
     const questionProgress = document.getElementById('question-progress');
@@ -380,6 +454,35 @@ function cargarPreguntaActual() {
     } else {
         timerVal.innerText = '∞';
     }
+
+    console.log('🧭 FIN DE RENDER:', {
+        pregunta: reactivo.pregunta,
+        tipo: reactivo.tipo,
+        opciones: reactivo.opciones,
+        multipleHidden: answersMultiple.classList.contains('hidden'),
+        cantidadBotones: answersMultiple.children.length,
+        consoleHidden: answersConsole.classList.contains('hidden')
+    });
+
+    if (
+        (reactivo.tipo === 'opcion_multiple' ||
+        reactivo.tipo === 'verdadero_falso') &&
+        (
+            answersMultiple.classList.contains('hidden') ||
+            answersMultiple.children.length === 0
+        )
+    ) {
+        console.error(
+            '🚨 FALLO DE RENDER DETECTADO:',
+            {
+                reactivo,
+                multipleHidden:
+                    answersMultiple.classList.contains('hidden'),
+                cantidadBotones:
+                    answersMultiple.children.length
+            }
+        );
+    }
 }
 
 function actualizarCronometro() {
@@ -404,6 +507,54 @@ function checkConsoleAnswer() {
     const userVal = input.value.trim();
     if (userVal !== "") {
         procesarRespuesta(userVal);
+    }
+}
+
+function registrarEstadisticaReactivo(reactivo, esCorrecta, respuestaUsuario) {
+
+    if (!gameState.estadisticas || !reactivo) {
+        return;
+    }
+
+    const stats = gameState.estadisticas;
+
+    // -----------------------------
+    // Estadísticas globales
+    // -----------------------------
+
+    stats.totalRespondidos++;
+
+    if (esCorrecta) {
+        stats.correctas++;
+    } else {
+        stats.incorrectas++;
+    }
+
+    if (respuestaUsuario === null) {
+        stats.agotadosPorTiempo++;
+    }
+
+
+    // -----------------------------
+    // Estadísticas por mundo
+    // -----------------------------
+
+    const areaId = reactivo.areaId;
+
+    if (
+        areaId &&
+        stats.porMundo[areaId]
+    ) {
+        stats.porMundo[areaId].total++;
+
+        if (esCorrecta) {
+            stats.porMundo[areaId].correctas++;
+        }
+    } else {
+        console.warn(
+            'Reactivo sin área válida para estadísticas:',
+            reactivo
+        );
     }
 }
 
@@ -457,6 +608,12 @@ function procesarRespuesta(respuestaUsuario) {
 
     }
 
+
+    registrarEstadisticaReactivo(
+        reactivo,
+        esCorrecta,
+        respuestaUsuario
+    );
 
     // ==========================================
     // BLOQUEAR CONTROLES
@@ -597,6 +754,7 @@ function procesarRespuesta(respuestaUsuario) {
         }
 
     }, 2000);
+
 }
 
 function mostrarRetroalimentacion(
@@ -677,18 +835,471 @@ function confirmEndGame() {
 }
 
 function finalizarPartida() {
-    let msg = "";
+
+    detenerTemporizador();
+
     if (gameState.modo === 'solitario') {
-        msg = `¡Infiltración completada!\nJugador: ${gameState.jugador}\nRespuestas correctas: ${gameState.puntuacionSolitario} de ${gameState.cantidadTotal}`;
+        mostrarReporteSolitario();
     } else {
-        msg = `¡Duelo finalizado!\n${gameState.equipoA}: ${gameState.puntuacionEquipoA} pts\n${gameState.equipoB}: ${gameState.puntuacionEquipoB} pts`;
+        mostrarResultadoEquipos();
     }
-    alert(msg);
+}
+
+function mostrarResultadoEquipos() {
+
+    const nombreEquipo1 =
+        document.getElementById('team-result-name-1');
+
+    const nombreEquipo2 =
+        document.getElementById('team-result-name-2');
+
+    const puntajeEquipo1 =
+        document.getElementById('team-result-score-1');
+
+    const puntajeEquipo2 =
+        document.getElementById('team-result-score-2');
+
+    const ganador =
+        document.getElementById('team-winner-name');
+
+    const etiquetaGanador =
+        document.querySelector('.team-winner-label');
+
+
+    const tarjetas =
+        document.querySelectorAll('.team-score-card');
+
+    const tarjetaEquipoA = tarjetas[0];
+    const tarjetaEquipoB = tarjetas[1];
+
+    tarjetaEquipoA.classList.remove('winner');
+    tarjetaEquipoB.classList.remove('winner');
+
+    // ==========================================
+    // MOSTRAR MARCADOR FINAL
+    // ==========================================
+
+    nombreEquipo1.textContent =
+        gameState.equipoA;
+
+    nombreEquipo2.textContent =
+        gameState.equipoB;
+
+    puntajeEquipo1.textContent =
+        gameState.puntuacionEquipoA;
+
+    puntajeEquipo2.textContent =
+        gameState.puntuacionEquipoB;
+
+
+    // ==========================================
+    // DETERMINAR GANADOR O EMPATE
+    // ==========================================
+
+    if (
+        gameState.puntuacionEquipoA >
+        gameState.puntuacionEquipoB
+    ) {
+
+        etiquetaGanador.textContent =
+            '🏆 EQUIPO GANADOR';
+
+        ganador.textContent =
+            gameState.equipoA;
+
+        tarjetaEquipoA.classList.add('winner');
+    }
+
+    else if (
+        gameState.puntuacionEquipoB >
+        gameState.puntuacionEquipoA
+    ) {
+
+        etiquetaGanador.textContent =
+            '🏆 EQUIPO GANADOR';
+
+        ganador.textContent =
+            gameState.equipoB;
+        
+        tarjetaEquipoB.classList.add('winner');
+    }
+
+    else {
+
+        etiquetaGanador.textContent =
+            '⚔️ RESULTADO FINAL';
+
+        ganador.textContent =
+            '¡EMPATE!';
+    }
+
+
+    // ==========================================
+    // MOSTRAR PANTALLA
+    // ==========================================
+
+    showScreen('screen-team-result');
+    playSFX('victory');
+}
+
+// ==========================================
+// REPORTE FINAL - MODO SOLITARIO
+// ==========================================
+
+function mostrarReporteSolitario() {
+
+    const stats = gameState.estadisticas;
+
+    if (!stats) {
+        console.error('No existen estadísticas para generar el reporte.');
+        return;
+    }
+
+    // --------------------------------------
+    // DATOS GENERALES
+    // --------------------------------------
+
+    document.getElementById('report-player').innerText =
+        gameState.jugador;
+
+    document.getElementById('report-quantity').innerText =
+        gameState.cantidadTotal;
+
+    document.getElementById('report-timer').innerText =
+        gameState.tiempoMaximo === 0
+            ? 'Sin límite'
+            : `${gameState.tiempoMaximo} segundos`;
+
+
+    // --------------------------------------
+    // RESULTADO GLOBAL
+    // --------------------------------------
+
+    const efectividad =
+        stats.totalRespondidos > 0
+            ? Math.round(
+                (stats.correctas / stats.totalRespondidos) * 100
+              )
+            : 0;
+
+
+    document.getElementById('report-correct').innerText =
+        stats.correctas;
+
+    document.getElementById('report-total').innerText =
+        stats.totalRespondidos;
+
+    document.getElementById('report-effectiveness').innerText =
+        `${efectividad}%`;
+
+    document.getElementById('report-summary-correct').innerText =
+        stats.correctas;
+
+    document.getElementById('report-summary-wrong').innerText =
+        stats.incorrectas;
+
+    document.getElementById('report-summary-timeout').innerText =
+        stats.agotadosPorTiempo;
+
+
+    // --------------------------------------
+    // RESULTADO POR MUNDO
+    // --------------------------------------
+
+    const mundos = [
+        { id: 'logica',      icono: '🧠', nombre: 'Salida Lógica' },
+        { id: 'numeracion',  icono: '🏺', nombre: 'ArqueoMat' },
+        { id: 'reales',      icono: '💻', nombre: 'Operación Hackers' },
+        { id: 'fracciones',  icono: '⚗️', nombre: 'Alquimia Matemática' },
+        { id: 'potencias',   icono: '🏴‍☠️', nombre: 'Navegantes del Abismo' },
+        { id: 'medicion',    icono: '🚀', nombre: 'Horizonte Cósmico' },
+        { id: 'jerarquia',   icono: '🛡️', nombre: 'Guardianes del Orden' }
+    ];
+
+
+    const contenedor =
+        document.getElementById('report-worlds-list');
+
+    contenedor.innerHTML = '';
+
+
+    mundos.forEach(mundo => {
+
+        const datos =
+            stats.porMundo[mundo.id] || {
+                total: 0,
+                correctas: 0
+            };
+
+        const porcentaje =
+            datos.total > 0
+                ? Math.round(
+                    (datos.correctas / datos.total) * 100
+                  )
+                : 0;
+
+
+        const fila = document.createElement('div');
+
+        fila.className = 'report-world-item';
+
+        fila.innerHTML = `
+            <div class="report-world-top">
+
+                <div class="report-world-name">
+                    <span class="report-world-icon">
+                        ${mundo.icono}
+                    </span>
+
+                    <span>
+                        ${mundo.nombre}
+                    </span>
+                </div>
+
+                <div class="report-world-result">
+                    <strong>
+                        ${datos.correctas} / ${datos.total}
+                    </strong>
+
+                    <span class="report-world-percent">
+                        ${porcentaje}%
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="report-world-bar">
+                <div
+                    class="report-world-bar-fill"
+                    style="width: ${porcentaje}%;">
+                </div>
+            </div>
+        `;
+
+        contenedor.appendChild(fila);
+    });
+
+
+    showScreen('screen-report');
+    playSFX('victory');
+
+    // ==========================================
+    // GUARDAR RESULTADO EN LEADERBOARD
+    // ==========================================
+
+    if (stats.totalRespondidos > 0) {
+
+        try {
+
+            const modeKey =
+                `solo_${gameState.cantidadTotal}_${gameState.tiempoMaximo}`;
+
+            saveScore({
+                gameId: 'nexus',
+                gameTitle: 'El Nexus',
+                studentName: gameState.jugador,
+                mode: modeKey,
+                score: stats.correctas,
+                effectiveness: efectividad,
+                details:
+                    `Reactivos: ${gameState.cantidadTotal} | ` +
+                    `Tiempo: ${
+                        gameState.tiempoMaximo === 0
+                            ? 'Sin límite'
+                            : gameState.tiempoMaximo + ' s'
+                    }`
+            }).catch(error => {
+
+                console.error(
+                    'Error al guardar puntuación de Nexus:',
+                    error
+                );
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                'Error al guardar puntuación de Nexus:',
+                error
+            );
+        }
+    }
+    
+}
+
+
+// ==========================================
+// NAVEGACIÓN DESDE RESULTADOS
+// ==========================================
+
+function restartGame() {
+
+    detenerTemporizador();
+
+    showScreen('screen-config-1');
+}
+
+
+function returnToCover() {
+
+    detenerTemporizador();
+
     showScreen('screen-cover');
 }
 
-function openLeaderboardModal() {
-    alert("🏆 Tabla de Posiciones de El Nexus en desarrollo.");
+// ==========================================
+// TABLA DE POSICIONES - NEXUS
+// ==========================================
+
+async function openLeaderboardModal() {
+
+    const modal =
+        document.getElementById('modal-leaderboard');
+
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+
+    await loadLeaderboard();
+}
+
+
+function closeLeaderboardModal() {
+
+    const modal =
+        document.getElementById('modal-leaderboard');
+
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+
+async function onLeaderboardFilterChange() {
+
+    await loadLeaderboard();
+}
+
+
+async function loadLeaderboard() {
+
+    const tbody =
+        document.getElementById('leaderboard-body');
+
+    const quantitySelect =
+        document.getElementById(
+            'leaderboard-quantity-select'
+        );
+
+    const timerSelect =
+        document.getElementById(
+            'leaderboard-timer-select'
+        );
+
+
+    if (
+        !tbody ||
+        !quantitySelect ||
+        !timerSelect
+    ) {
+        return;
+    }
+
+
+    const cantidad =
+        parseInt(quantitySelect.value, 10);
+
+    const tiempo =
+        parseInt(timerSelect.value, 10);
+
+
+    const modeKey =
+        `solo_${cantidad}_${tiempo}`;
+
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="4">
+                Cargando puntuaciones...
+            </td>
+        </tr>
+    `;
+
+
+    try {
+
+        const scores =
+            await getTopScores(
+                'nexus',
+                modeKey,
+                10
+            );
+
+
+        if (!scores || scores.length === 0) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4">
+                        Sin registros para esta modalidad.
+                        ¡Sé el primero en conquistar El Nexus!
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        tbody.innerHTML = '';
+
+
+        scores.forEach((item, index) => {
+
+            const fila =
+                document.createElement('tr');
+
+
+            const posicion =
+                index === 0
+                    ? '🥇'
+                    : index === 1
+                        ? '🥈'
+                        : index === 2
+                            ? '🥉'
+                            : index + 1;
+
+
+            fila.innerHTML = `
+                <td>${posicion}</td>
+                <td>
+                    <strong>${item.studentName}</strong>
+                </td>
+                <td>${item.score} / ${cantidad}</td>
+                <td>${item.effectiveness}%</td>
+            `;
+
+
+            tbody.appendChild(fila);
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            'Error cargando leaderboard de Nexus:',
+            error
+        );
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    No se pudo cargar la tabla de posiciones.
+                </td>
+            </tr>
+        `;
+    }
 }
 
 // ----------------------------------------
@@ -1619,6 +2230,8 @@ function crearNodoCableNexus(id, texto, lado) {
         () => seleccionarNodoCableNexus(nodo)
     );
 
+    
+
 
     return nodo;
 }
@@ -2259,3 +2872,10 @@ window.openLeaderboardModal = openLeaderboardModal;
 window.toggleNexusTruthSwitch = toggleNexusTruthSwitch;
 window.checkTruthTableAnswer = checkTruthTableAnswer;
 window.checkFactorTreeAnswer = checkFactorTreeAnswer;
+window.restartGame = restartGame;
+window.returnToCover = returnToCover;
+window.closeLeaderboardModal = closeLeaderboardModal;
+window.onLeaderboardFilterChange = onLeaderboardFilterChange;
+
+
+window.probarHackers = probarHackers;

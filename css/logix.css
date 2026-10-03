@@ -163,7 +163,8 @@ body::before {
 /* ==========================================
    5. PANTALLA CONFIGURACIÓN
    ========================================== */
-#screen-setup {
+#screen-setup,
+#screen-team-setup {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -244,6 +245,401 @@ body::before {
     width: 100%;
     margin-top: 0;
 }
+
+/* ==========================================
+   SELECCIÓN DE MODO DE JUEGO
+   ========================================== */
+
+#screen-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.mode-selection {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 25px;
+}
+
+.mode-card {
+    flex: 1;
+    min-height: 210px;
+    padding: 25px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    background: rgba(18, 24, 36, 0.95);
+    border: 2px solid #00f0ff;
+    border-radius: 12px;
+
+    color: #e0e6ed;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.mode-card:hover {
+    transform: translateY(-5px);
+    background: rgba(0, 240, 255, 0.08);
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.45);
+}
+
+.mode-icon {
+    font-size: 3rem;
+}
+
+.mode-title {
+    color: #00f0ff;
+    font-size: 1.15rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.mode-description {
+    color: #a0aec0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 650px) {
+    .mode-selection {
+        flex-direction: column;
+    }
+
+    .mode-card {
+        min-height: 170px;
+    }
+}
+
+/* ==========================================
+   PANEL DE COMPETENCIA
+   ========================================== */
+
+.team-game-panel {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.team-score {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    padding: 12px 15px;
+
+    background: rgba(18, 24, 36, 0.9);
+    border: 1px solid #3a4b66;
+    border-radius: 8px;
+
+    transition: all 0.3s ease;
+}
+
+.team-score.active-team {
+    border-color: #00f0ff;
+    background: rgba(0, 240, 255, 0.08);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+}
+
+.team-display-name {
+    color: #e0e6ed;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.team-display-score {
+    min-width: 38px;
+    padding: 5px 10px;
+
+    background: #0d131d;
+    border: 1px solid #00f0ff;
+    border-radius: 6px;
+
+    color: #00ff88;
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.team-center-info {
+    min-width: 190px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    padding: 8px 15px;
+}
+
+.team-turn-display {
+    color: #00f0ff;
+    font-size: 0.95rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.team-door-display {
+    color: #8a99ad;
+    font-size: 0.85rem;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 700px) {
+    .team-game-panel {
+        flex-direction: column;
+    }
+
+    .team-center-info {
+        order: -1;
+        min-width: 0;
+    }
+
+    .team-score {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* ==========================================
+   RESULTADOS DE COMPETENCIA
+   ========================================== */
+
+#screen-team-results {
+    padding: 35px 20px;
+}
+
+.team-results-container {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 30px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0, 240, 255, 0.04),
+            rgba(10, 15, 25, 0.96)
+        );
+
+    border: 2px solid #00f0ff;
+    border-radius: 14px;
+
+    box-shadow:
+        0 0 20px rgba(0, 240, 255, 0.20),
+        inset 0 0 30px rgba(0, 240, 255, 0.03);
+
+    text-align: center;
+}
+
+.team-results-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    margin-bottom: 15px;
+}
+
+.team-results-header h2 {
+    margin: 0;
+
+    color: #00f0ff;
+
+    font-size: 1.65rem;
+    letter-spacing: 1px;
+
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.45);
+}
+
+.team-results-icon {
+    color: #00f0ff;
+    font-size: 1.5rem;
+}
+
+.team-result-protocol {
+    margin-bottom: 12px;
+
+    color: #00ff88;
+
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.team-result-winner {
+    margin: 18px 0 8px;
+
+    color: #ffd700;
+
+    font-size: 1.65rem;
+    font-weight: bold;
+
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+}
+
+.team-result-message {
+    margin: 0 auto 25px;
+
+    color: #aab7c8;
+    font-size: 0.95rem;
+}
+
+.team-result-scoreboard {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 18px;
+
+    margin: 25px 0;
+}
+
+.team-result-card {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 22px 15px;
+
+    background: rgba(13, 19, 29, 0.92);
+
+    border: 1px solid #3a4b66;
+    border-radius: 10px;
+
+    transition: all 0.3s ease;
+}
+
+.team-result-card.winner {
+    border-color: #ffd700;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 215, 0, 0.08),
+            rgba(13, 19, 29, 0.95)
+        );
+
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.20);
+}
+
+.team-result-card.tie {
+    border-color: #00f0ff;
+
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.18);
+}
+
+.team-result-name {
+    color: #e0e6ed;
+
+    font-size: 1rem;
+    font-weight: bold;
+
+    word-break: break-word;
+}
+
+.team-result-score {
+    margin: 10px 0 3px;
+
+    color: #00ff88;
+
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1;
+
+    text-shadow: 0 0 12px rgba(0, 255, 136, 0.35);
+}
+
+.team-result-points {
+    color: #708096;
+
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.team-result-vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #ff0055;
+
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.team-result-details {
+    display: inline-block;
+
+    margin: 5px 0 25px;
+    padding: 8px 16px;
+
+    color: #8fa1b8;
+
+    background: rgba(0, 240, 255, 0.04);
+
+    border: 1px solid rgba(0, 240, 255, 0.20);
+    border-radius: 20px;
+
+    font-size: 0.8rem;
+    letter-spacing: 0.8px;
+}
+
+.team-results-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+
+    margin-top: 5px;
+}
+
+
+/* Responsive */
+@media (max-width: 600px) {
+
+    .team-results-container {
+        padding: 22px 15px;
+    }
+
+    .team-results-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .team-result-scoreboard {
+        flex-direction: column;
+    }
+
+    .team-result-vs {
+        padding: 0;
+    }
+
+    .team-results-actions {
+        flex-direction: column;
+    }
+}
+
 
 /* ==========================================
    6. PANEL DE JUEGO Y TABLA

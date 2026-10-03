@@ -31,6 +31,36 @@
         </div>
     </section>
 
+    <!-- PANTALLA 1.5: SELECCIÓN DE MODO -->
+    <section id="screen-mode" class="screen hidden">
+        <h2 class="setup-title">Selecciona el modo de juego</h2>
+
+        <div class="mode-selection">
+
+            <button class="mode-card" onclick="selectGameMode('solo')">
+                <span class="mode-icon">👤</span>
+                <span class="mode-title">JUGADOR INDIVIDUAL</span>
+                <span class="mode-description">
+                    Practica tus habilidades y descifra las puertas del laboratorio.
+                </span>
+            </button>
+
+            <button class="mode-card" onclick="selectGameMode('team')">
+                <span class="mode-icon">⚔️</span>
+                <span class="mode-title">COMPETENCIA POR EQUIPOS</span>
+                <span class="mode-description">
+                    Dos equipos se enfrentan para demostrar quién domina la lógica.
+                </span>
+            </button>
+
+        </div>
+
+        <button class="btn-back" onclick="showScreen('screen-cover')">
+            ⬅ Regresar al Inicio
+        </button>
+    </section>
+
+
    <!-- PANTALLA 2: CONFIGURACIÓN DE DIFICULTAD -->
     <section id="screen-setup" class="screen hidden">
         <h2 class="setup-title">Configuración del Desafío</h2>
@@ -66,8 +96,92 @@
         </div>
     </section>
 
+    <!-- PANTALLA 2.5: CONFIGURACIÓN DE COMPETENCIA -->
+    <section id="screen-team-setup" class="screen hidden">
+        <h2 class="setup-title">⚔️ Configuración de Competencia</h2>
+
+        <div class="setup-form">
+
+            <div class="input-group">
+                <label for="team-1-name">Nombre del Equipo 1:</label>
+                <input
+                    type="text"
+                    id="team-1-name"
+                    class="custom-input"
+                    placeholder="Ej. Los Lógicos"
+                    autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label for="team-2-name">Nombre del Equipo 2:</label>
+                <input
+                    type="text"
+                    id="team-2-name"
+                    class="custom-input"
+                    placeholder="Ej. Los Booleanos"
+                    autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label for="team-num-vars">Número de Variables Proposicionales:</label>
+                <select id="team-num-vars" class="custom-select">
+                    <option value="2" selected>2 Variables (A, B) — 4 Filas</option>
+                    <option value="3">3 Variables (A, B, C) — 8 Filas</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="team-total-doors">Número de Puertas:</label>
+                <select id="team-total-doors" class="custom-select">
+                    <option value="10" selected>10 Puertas</option>
+                    <option value="20">20 Puertas</option>
+                    <option value="30">30 Puertas</option>
+                </select>
+            </div>
+
+            <div class="setup-buttons">
+                <button class="btn-start" onclick="startTeamGame()">
+                    ⚡ INICIAR COMPETENCIA
+                </button>
+
+                <button class="btn-back" onclick="showScreen('screen-mode')">
+                    ⬅ Regresar a Modos
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+
+
     <!-- PANTALLA 3: PANEL DE JUEGO (LABORATORIO) -->
     <section id="screen-game" class="screen hidden">
+
+        <!-- PANEL DE COMPETENCIA -->
+        <div id="team-game-panel" class="team-game-panel hidden">
+
+            <div class="team-score team-score-1 active-team">
+                <span id="team1-display-name" class="team-display-name">Equipo 1</span>
+                <span id="team1-display-score" class="team-display-score">0</span>
+            </div>
+
+            <div class="team-center-info">
+                <span id="team-turn-display" class="team-turn-display">
+                    TURNO: Equipo 1
+                </span>
+
+                <span id="team-door-display" class="team-door-display">
+                    Puerta 1 de 10
+                </span>
+            </div>
+
+            <div class="team-score team-score-2">
+                <span id="team2-display-score" class="team-display-score">0</span>
+                <span id="team2-display-name" class="team-display-name">Equipo 2</span>
+            </div>
+
+        </div>
+
         <div class="panel-header">
             <div id="door-status" class="door-status locked">🔒 PUERTA BLOQUEADA</div>
             <div id="attempts-left" class="attempts-display">Intentos: ❤️❤️❤️</div>
@@ -94,10 +208,89 @@
 
         <div class="game-action-buttons">
             <button id="btn-submit" class="btn-start" onclick="checkAnswer()">⚡ VERIFICAR CÓDIGO</button>
-            <button id="btn-next" class="btn-next hidden" onclick="loadNextDoor()">Siguiente Puerta ➔</button>
+            <!-- <button id="btn-next" class="btn-next hidden" onclick="loadNextDoor()">Siguiente Puerta ➔</button> -->
+            <button id="btn-next" class="btn-next hidden" onclick="goToNextDoor()">Siguiente Puerta ➔</button>
             <button class="btn-abort" onclick="confirmEndGame()">🏁 Terminar Partida</button>
         </div>
     </section>
+
+    <!-- PANTALLA: RESULTADOS DE COMPETENCIA -->
+    <section id="screen-team-results" class="screen hidden">
+
+        <div class="team-results-container">
+
+            <div class="team-results-header">
+                <span class="team-results-icon">⚡</span>
+                <h2>COMPETENCIA FINALIZADA</h2>
+                <span class="team-results-icon">⚡</span>
+            </div>
+
+            <div id="team-result-protocol" class="team-result-protocol">
+                PROTOCOLO DE ESCAPE COMPLETADO
+            </div>
+
+            <div id="team-result-winner" class="team-result-winner">
+                🏆 EQUIPO GANADOR
+            </div>
+
+            <p id="team-result-message" class="team-result-message">
+                El sistema de seguridad ha sido vulnerado.
+            </p>
+
+            <div class="team-result-scoreboard">
+
+                <div id="team-result-card-1" class="team-result-card">
+                    <span id="team-result-name-1" class="team-result-name">
+                        Equipo 1
+                    </span>
+
+                    <span id="team-result-score-1" class="team-result-score">
+                        0
+                    </span>
+
+                    <span class="team-result-points">
+                        PUNTOS
+                    </span>
+                </div>
+
+                <div class="team-result-vs">
+                    VS
+                </div>
+
+                <div id="team-result-card-2" class="team-result-card">
+                    <span id="team-result-name-2" class="team-result-name">
+                        Equipo 2
+                    </span>
+
+                    <span id="team-result-score-2" class="team-result-score">
+                        0
+                    </span>
+
+                    <span class="team-result-points">
+                        PUNTOS
+                    </span>
+                </div>
+
+            </div>
+
+            <div id="team-result-details" class="team-result-details">
+                10 PUERTAS • 2 VARIABLES
+            </div>
+
+            <div class="team-results-actions">
+                <button class="btn-start" onclick="rematchTeamGame()">
+                    ⚡ REVANCHA
+                </button>
+
+                <button class="btn-back" onclick="returnToCover()">
+                    🏠 INICIO
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+
 
     <!-- PANTALLA 4: RESULTADOS -->
     <section id="screen-results" class="screen hidden">

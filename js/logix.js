@@ -18,6 +18,21 @@ let totalCorrectExercises = 0;
 let totalCheckAttempts = 0;
 let hasAttemptedCurrentExercise = false;
 
+// Variables del modo de juego
+let gameMode = 'solo';
+
+// Variables de competencia
+let team1Name = "";
+let team2Name = "";
+let totalTeamDoors = 10;
+
+let currentTeamDoor = 1;
+let currentTeam = 1;
+let team1Score = 0;
+let team2Score = 0;
+
+let teamDoorResolved = false;
+
 // ==========================================
 // 2. SISTEMA DE AUDIO Y SONIDOS
 // ==========================================
@@ -105,7 +120,20 @@ document.addEventListener('DOMContentLoaded', () => {
 function startFromCover() {
     const screenCover = document.getElementById('screen-cover');
     if (screenCover && !screenCover.classList.contains('hidden')) {
-        showScreen('screen-setup'); 
+        showScreen('screen-mode'); 
+    }
+}
+
+function selectGameMode(mode) {
+    gameMode = mode;
+
+    if (mode === 'solo') {
+        showScreen('screen-setup');
+        return;
+    }
+
+    if (mode === 'team') {
+        showScreen('screen-team-setup');
     }
 }
 
@@ -224,6 +252,8 @@ function startGame() {
         return;
     }
 
+    gameMode = 'solo';
+
     totalAttemptedExercises = 0;
     totalCorrectExercises = 0;
     totalCheckAttempts = 0;
@@ -232,7 +262,112 @@ function startGame() {
     maxAttempts = parseInt(document.getElementById('max-attempts').value);
     
     showScreen('screen-game');
+
+    updateTeamPanel();
+
     loadNextDoor();
+}
+
+function startTeamGame() {
+    const team1Input = document.getElementById('team-1-name');
+    const team2Input = document.getElementById('team-2-name');
+
+    team1Name = team1Input.value.trim();
+    team2Name = team2Input.value.trim();
+
+    if (!team1Name) {
+        alert("Por favor, ingresa el nombre del Equipo 1.");
+        team1Input.focus();
+        return;
+    }
+
+    if (!team2Name) {
+        alert("Por favor, ingresa el nombre del Equipo 2.");
+        team2Input.focus();
+        return;
+    }
+
+    if (team1Name.toLowerCase() === team2Name.toLowerCase()) {
+        alert("Los equipos deben tener nombres diferentes.");
+        team2Input.focus();
+        return;
+    }
+
+    gameMode = 'team';
+
+    numVariables = parseInt(
+        document.getElementById('team-num-vars').value
+    );
+
+    totalTeamDoors = parseInt(
+        document.getElementById('team-total-doors').value
+    );
+
+    // Reiniciar estado de la competencia
+    currentTeamDoor = 1;
+    currentTeam = 1;
+    team1Score = 0;
+    team2Score = 0;
+
+    teamDoorResolved = false;
+
+
+    // En competencia habrá una sola oportunidad por puerta
+    maxAttempts = 1;
+
+    showScreen('screen-game');
+
+    updateTeamPanel();
+
+    loadNextDoor();
+}
+
+function updateTeamPanel() {
+    const panel = document.getElementById('team-game-panel');
+
+    if (!panel) return;
+
+    // El panel competitivo sólo debe aparecer en modo equipos
+    if (gameMode !== 'team') {
+        panel.classList.add('hidden');
+        return;
+    }
+
+    panel.classList.remove('hidden');
+
+    document.getElementById('team1-display-name').innerText = team1Name;
+    document.getElementById('team2-display-name').innerText = team2Name;
+
+    document.getElementById('team1-display-score').innerText = team1Score;
+    document.getElementById('team2-display-score').innerText = team2Score;
+
+    const currentTeamName = currentTeam === 1
+        ? team1Name
+        : team2Name;
+
+    document.getElementById('team-turn-display').innerText =
+        `TURNO: ${currentTeamName}`;
+
+    document.getElementById('team-door-display').innerText =
+        `Puerta ${currentTeamDoor} de ${totalTeamDoors}`;
+
+    const team1Card = document.querySelector('.team-score-1');
+    const team2Card = document.querySelector('.team-score-2');
+
+    team1Card.classList.toggle('active-team', currentTeam === 1);
+    team2Card.classList.toggle('active-team', currentTeam === 2);
+}
+
+function updateNextButton() {
+    const nextButton = document.getElementById('btn-next');
+
+    if (!nextButton) return;
+
+    if (gameMode === 'team' && currentTeamDoor >= totalTeamDoors) {
+        nextButton.innerText = "🏁 VER RESULTADO";
+    } else {
+        nextButton.innerText = "Siguiente Puerta ➔";
+    }
 }
 
 function loadNextDoor() {
@@ -246,7 +381,7 @@ function loadNextDoor() {
     document.getElementById('feedback').innerText = "";
     document.getElementById('btn-submit').classList.remove('hidden');
     document.getElementById('btn-next').classList.add('hidden');
-    
+    updateNextButton();
     updateAttemptsDisplay();
 
     currentExpression = generateRandomExpression(numVariables);
@@ -256,6 +391,150 @@ function loadNextDoor() {
     userSwitches = new Array(currentTableData.length).fill(false);
 
     renderTable();
+}
+
+function goToNextDoor() {
+
+    // Modo individual: conservar comportamiento original
+    if (gameMode !== 'team') {
+        loadNextDoor();
+        return;
+    }
+
+    // Si ya se resolvió la última puerta, finalizar competencia
+    if (currentTeamDoor >= totalTeamDoors) {
+        finishTeamGame();
+        return;
+    }
+
+    // Avanzar número de puerta
+    currentTeamDoor++;
+
+    // Alternar equipo
+    currentTeam = currentTeam === 1 ? 2 : 1;
+
+    // Preparar la nueva puerta
+    teamDoorResolved = false;
+
+    updateTeamPanel();
+    loadNextDoor();
+}
+
+function finishTeamGame() {
+
+    const protocol = document.getElementById('team-result-protocol');
+    const winnerText = document.getElementById('team-result-winner');
+    const message = document.getElementById('team-result-message');
+
+    const card1 = document.getElementById('team-result-card-1');
+    const card2 = document.getElementById('team-result-card-2');
+
+    // Limpiar estados visuales anteriores
+    card1.classList.remove('winner', 'tie');
+    card2.classList.remove('winner', 'tie');
+
+    // Mostrar nombres y puntuaciones
+    document.getElementById('team-result-name-1').innerText = team1Name;
+    document.getElementById('team-result-name-2').innerText = team2Name;
+
+    document.getElementById('team-result-score-1').innerText = team1Score;
+    document.getElementById('team-result-score-2').innerText = team2Score;
+
+    // Mostrar configuración utilizada
+    document.getElementById('team-result-details').innerText =
+        `${totalTeamDoors} PUERTAS • ${numVariables} VARIABLES`;
+
+    // Determinar resultado
+    if (team1Score > team2Score) {
+
+        protocol.innerText = "PROTOCOLO DE ESCAPE COMPLETADO";
+        winnerText.innerText = `🏆 ${team1Name}`;
+
+        message.innerText =
+            `${team1Name} ha descifrado más sistemas de seguridad.`;
+
+        card1.classList.add('winner');
+
+    }
+    else if (team2Score > team1Score) {
+
+        protocol.innerText = "PROTOCOLO DE ESCAPE COMPLETADO";
+        winnerText.innerText = `🏆 ${team2Name}`;
+
+        message.innerText =
+            `${team2Name} ha descifrado más sistemas de seguridad.`;
+
+        card2.classList.add('winner');
+
+    }
+    else {
+
+        protocol.innerText = "EQUILIBRIO LÓGICO DETECTADO";
+        winnerText.innerText = "🤝 EMPATE LÓGICO";
+
+        message.innerText =
+            "Ambos equipos han alcanzado el mismo nivel de acceso.";
+
+        card1.classList.add('tie');
+        card2.classList.add('tie');
+    }
+
+    showScreen('screen-team-results');
+}
+
+function rematchTeamGame() {
+
+    // Reiniciar estado competitivo
+    currentTeamDoor = 1;
+    currentTeam = 1;
+    team1Score = 0;
+    team2Score = 0;
+    teamDoorResolved = false;
+
+    // Mantener nombres y configuración de la competencia anterior
+    gameMode = 'team';
+    maxAttempts = 1;
+
+    // Volver al área de juego
+    showScreen('screen-game');
+
+    // Actualizar panel competitivo
+    updateTeamPanel();
+
+    // Preparar la primera puerta de la revancha
+    loadNextDoor();
+}
+
+function returnToCover() {
+
+    // Restablecer modo general
+    gameMode = 'solo';
+
+    // Reiniciar estado competitivo
+    team1Name = "";
+    team2Name = "";
+    totalTeamDoors = 10;
+
+    currentTeamDoor = 1;
+    currentTeam = 1;
+
+    team1Score = 0;
+    team2Score = 0;
+
+    teamDoorResolved = false;
+
+    // Restaurar texto normal del botón siguiente
+    const nextButton = document.getElementById('btn-next');
+
+    if (nextButton) {
+        nextButton.innerText = "Siguiente Puerta ➔";
+    }
+
+    // Ocultar cualquier estado competitivo
+    updateTeamPanel();
+
+    // Regresar a portada
+    showScreen('screen-cover');
 }
 
 function renderTable() {
@@ -336,7 +615,21 @@ function checkAnswer() {
         playSFX('correct');
         isTableLocked = true;
         totalCorrectExercises++;
-        
+
+        // Registrar punto en modo competencia
+        if (gameMode === 'team' && !teamDoorResolved) {
+            if (currentTeam === 1) {
+                team1Score++;
+            } else {
+                team2Score++;
+            }
+
+            teamDoorResolved = true;
+            updateTeamPanel();
+        }
+
+        updateNextButton();
+ 
         document.getElementById('door-status').className = "door-status unlocked";
         document.getElementById('door-status').innerText = "🔓 ¡PUERTA DESBLOQUEADA!";
         feedback.style.color = "#00ff88";
@@ -356,6 +649,11 @@ function checkAnswer() {
         } else {
             feedback.style.color = "#ff0055";
             feedback.innerText = "⚠️ Has agotado los intentos. Revelando clave correcta...";
+            
+            if (gameMode === 'team') {
+                teamDoorResolved = true;
+            }
+            updateNextButton();
             revealCorrectAnswer();
             document.getElementById('btn-submit').classList.add('hidden');
             document.getElementById('btn-next').classList.remove('hidden');
@@ -502,3 +800,9 @@ window.closeLeaderboardModal = closeLeaderboardModal;
 window.switchLeaderboardMode = switchLeaderboardMode;
 window.openLeaderboardModal = openLeaderboardModal;
 window.closeLeaderboardModal = closeLeaderboardModal;
+window.selectGameMode = selectGameMode;
+window.startTeamGame = startTeamGame;
+window.goToNextDoor = goToNextDoor;
+window.finishTeamGame = finishTeamGame;
+window.rematchTeamGame = rematchTeamGame;
+window.returnToCover = returnToCover;

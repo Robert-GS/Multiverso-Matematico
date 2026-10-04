@@ -161,6 +161,261 @@ body::before {
 }
 
 /* ==========================================
+   HISTORIA / BRIEFING DE MISIÓN
+   ========================================== */
+
+#screen-story {
+    padding: 30px 20px;
+}
+
+.story-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.story-classified {
+    margin-bottom: 8px;
+
+    color: #ff0055;
+    font-size: 0.78rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.story-title {
+    margin: 0 0 25px;
+
+    color: #00f0ff;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+
+    text-shadow: 0 0 12px rgba(0, 240, 255, 0.45);
+}
+
+
+/* --- GALERÍA ARGOS --- */
+
+.story-gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto 25px;
+}
+
+.story-frame {
+    position: relative;
+    overflow: hidden;
+
+    background: #0d131d;
+    border: 1px solid #00f0ff;
+    border-radius: 8px;
+
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.12);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.story-frame:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.28);
+}
+
+.story-frame img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    object-fit: contain;
+}
+
+.story-rec {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 3px 7px;
+
+    background: rgba(5, 8, 13, 0.75);
+    border-radius: 4px;
+
+    color: #e0e6ed;
+    font-size: 0.62rem;
+    letter-spacing: 0.7px;
+}
+
+.rec-dot {
+    width: 6px;
+    height: 6px;
+
+    background: #ff0055;
+    border-radius: 50%;
+
+    box-shadow: 0 0 6px rgba(255, 0, 85, 0.8);
+}
+
+.story-frame-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    padding: 9px 10px;
+
+    text-align: left;
+}
+
+.story-frame-info strong {
+    color: #00f0ff;
+    font-size: 0.76rem;
+    letter-spacing: 0.5px;
+}
+
+.story-frame-info span {
+    color: #66778d;
+    font-size: 0.65rem;
+}
+
+
+/* --- TEXTO NARRATIVO --- */
+
+.story-text {
+    max-width: 760px;
+    margin: 0 auto 20px;
+
+    color: #b8c4d4;
+    font-size: 0.95rem;
+    line-height: 1.55;
+
+    text-align: justify;
+}
+
+.story-text p {
+    margin: 0 0 10px;
+}
+
+.story-text strong {
+    color: #e7faff;
+}
+
+.story-year {
+    color: #00ff88 !important;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+
+/* --- MISIÓN --- */
+
+.story-mission {
+    max-width: 760px;
+    margin: 20px auto;
+
+    padding: 14px 18px;
+
+    background: rgba(0, 240, 255, 0.05);
+
+    border-left: 3px solid #00f0ff;
+    border-right: 3px solid #00f0ff;
+
+    color: #d5e2ef;
+}
+
+.story-mission h3 {
+    margin: 0 0 7px;
+
+    color: #00f0ff;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+.story-mission p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+
+/* --- LEMA --- */
+
+.story-motto {
+    margin: 22px 0;
+
+    color: #00ff88;
+
+    font-size: 1.05rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
+}
+
+
+/* --- CONTROLES --- */
+
+.story-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+
+    margin-top: 15px;
+}
+
+.story-enter-hint {
+    margin-top: 12px;
+
+    color: #5e6c80;
+    font-size: 0.7rem;
+    letter-spacing: 0.8px;
+}
+
+
+/* --- RESPONSIVE --- */
+
+@media (max-width: 700px) {
+
+    #screen-story {
+        padding: 22px 12px;
+    }
+
+    .story-title {
+        font-size: 1.45rem;
+    }
+
+    .story-gallery {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .story-frame {
+        max-width: 520px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .story-text {
+        font-size: 0.9rem;
+    }
+
+    .story-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+
+
+/* ==========================================
    5. PANTALLA CONFIGURACIÓN
    ========================================== */
 #screen-setup,

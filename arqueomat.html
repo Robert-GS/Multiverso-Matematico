@@ -28,6 +28,109 @@
             </div>
         </section>
 
+
+        <!-- PANTALLA: DIARIO DE EXPEDICIÓN -->
+        <section id="screen-story" class="screen hidden">
+
+            <div class="arqueomat-story-container">
+
+                <div class="expedition-file">
+                    🧭 DIARIO DE EXPEDICIÓN // ARCHIVO RECUPERADO 🧭
+                </div>
+
+                <h2 class="arqueomat-story-title">
+                    EL ENIGMA DE LOS NÚMEROS ANTIGUOS
+                </h2>
+
+                <!-- REGISTROS DE LA EXPEDICIÓN -->
+                <div class="expedition-gallery">
+
+                    <div class="expedition-frame">
+                        <img src="img/arqueomat/escena01.png"
+                            alt="Los exploradores descubren la entrada a una cámara ancestral">
+                    </div>
+
+                    <div class="expedition-frame">
+                        <img src="img/arqueomat/escena02.png"
+                            alt="Los exploradores estudian antiguos sistemas de numeración">
+                    </div>
+
+                    <div class="expedition-frame">
+                        <img src="img/arqueomat/escena03.png"
+                            alt="Los exploradores intentan descifrar un antiguo mecanismo">
+                    </div>
+
+                </div>
+
+                <!-- NARRATIVA -->
+                <div class="arqueomat-story-text">
+
+                    <p class="expedition-intro">
+                        UN DESCUBRIMIENTO IMPOSIBLE.
+                    </p>
+
+                    <p>
+                        Durante una expedición arqueológica, dos jóvenes investigadores
+                        han descubierto una cámara que permaneció oculta durante siglos.
+                    </p>
+                    <br>
+                    <p>
+                        En sus muros conviven inscripciones de antiguas civilizaciones:
+                        <strong>egipcios, mesopotámicos y mayas</strong> dejaron allí sus
+                        propios sistemas para representar los números.
+                    </p>
+                    <br>
+                    <p>
+                        En el centro de la cámara, un antiguo mecanismo permanece sellado.
+                        Para activarlo será necesario interpretar los símbolos, comprender
+                        su valor y <strong>traducir correctamente los números que dejaron
+                        sus creadores</strong>.
+                    </p>
+                    <br>
+                </div>
+
+                <!-- MISIÓN -->
+                <div class="expedition-mission">
+
+                    <h3>🔥 TU MISIÓN</h3>
+
+                    <p>
+                        - Explora los antiguos sistemas de numeración -
+                    </p>
+                    <p>
+                        - Descifra sus símbolos -
+                    </p>
+                    <p>
+                        - Ayuda a los investigadores a revelar el secreto que guarda la cámara -
+                    </p>
+
+                </div>
+                <br>
+                <div class="expedition-motto">
+                    « LOS NÚMEROS CAMBIAN - SU HISTORIA PERMANECE »
+                </div>
+                <br>
+                <div class="expedition-actions">
+
+                    <button class="btn-primary" onclick="continueFromStory()">
+                        🧭 INICIAR EXPEDICIÓN
+                    </button>
+
+                    <button class="btn-secondary" onclick="showScreen('screen-cover')">
+                        ⬅ VOLVER
+                    </button>
+
+                </div>
+
+                <div class="expedition-enter-hint">
+                    Presiona ENTER para continuar
+                </div>
+
+            </div>
+
+        </section>
+
+
         <!-- PANTALLA 2: SELECCIÓN DE SISTEMA -->
         <section id="screen-system" class="screen hidden">
             <h2>Selecciona el Sistema de Numeración</h2>
@@ -69,7 +172,7 @@
             <form id="setup-form-solo" onsubmit="startSoloGame(event)">
                 <div class="input-group">
                     <label for="player-name">Nombre Completo del Alumno:</label>
-                    <input type="text" id="player-name" placeholder="Ej. Juan Pérez López" required autocomplete="off">
+                    <input type="text" id="player-name" placeholder="Grupo - Apellido Nombre" required autocomplete="off">
                 </div>
 
                 <div class="input-group">
@@ -147,13 +250,122 @@
             </div>
         </section>
 
-        <!-- PANTALLA 6: RESULTADOS -->
+        <!-- PANTALLA 6: RESULTADOS 
         <section id="screen-results" class="screen hidden">
             <h1 id="results-title">🏆 ¡FIN DEL JUEGO! 🏆</h1>
             <h2 id="winner-message"></h2>
             <div class="final-scores" id="final-scores"></div>
             <button class="btn-start" onclick="resetToSystemSelection()">Jugar de Nuevo 🔄</button>
         </section>
+        -->
+        <!-- PANTALLA 6: RESULTADOS NUEVA-->
+        <section id="screen-results" class="screen hidden">
+            <div class="expedition-results-container">
+
+                <!-- Compatibilidad temporal con endGame() actual -->
+                <h1 id="results-title" class="hidden"></h1>
+                <h2 id="winner-message" class="hidden"></h2>
+                <div id="final-scores" class="hidden"></div>
+
+                <div class="expedition-results-kicker">
+                    🏺 REGISTRO FINAL DE LA EXPEDICIÓN
+                </div>
+
+                <h2 class="expedition-results-title">
+                    EXPEDICIÓN COMPLETADA
+                </h2>
+
+                <div id="team-result-status" class="expedition-result-status">
+                    EL ENIGMA HA SIDO DESCIFRADO
+                </div>
+
+                <div id="team-result-winner" class="expedition-result-winner">
+                    🏆 EQUIPO GANADOR
+                </div>
+
+                <p id="team-result-message" class="expedition-result-message">
+                    El conocimiento de las antiguas civilizaciones ha sido revelado.
+                </p>
+
+
+                <!-- MARCADOR FINAL -->
+                <div class="expedition-scoreboard">
+
+                    <div id="team-result-card-1" class="expedition-team-card">
+
+                        <span id="team-result-name-1"
+                            class="expedition-team-name">
+                            Equipo 1
+                        </span>
+
+                        <span id="team-result-score-1"
+                            class="expedition-team-score">
+                            0
+                        </span>
+
+                        <span class="expedition-team-points">
+                            ACIERTOS
+                        </span>
+
+                    </div>
+
+
+                    <div class="expedition-vs">
+                        VS
+                    </div>
+
+
+                    <div id="team-result-card-2" class="expedition-team-card">
+
+                        <span id="team-result-name-2"
+                            class="expedition-team-name">
+                            Equipo 2
+                        </span>
+
+                        <span id="team-result-score-2"
+                            class="expedition-team-score">
+                            0
+                        </span>
+
+                        <span class="expedition-team-points">
+                            ACIERTOS
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATOS DE LA EXPEDICIÓN -->
+                <div id="team-result-details"
+                    class="expedition-result-details">
+                    EGIPCIO • 20 DESAFÍOS COMPLETADOS
+                </div>
+
+
+                <div class="expedition-result-motto">
+                    « EL CONOCIMIENTO ANTIGUO HA SIDO REVELADO »
+                </div>
+
+
+                <div class="expedition-result-actions">
+
+                    <button class="btn-primary"
+                            onclick="rematchTeamGame()">
+                        🔥 NUEVA EXPEDICIÓN
+                    </button>
+
+                    <button class="btn-secondary"
+                            onclick="returnToCover()">
+                        🏠 INICIO
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+        
 
     </div>
 

@@ -31,10 +31,135 @@
         </div>
     </section>
 
+    <!-- PANTALLA: HISTORIA / BRIEFING DE MISIÓN -->
+    <section id="screen-story" class="screen hidden">
+
+        <div class="story-container">
+
+            <div class="story-classified">
+                ⚠ ARCHIVO CLASIFICADO // ARGOS_SECURITY_SYSTEM ⚠
+            </div>
+
+            <h2 class="story-title">PROTOCOLO DE ESCAPE</h2>
+
+            <!-- REGISTROS VISUALES DE ARGOS -->
+            <div class="story-gallery">
+
+                <div class="story-frame">
+                    <div class="story-rec">
+                        <span class="rec-dot"></span>
+                        REC // ARGOS
+                    </div>
+
+                    <img src="img/logix/escena01.png"
+                        alt="Complejo ARGOS bajo protocolo de confinamiento">
+
+                    <div class="story-frame-info">
+                        <strong>01 // CONFINAMIENTO</strong>
+                        <span>CAM_ARGOS_07</span>
+                    </div>
+                </div>
+
+                <div class="story-frame">
+                    <div class="story-rec">
+                        <span class="rec-dot"></span>
+                        REC // ARGOS
+                    </div>
+
+                    <img src="img/logix/escena02.png"
+                        alt="Puerta protegida por un código lógico">
+
+                    <div class="story-frame-info">
+                        <strong>02 // CÓDIGO LÓGICO</strong>
+                        <span>CAM_ARGOS_12</span>
+                    </div>
+                </div>
+
+                <div class="story-frame">
+                    <div class="story-rec">
+                        <span class="rec-dot"></span>
+                        REC // ARGOS
+                    </div>
+
+                    <img src="img/logix/escena03.png"
+                        alt="Los científicos intentan escapar de las unidades de vigilancia">
+
+                    <div class="story-frame-info">
+                        <strong>03 // ESCAPE</strong>
+                        <span>CAM_ARGOS_19</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- NARRATIVA -->
+            <div class="story-text">
+
+                <p class="story-year">AÑO 2187.</p>
+
+                <p>
+                    El complejo de investigación <strong>ARGOS</strong> ha quedado aislado.
+                    Una inteligencia artificial experimental ha tomado el control de sus
+                    sistemas y activado el protocolo de confinamiento.
+                </p>
+                <br>
+                <p>
+                    Dos jóvenes científicos permanecen atrapados mientras las unidades
+                    de vigilancia recorren los pasillos.
+                </p>
+                <br>
+                <p>
+                    Existe una sola ruta de escape, pero cada puerta de seguridad está
+                    protegida por un <strong>código lógico</strong>. Para abrirla deberán
+                    interpretar las proposiciones y
+                    <strong>decodificar correctamente su tabla de verdad</strong>.
+                </p>
+                <br>
+            </div>
+
+            <!-- MISIÓN -->
+            <div class="story-mission">
+                <h3>⚡ TU MISIÓN ⚡</h3>
+
+                <p>
+                    - Analiza cada código - 
+                </p>
+                <p>
+                    - Activa las combinaciones correctas -
+                </p>
+                <p>
+                    - Abre las puertas y guía a los científicos hacia la salida -
+                </p>
+            </div>
+            <br>
+            <div class="story-motto">
+                « LA LÓGICA ES LA ÚNICA LLAVE »
+            </div>
+            <br>
+            <div class="story-actions">
+                <button class="btn-start" onclick="continueFromStory()">
+                    ⚡ INICIAR MISIÓN
+                </button>
+
+                <button class="btn-back" onclick="showScreen('screen-cover')">
+                    ⬅ VOLVER
+                </button>
+            </div>
+
+            <div class="story-enter-hint">
+                Presiona ENTER para continuar
+            </div>
+
+        </div>
+
+    </section>
+
+
+
     <!-- PANTALLA 1.5: SELECCIÓN DE MODO -->
     <section id="screen-mode" class="screen hidden">
         <h2 class="setup-title">Selecciona el modo de juego</h2>
-
+        <br>
         <div class="mode-selection">
 
             <button class="mode-card" onclick="selectGameMode('solo')">
@@ -68,7 +193,7 @@
         <div class="setup-form">
             <div class="input-group">
                 <label for="student-name">Nombre del Alumno:</label>
-                <input type="text" id="student-name" class="custom-input" placeholder="Escribe tu nombre completo" autocomplete="off">
+                <input type="text" id="student-name" class="custom-input" placeholder="Grupo - Apellido Nombre" autocomplete="off">
             </div>
 
             <div class="input-group">

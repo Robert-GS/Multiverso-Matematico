@@ -117,11 +117,15 @@ const screenCover = document.getElementById('screen-cover');
 
 function startFromCover() {
     if (screenCover && !screenCover.classList.contains('hidden')) {
-        showScreen('screen-system'); 
+        showScreen('screen-story'); 
     }
 }
 
-document.addEventListener('keydown', function(e) {
+function continueFromStory() {
+    showScreen('screen-system');
+}
+
+/*document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
         if (screenCover && !screenCover.classList.contains('hidden')) {
             startFromCover();
@@ -133,7 +137,32 @@ document.addEventListener('keydown', function(e) {
             }
         }
     }
+}); */
+
+document.addEventListener('keydown', (event) => {
+
+    if (event.key !== 'Enter') return;
+
+    const screenCover = document.getElementById('screen-cover');
+    const screenStory = document.getElementById('screen-story');
+
+    // PORTADA → HISTORIA
+    if (screenCover && !screenCover.classList.contains('hidden')) {
+        startFromCover();
+        return;
+    }
+
+    // HISTORIA → SELECCIÓN DE SISTEMA
+    if (screenStory && !screenStory.classList.contains('hidden')) {
+        continueFromStory();
+        return;
+    }
+
+    // AQUÍ SE CONSERVA INTACTA
+    // LA LÓGICA DE ENTER QUE YA USA
+    // ARQUEOMAT DURANTE EL JUEGO.
 });
+
 
 if (screenCover) {
     screenCover.addEventListener('click', startFromCover);
@@ -665,7 +694,7 @@ async function endGame() {
                 console.error("Error al guardar puntuación en ArqueoMat:", err);
             }
         }
-    } else {
+    /*} else {
         resultsTitle.innerText = "🏆 ¡FIN DEL JUEGO! 🏆";
         let winnerText = "";
         if (scoreTeam1 > scoreTeam2) {
@@ -681,10 +710,124 @@ async function endGame() {
             <p><strong>${team1Name}:</strong> ${scoreTeam1} puntos</p>
             <p><strong>${team2Name}:</strong> ${scoreTeam2} puntos</p>
         `;
+    }*/
+
+    } else {
+
+        // Mantener compatibilidad con los elementos antiguos ocultos
+        resultsTitle.innerText = "🏺 EXPEDICIÓN COMPLETADA";
+        winnerMessage.innerText = "";
+        finalScores.innerHTML = "";
+
+        // Elementos de la nueva pantalla competitiva
+        const resultStatus = document.getElementById('team-result-status');
+        const resultWinner = document.getElementById('team-result-winner');
+        const resultMessage = document.getElementById('team-result-message');
+
+        const teamCard1 = document.getElementById('team-result-card-1');
+        const teamCard2 = document.getElementById('team-result-card-2');
+
+        const teamName1 = document.getElementById('team-result-name-1');
+        const teamName2 = document.getElementById('team-result-name-2');
+
+        const teamScore1 = document.getElementById('team-result-score-1');
+        const teamScore2 = document.getElementById('team-result-score-2');
+
+        const resultDetails = document.getElementById('team-result-details');
+
+        // Limpiar posibles marcas de una partida anterior
+        teamCard1.classList.remove('winner', 'tie');
+        teamCard2.classList.remove('winner', 'tie');
+
+        // Nombres y puntuaciones reales
+        teamName1.innerText = team1Name;
+        teamName2.innerText = team2Name;
+
+        teamScore1.innerText = scoreTeam1;
+        teamScore2.innerText = scoreTeam2;
+
+        // Determinar resultado
+        if (scoreTeam1 > scoreTeam2) {
+
+            resultStatus.innerText = "EL ENIGMA HA SIDO DESCIFRADO";
+            resultWinner.innerText = `🏆 ${team1Name}`;
+            resultMessage.innerText =
+                "Su conocimiento de los antiguos sistemas numéricos los llevó a la victoria.";
+
+            teamCard1.classList.add('winner');
+
+        } else if (scoreTeam2 > scoreTeam1) {
+
+            resultStatus.innerText = "EL ENIGMA HA SIDO DESCIFRADO";
+            resultWinner.innerText = `🏆 ${team2Name}`;
+            resultMessage.innerText =
+                "Su conocimiento de los antiguos sistemas numéricos los llevó a la victoria.";
+
+            teamCard2.classList.add('winner');
+
+        } else {
+
+            resultStatus.innerText = "EL ENIGMA PERMANECE EN EQUILIBRIO";
+            resultWinner.innerText = "⚖️ EMPATE";
+            resultMessage.innerText =
+                "Ambos equipos demostraron estar a la altura del desafío.";
+
+            teamCard1.classList.add('tie');
+            teamCard2.classList.add('tie');
+        }
+
+        // Nombre legible del sistema
+        const systemNames = {
+            egipcia: "EGIPCIO",
+            mesopotamica: "MESOPOTÁMICO",
+            maya: "MAYA",
+            mixta: "EXPEDICIÓN MIXTA"
+        };
+
+        const systemLabel =
+            systemNames[selectedSystem] || selectedSystem.toUpperCase();
+
+        resultDetails.innerText =
+            `${systemLabel} • ${maxRounds} DESAFÍOS COMPLETADOS`;
     }
 
     showScreen('screen-results');
     playSFX('victory');
+}
+
+
+function rematchTeamGame() {
+
+    // Reiniciar únicamente el estado de la competencia
+    scoreTeam1 = 0;
+    scoreTeam2 = 0;
+
+    currentTurn = 1;
+    currentRound = 1;
+
+    // Conservamos:
+    // - sistema
+    // - rango
+    // - nombres de equipos
+    // - cantidad de reactivos
+    // - tipo de reactivo
+
+    gameMode = 'equipos';
+
+    showScreen('screen-game');
+    loadNextQuestion();
+}
+
+function returnToCover() {
+
+    // Reinicio básico del estado competitivo
+    scoreTeam1 = 0;
+    scoreTeam2 = 0;
+
+    currentTurn = 1;
+    currentRound = 1;
+
+    showScreen('screen-cover');
 }
 
 function resetToSystemSelection() {
@@ -807,3 +950,6 @@ window.onLeaderboardTypeChange = onLeaderboardTypeChange;
 window.switchLeaderboardMode = switchLeaderboardMode;
 window.openLeaderboardModal = openLeaderboardModal;
 window.closeLeaderboardModal = closeLeaderboardModal;
+window.continueFromStory = continueFromStory;
+window.rematchTeamGame = rematchTeamGame;
+window.returnToCover = returnToCover;

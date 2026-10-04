@@ -158,6 +158,247 @@ body {
     }
 }
 
+
+/* ==========================================
+   DIARIO DE EXPEDICIÓN
+   ========================================== */
+
+#screen-story {
+    padding: 30px 18px;
+}
+
+.arqueomat-story-container {
+    width: 100%;
+    max-width: 900px;
+    box-sizing: border-box;
+    margin: 0 auto;
+
+    padding: 28px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(45, 28, 12, 0.96),
+            rgba(20, 13, 7, 0.97)
+        );
+
+    border: 2px solid #c89232;
+    border-radius: 10px;
+
+    box-shadow:
+        0 0 24px rgba(218, 157, 53, 0.18),
+        inset 0 0 35px rgba(255, 184, 58, 0.04);
+
+    text-align: center;
+}
+
+.expedition-file {
+    margin-bottom: 8px;
+
+    color: #b98b47;
+
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.arqueomat-story-title {
+    margin: 0 0 26px;
+
+    color: #f1c56e;
+
+    font-size: 1.75rem;
+    letter-spacing: 1.5px;
+
+    text-shadow: 0 0 10px rgba(241, 197, 110, 0.22);
+}
+
+
+/* ==========================================
+   REGISTROS VISUALES
+   ========================================== */
+
+.expedition-gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    width: 100%;
+    max-width: 700px;
+
+    margin: 0 auto 28px;
+
+    gap: 18px;
+}
+
+.expedition-frame {
+    overflow: hidden;
+
+    background: #160e07;
+
+    border: 2px solid #8d6329;
+    border-radius: 7px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.38),
+        0 0 12px rgba(218, 157, 53, 0.08);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.expedition-frame:hover {
+    transform: translateY(-2px);
+
+    border-color: #d9a441;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.42),
+        0 0 16px rgba(218, 157, 53, 0.18);
+}
+
+.expedition-frame img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+}
+
+
+/* ==========================================
+   NARRATIVA
+   ========================================== */
+
+.arqueomat-story-text {
+    max-width: 700px;
+    margin: 0 auto 22px;
+
+    color: #d7c5a7;
+
+    font-size: 0.95rem;
+    line-height: 1.6;
+
+    text-align: justify;
+}
+
+.arqueomat-story-text p {
+    margin: 0 0 11px;
+}
+
+.arqueomat-story-text strong {
+    color: #f0d59d;
+}
+
+.expedition-intro {
+    color: #e4aa42 !important;
+
+    font-weight: bold;
+    letter-spacing: 1.2px;
+}
+
+
+/* ==========================================
+   MISIÓN
+   ========================================== */
+
+.expedition-mission {
+    max-width: 700px;
+
+    margin: 22px auto;
+    padding: 15px 20px;
+
+    background: rgba(211, 151, 52, 0.07);
+
+    border-left: 3px solid #d39a34;
+    border-right: 3px solid #d39a34;
+}
+
+.expedition-mission h3 {
+    margin: 0 0 8px;
+
+    color: #efb84f;
+
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+.expedition-mission p {
+    margin: 0;
+
+    color: #ddceb4;
+    line-height: 1.55;
+}
+
+
+/* ==========================================
+   LEMA Y NAVEGACIÓN
+   ========================================== */
+
+.expedition-motto {
+    margin: 24px 0;
+
+    color: #f2c76d;
+
+    font-size: 1.05rem;
+    font-weight: bold;
+    letter-spacing: 1.4px;
+
+    text-shadow: 0 0 10px rgba(242, 199, 109, 0.18);
+}
+
+.expedition-actions {
+    display: flex;
+    justify-content: center;
+
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.expedition-enter-hint {
+    margin-top: 12px;
+
+    color: #806d51;
+
+    font-size: 0.7rem;
+    letter-spacing: 0.8px;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 700px) {
+
+    #screen-story {
+        padding: 18px 10px;
+    }
+
+    .arqueomat-story-container {
+        padding: 20px 12px;
+    }
+
+    .arqueomat-story-title {
+        font-size: 1.35rem;
+    }
+
+    .expedition-gallery {
+        max-width: 100%;
+        gap: 14px;
+    }
+
+    .arqueomat-story-text {
+        font-size: 0.9rem;
+    }
+
+    .expedition-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+
 /* ==========================================
    5. FORMULARIOS, SELECCIÓN Y BOTONES
    ========================================== */
@@ -621,6 +862,280 @@ button:disabled {
 
 #final-scores p {
     margin: 6px 0;
+}
+
+/* =========================================================
+   RESULTADOS COMPETITIVOS - ARQUEOMAT
+   ========================================================= */
+
+.expedition-results-container {
+    width: 100%;
+    max-width: 850px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 32px 28px;
+
+    text-align: center;
+
+    background:
+        radial-gradient(circle at top,
+            rgba(176, 118, 35, 0.14),
+            transparent 42%),
+        linear-gradient(180deg,
+            rgba(47, 30, 14, 0.97),
+            rgba(21, 14, 8, 0.98));
+
+    border: 2px solid #b98535;
+    border-radius: 12px;
+
+    box-shadow:
+        0 0 28px rgba(190, 130, 38, 0.18),
+        inset 0 0 40px rgba(255, 194, 92, 0.04);
+}
+
+
+/* ---------- ENCABEZADO ---------- */
+
+.expedition-results-kicker {
+    color: #aa8048;
+    font-size: 0.76rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.expedition-results-title {
+    margin: 0 0 10px;
+
+    color: #f0c56f;
+    font-size: 2rem;
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 0 12px rgba(239, 184, 79, 0.25);
+}
+
+.expedition-result-status {
+    color: #d9b873;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 1.4px;
+    margin-top: 8px;
+}
+
+
+/* ---------- GANADOR ---------- */
+
+.expedition-result-winner {
+    margin: 22px 0 8px;
+
+    color: #ffd66b;
+    font-size: 1.75rem;
+    font-weight: bold;
+
+    text-shadow:
+        0 0 8px rgba(255, 205, 91, 0.35),
+        0 0 20px rgba(255, 181, 46, 0.16);
+}
+
+.expedition-result-message {
+    max-width: 600px;
+    margin: 0 auto 25px;
+
+    color: #d5c3a5;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+
+/* ---------- MARCADOR ---------- */
+
+.expedition-scoreboard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+
+    gap: 18px;
+
+    max-width: 700px;
+    margin: 25px auto;
+}
+
+.expedition-team-card {
+    position: relative;
+
+    min-width: 0;
+    padding: 22px 15px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background:
+        linear-gradient(180deg,
+            rgba(120, 81, 34, 0.13),
+            rgba(30, 19, 9, 0.6));
+
+    border: 1px solid #76552e;
+    border-radius: 9px;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.expedition-team-name {
+    width: 100%;
+
+    color: #ddc69d;
+    font-size: 1rem;
+    font-weight: bold;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.expedition-team-score {
+    margin: 8px 0 2px;
+
+    color: #f2c766;
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.expedition-team-points {
+    color: #907858;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.expedition-vs {
+    color: #806b4d;
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+
+/* ---------- EQUIPO GANADOR ---------- */
+
+.expedition-team-card.winner {
+    transform: translateY(-4px);
+
+    border-color: #e3ad43;
+
+    background:
+        radial-gradient(circle at top,
+            rgba(255, 199, 78, 0.18),
+            transparent 55%),
+        linear-gradient(180deg,
+            rgba(132, 88, 28, 0.22),
+            rgba(34, 21, 8, 0.7));
+
+    box-shadow:
+        0 0 12px rgba(238, 177, 61, 0.22),
+        0 0 30px rgba(218, 151, 41, 0.12);
+}
+
+.expedition-team-card.winner::before {
+    content: "🏆";
+    position: absolute;
+    top: -17px;
+
+    padding: 4px 9px;
+
+    background: #2b1b0b;
+    border: 1px solid #d8a33d;
+    border-radius: 50%;
+
+    font-size: 1.1rem;
+}
+
+
+/* ---------- EMPATE ---------- */
+
+.expedition-team-card.tie {
+    border-color: #c19b5e;
+
+    box-shadow:
+        0 0 15px rgba(193, 155, 94, 0.16);
+}
+
+
+/* ---------- DATOS DE EXPEDICIÓN ---------- */
+
+.expedition-result-details {
+    display: inline-block;
+
+    margin: 8px auto 0;
+    padding: 8px 17px;
+
+    color: #ad946d;
+    font-size: 0.76rem;
+    font-weight: bold;
+    letter-spacing: 1.3px;
+
+    border-top: 1px solid #72552f;
+    border-bottom: 1px solid #72552f;
+}
+
+.expedition-result-motto {
+    margin: 26px 0 22px;
+
+    color: #e9bd65;
+    font-size: 0.9rem;
+    font-style: italic;
+    letter-spacing: 1.2px;
+}
+
+
+/* ---------- BOTONES ---------- */
+
+.expedition-result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+
+    margin-top: 18px;
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 650px) {
+
+    .expedition-results-container {
+        padding: 25px 14px;
+    }
+
+    .expedition-results-title {
+        font-size: 1.55rem;
+    }
+
+    .expedition-result-winner {
+        font-size: 1.35rem;
+    }
+
+    .expedition-scoreboard {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .expedition-vs {
+        margin: -2px 0;
+    }
+
+    .expedition-team-score {
+        font-size: 2.5rem;
+    }
+
+    .expedition-result-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 /* ==========================================

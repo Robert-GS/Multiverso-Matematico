@@ -120,8 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function startFromCover() {
     const screenCover = document.getElementById('screen-cover');
     if (screenCover && !screenCover.classList.contains('hidden')) {
-        showScreen('screen-mode'); 
+        showScreen('screen-story'); 
     }
+}
+
+function continueFromStory() {
+    showScreen('screen-mode');
 }
 
 function selectGameMode(mode) {
@@ -137,11 +141,34 @@ function selectGameMode(mode) {
     }
 }
 
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
+//document.addEventListener('keydown', function(e) {
+//    if (e.key === 'Enter') {
+//        startFromCover();
+//    }
+//});
+//------------------------------------------------------------------
+function handleEnterNavigation(event) {
+
+    if (event.key !== 'Enter') return;
+
+    const screenCover = document.getElementById('screen-cover');
+    const screenStory = document.getElementById('screen-story');
+
+    // PORTADA → HISTORIA
+    if (screenCover && !screenCover.classList.contains('hidden')) {
         startFromCover();
+        return;
     }
-});
+
+    // HISTORIA → SELECCIÓN DE MODO
+    if (screenStory && !screenStory.classList.contains('hidden')) {
+        continueFromStory();
+    }
+}
+
+document.addEventListener('keydown', handleEnterNavigation);
+
+//---------------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
     const screenCover = document.getElementById('screen-cover');
@@ -806,3 +833,4 @@ window.goToNextDoor = goToNextDoor;
 window.finishTeamGame = finishTeamGame;
 window.rematchTeamGame = rematchTeamGame;
 window.returnToCover = returnToCover;
+window.continueFromStory = continueFromStory;

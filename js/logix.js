@@ -285,6 +285,8 @@ function startGame() {
     totalCorrectExercises = 0;
     totalCheckAttempts = 0;
 
+    updateSoloProgressDisplay();
+
     numVariables = parseInt(document.getElementById('num-vars-select').value);
     maxAttempts = parseInt(document.getElementById('max-attempts').value);
     
@@ -615,6 +617,20 @@ function updateAttemptsDisplay() {
     document.getElementById('attempts-left').innerText = `Intentos: ${'❤️'.repeat(currentAttempts)}`;
 }
 
+function updateSoloProgressDisplay() {
+    const progress = document.getElementById('solo-progress');
+
+    if (!progress) return;
+
+    if (gameMode === 'solo') {
+        progress.classList.remove('hidden');
+        progress.innerText =
+            `🎯 Aciertos: ${totalCorrectExercises} / ${totalAttemptedExercises}`;
+    } else {
+        progress.classList.add('hidden');
+    }
+}
+
 // ==========================================
 // 6. VERIFICACIÓN DE CÓDIGO
 // ==========================================
@@ -623,6 +639,8 @@ function checkAnswer() {
         totalAttemptedExercises++;
         hasAttemptedCurrentExercise = true;
     }
+
+    updateSoloProgressDisplay();
 
     totalCheckAttempts++;
 
@@ -642,6 +660,7 @@ function checkAnswer() {
         playSFX('correct');
         isTableLocked = true;
         totalCorrectExercises++;
+        updateSoloProgressDisplay();
 
         // Registrar punto en modo competencia
         if (gameMode === 'team' && !teamDoorResolved) {

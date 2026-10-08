@@ -110,19 +110,39 @@ const screenCover = document.getElementById('screen-cover');
 
 function startFromCover() {
     if (screenCover && !screenCover.classList.contains('hidden')) {
-        showScreen('screen-server'); 
+        showScreen('screen-story');
     }
+}
+
+function acceptMission() {
+    showScreen('screen-server');
 }
 
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
+
+        const storyScreen = document.getElementById('screen-story');
+
+        // PORTADA → HISTORIA
         if (screenCover && !screenCover.classList.contains('hidden')) {
             startFromCover();
-        } else {
-            const directContainer = document.getElementById('direct-input-container');
-            if (directContainer && !directContainer.classList.contains('hidden')) {
-                const submitBtn = document.getElementById('btn-submit-answer');
-                if (submitBtn && !submitBtn.disabled) checkDirectAnswer();
+            return;
+        }
+
+        // HISTORIA → SELECCIÓN DE SERVIDOR
+        if (storyScreen && !storyScreen.classList.contains('hidden')) {
+            acceptMission();
+            return;
+        }
+
+        // RESPUESTA DIRECTA DURANTE EL JUEGO
+        const directContainer = document.getElementById('direct-input-container');
+
+        if (directContainer && !directContainer.classList.contains('hidden')) {
+            const submitBtn = document.getElementById('btn-submit-answer');
+
+            if (submitBtn && !submitBtn.disabled) {
+                checkDirectAnswer();
             }
         }
     }
@@ -1253,3 +1273,4 @@ window.onLeaderboardLevelChange = onLeaderboardLevelChange;
 window.onLeaderboardTypeChange = onLeaderboardTypeChange;
 window.openLeaderboardModal = openLeaderboardModal;
 window.closeLeaderboardModal = closeLeaderboardModal;
+window.acceptMission = acceptMission;

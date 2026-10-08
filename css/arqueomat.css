@@ -1265,3 +1265,56 @@ button:disabled {
 .leaderboard-table tr:nth-child(1) td { color: #b8860b; font-weight: bold; }
 .leaderboard-table tr:nth-child(2) td { color: #7f8c8d; font-weight: bold; }
 .leaderboard-table tr:nth-child(3) td { color: #d35400; font-weight: bold; }
+
+
+
+/* ==========================================
+   REPORTE INDIVIDUAL - ARQUEOMAT
+   Corrección de contraste y legibilidad
+   ========================================== */
+
+/* Encabezado del reporte */
+#solo-results-container #results-title {
+    color: #f1c56e;
+    font-size: 1.7rem;
+    text-shadow: 0 0 10px rgba(241, 197, 110, 0.2);
+}
+
+/* Mensaje de felicitación */
+#solo-results-container #winner-message {
+    color: #e8d2a7;
+    font-size: 1.3rem;
+}
+
+/* Información general del reporte */
+#solo-results-container #final-scores {
+    color: #e8dcc6;
+}
+
+/* Etiquetas: Alumno, Sistema, Aciertos, etc. */
+#solo-results-container #final-scores strong {
+    color: #f1c56e;
+}
+
+/* Datos del reporte y sus valores */
+#solo-results-container #final-scores p {
+    color: #e8dcc6;
+    line-height: 1.6;
+}
+
+/* Nota de captura de pantalla */
+#solo-results-container #final-scores > p:last-child {
+    color: #cbb994 !important;
+    font-size: 0.9rem;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 650px) {
+    #solo-results-container #results-title {
+        font-size: 1.35rem;
+    }
+
+    #solo-results-container #winner-message {
+        font-size: 1.1rem;
+    }
+}

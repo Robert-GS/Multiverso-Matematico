@@ -627,6 +627,19 @@ function confirmEndGame() {
 }
 
 async function endGame() {
+    // Mostrar únicamente los resultados del modo activo
+    const soloResults = document.getElementById('solo-results-container');
+    const teamResults = document.getElementById('team-results-container');
+
+    if (gameMode === 'solitario') {
+        soloResults.classList.remove('hidden');
+        teamResults.classList.add('hidden');
+    } else {
+        soloResults.classList.add('hidden');
+        teamResults.classList.remove('hidden');
+    }
+
+
     const resultsTitle = document.getElementById('results-title');
     const winnerMessage = document.getElementById('winner-message');
     const finalScores = document.getElementById('final-scores');

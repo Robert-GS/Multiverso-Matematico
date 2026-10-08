@@ -262,106 +262,125 @@
         <section id="screen-results" class="screen hidden">
             <div class="expedition-results-container">
 
-                <!-- Compatibilidad temporal con endGame() actual -->
+                <!-- Compatibilidad temporal con endGame() actual
                 <h1 id="results-title" class="hidden"></h1>
                 <h2 id="winner-message" class="hidden"></h2>
-                <div id="final-scores" class="hidden"></div>
+                <div id="final-scores" class="hidden"></div> -->
 
-                <div class="expedition-results-kicker">
-                    🏺 REGISTRO FINAL DE LA EXPEDICIÓN
-                </div>
+                <!-- RESULTADOS INDIVIDUALES -->
+                <div id="solo-results-container" class="hidden">
 
-                <h2 class="expedition-results-title">
-                    EXPEDICIÓN COMPLETADA
-                </h2>
+                    <h1 id="results-title"></h1>
 
-                <div id="team-result-status" class="expedition-result-status">
-                    EL ENIGMA HA SIDO DESCIFRADO
-                </div>
+                    <h2 id="winner-message"></h2>
 
-                <div id="team-result-winner" class="expedition-result-winner">
-                    🏆 EQUIPO GANADOR
-                </div>
-
-                <p id="team-result-message" class="expedition-result-message">
-                    El conocimiento de las antiguas civilizaciones ha sido revelado.
-                </p>
-
-
-                <!-- MARCADOR FINAL -->
-                <div class="expedition-scoreboard">
-
-                    <div id="team-result-card-1" class="expedition-team-card">
-
-                        <span id="team-result-name-1"
-                            class="expedition-team-name">
-                            Equipo 1
-                        </span>
-
-                        <span id="team-result-score-1"
-                            class="expedition-team-score">
-                            0
-                        </span>
-
-                        <span class="expedition-team-points">
-                            ACIERTOS
-                        </span>
-
-                    </div>
-
-
-                    <div class="expedition-vs">
-                        VS
-                    </div>
-
-
-                    <div id="team-result-card-2" class="expedition-team-card">
-
-                        <span id="team-result-name-2"
-                            class="expedition-team-name">
-                            Equipo 2
-                        </span>
-
-                        <span id="team-result-score-2"
-                            class="expedition-team-score">
-                            0
-                        </span>
-
-                        <span class="expedition-team-points">
-                            ACIERTOS
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- DATOS DE LA EXPEDICIÓN -->
-                <div id="team-result-details"
-                    class="expedition-result-details">
-                    EGIPCIO • 20 DESAFÍOS COMPLETADOS
-                </div>
-
-
-                <div class="expedition-result-motto">
-                    « EL CONOCIMIENTO ANTIGUO HA SIDO REVELADO »
-                </div>
-
-
-                <div class="expedition-result-actions">
+                    <div class="final-scores" id="final-scores"></div>
 
                     <button class="btn-primary"
-                            onclick="rematchTeamGame()">
-                        🔥 NUEVA EXPEDICIÓN
-                    </button>
-
-                    <button class="btn-secondary"
-                            onclick="returnToCover()">
-                        🏠 INICIO
+                            onclick="resetToSystemSelection()">
+                        🔄 NUEVA PRÁCTICA
                     </button>
 
                 </div>
 
+                <!-- RESULTADOS COMPETITIVOS -->
+                <div id="team-results-container">
+
+                    <div class="expedition-results-kicker">
+                        🏺 REGISTRO FINAL DE LA EXPEDICIÓN
+                    </div>
+
+                    <h2 class="expedition-results-title">
+                        EXPEDICIÓN COMPLETADA
+                    </h2>
+
+                    <div id="team-result-status" class="expedition-result-status">
+                        EL ENIGMA HA SIDO DESCIFRADO
+                    </div>
+
+                    <div id="team-result-winner" class="expedition-result-winner">
+                        🏆 EQUIPO GANADOR
+                    </div>
+
+                    <p id="team-result-message" class="expedition-result-message">
+                        El conocimiento de las antiguas civilizaciones ha sido revelado.
+                    </p>
+
+
+                    <!-- MARCADOR FINAL -->
+                    <div class="expedition-scoreboard">
+
+                        <div id="team-result-card-1" class="expedition-team-card">
+
+                            <span id="team-result-name-1"
+                                class="expedition-team-name">
+                                Equipo 1
+                            </span>
+
+                            <span id="team-result-score-1"
+                                class="expedition-team-score">
+                                0
+                            </span>
+
+                            <span class="expedition-team-points">
+                                ACIERTOS
+                            </span>
+
+                        </div>
+
+
+                        <div class="expedition-vs">
+                            VS
+                        </div>
+
+
+                        <div id="team-result-card-2" class="expedition-team-card">
+
+                            <span id="team-result-name-2"
+                                class="expedition-team-name">
+                                Equipo 2
+                            </span>
+
+                            <span id="team-result-score-2"
+                                class="expedition-team-score">
+                                0
+                            </span>
+
+                            <span class="expedition-team-points">
+                                ACIERTOS
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DATOS DE LA EXPEDICIÓN -->
+                    <div id="team-result-details"
+                        class="expedition-result-details">
+                        EGIPCIO • 20 DESAFÍOS COMPLETADOS
+                    </div>
+
+
+                    <div class="expedition-result-motto">
+                        « EL CONOCIMIENTO ANTIGUO HA SIDO REVELADO »
+                    </div>
+
+
+                    <div class="expedition-result-actions">
+
+                        <button class="btn-primary"
+                                onclick="rematchTeamGame()">
+                            🔥 NUEVA EXPEDICIÓN
+                        </button>
+
+                        <button class="btn-secondary"
+                                onclick="returnToCover()">
+                            🏠 INICIO
+                        </button>
+
+                    </div>
+                </div>
             </div>
 
         </section>

@@ -1196,6 +1196,28 @@ button {
     min-width: 220px;
 }
 
+/* =========================================================
+   PANEL DE ESTADO - MODO INDIVIDUAL
+   ========================================================= */
+
+.solo-status-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .solo-status-row {
+        gap: 10px;
+    }
+
+    .solo-status-row .attempts-display {
+        font-size: 0.9rem;
+    }
+}
+
 /* ==========================================
    9. MODAL DE TABLA GLOBAL DE LÍDERES
    ========================================== */

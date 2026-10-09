@@ -1,5 +1,5 @@
 // js/leaderboard.js
-import { db } from './firebase-config.js';
+import { db, authReady } from './firebase-config.js';
 import { collection, query, where, getDocs, addDoc, updateDoc, doc, serverTimestamp, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 const isFirebaseAvailable = typeof db !== 'undefined' && db !== null;
@@ -15,6 +15,14 @@ export async function saveScore(scoreData) {
     }
 
     try {
+
+        const user = await authReady;
+
+        if (!user) {
+            console.warn("No se pudo autenticar al jugador. Récord no guardado.");
+            return false;
+        }
+
         const scoresRef = collection(db, "highscores");
         
         const cleanStudentName = scoreData.studentName.trim().toLowerCase();
@@ -22,12 +30,22 @@ export async function saveScore(scoreData) {
         const targetMode = typeof scoreData.mode === 'number' ? scoreData.mode : String(scoreData.mode).toLowerCase();
 
         // 1. Buscar si el alumno ya tiene un registro en este juego y modo
+        //const q = query(
+        //    scoresRef,
+        //    where("gameId", "==", scoreData.gameId),
+        //    where("mode", "==", targetMode),
+        //    where("ownerUid", "==", user.uid)
+        //);
+
         const q = query(
             scoresRef,
             where("gameId", "==", scoreData.gameId),
             where("mode", "==", targetMode),
-            where("studentNameLower", "==", cleanStudentName)
+            where("studentNameLower", "==", cleanStudentName),
+            where("ownerUid", "==", user.uid)
         );
+
+
 
         const querySnapshot = await getDocs(q);
 
@@ -46,6 +64,7 @@ export async function saveScore(scoreData) {
             if (isBetterScore || isTieWithBetterEffectiveness) {
                 await updateDoc(doc(db, "highscores", existingDoc.id), {
                     studentName: scoreData.studentName.trim(),
+                    studentNameLower: cleanStudentName,
                     score: newScore,
                     effectiveness: newEffectiveness,
                     details: scoreData.details || "",
@@ -64,6 +83,7 @@ export async function saveScore(scoreData) {
                 gameTitle: scoreData.gameTitle,
                 studentName: scoreData.studentName.trim(),
                 studentNameLower: cleanStudentName,
+                ownerUid: user.uid,
                 mode: targetMode,
                 score: Number(scoreData.score),
                 effectiveness: Number(scoreData.effectiveness),
@@ -94,6 +114,13 @@ export async function getTopScores(gameId, mode, limitCount = 10) {
     const selectedMode = typeof mode === 'number' ? mode : String(mode).toLowerCase();
 
     try {
+        const user = await authReady;
+
+        if (!user) {
+            console.warn("No se pudo autenticar al jugador para consultar el ranking.");
+            return [];
+        }
+
         const q = query(
             collection(db, "highscores"),
             where("gameId", "==", gameId),

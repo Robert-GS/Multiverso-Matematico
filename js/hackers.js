@@ -280,10 +280,22 @@ function loadNextQuestion() {
     const hackDisplay = document.getElementById('hack-display');
 
     // Ocultar todos por defecto
-    if (optionsContainer) optionsContainer.classList.add('hidden');
+    //if (optionsContainer) optionsContainer.classList.add('hidden');
+    //if (directContainer) directContainer.classList.add('hidden');
+    //if (cableContainer) cableContainer.classList.add('hidden');
+    //if (treeContainer) treeContainer.classList.add('hidden'); // NEW
+
+
+    // Ocultar todos por defecto
+    if (optionsContainer) {
+        optionsContainer.classList.remove('matrix-active');
+        optionsContainer.classList.add('hidden');
+    }
     if (directContainer) directContainer.classList.add('hidden');
     if (cableContainer) cableContainer.classList.add('hidden');
-    if (treeContainer) treeContainer.classList.add('hidden'); // NEW
+    if (treeContainer) treeContainer.classList.add('hidden');
+
+
 
     document.getElementById('challenge-instruction').innerText = challengeData.instruction;
 
@@ -993,6 +1005,7 @@ function checkAnswer(selected) {
     processResult(selected.toString().trim() === correctAnswer.toString().trim());
 }
 
+
 function checkDirectAnswer() {
     const input = document.getElementById('direct-answer');
     const userVal = input.value.trim();
@@ -1002,8 +1015,54 @@ function checkDirectAnswer() {
     input.disabled = true;
     document.getElementById('btn-submit-answer').disabled = true;
 
-    processResult(userVal.toLowerCase() === correctAnswer.toLowerCase());
+    let isCorrect = false;
+
+    // Detectar específicamente los ejercicios de
+    // factorización en factores primos.
+    const isFactorization =
+        currentActiveServer === 'servidor3' &&
+        /^\d+\s*x\s*\d+$/i.test(correctAnswer);
+
+    if (isFactorization) {
+
+        // Aceptar x, X, × o * como multiplicación.
+        const getFactors = (value) => {
+            const normalized = value
+                .toLowerCase()
+                .replace(/[×*]/g, 'x')
+                .trim();
+
+            if (!/^\d+\s*x\s*\d+$/.test(normalized)) {
+                return null;
+            }
+
+            return normalized
+                .split('x')
+                .map(n => Number(n.trim()))
+                .sort((a, b) => a - b);
+        };
+
+        const studentFactors = getFactors(userVal);
+        const correctFactors = getFactors(correctAnswer);
+
+        isCorrect =
+            studentFactors !== null &&
+            correctFactors !== null &&
+            studentFactors.length === correctFactors.length &&
+            studentFactors.every(
+                (factor, index) => factor === correctFactors[index]
+            );
+
+    } else {
+        // Conservar la evaluación original para MCD, mcm
+        // y todos los demás reactivos.
+        isCorrect =
+            userVal.toLowerCase() === correctAnswer.toLowerCase();
+    }
+
+    processResult(isCorrect);
 }
+
 
 function processResult(isCorrect) {
     const feedback = document.getElementById('feedback');
@@ -1142,19 +1201,130 @@ async function endGame() {
             }
         }    
 
-    } else {
-        resultsTitle.innerText = "🏆 DUELO CIBERNÉTICO FINALIZADO 🏆";
-        let winnerText = "";
-        if (scoreTeam1 > scoreTeam2) winnerText = `🏆 ¡Escuadrón Ganador: ${team1Name}! 🏆`;
-        else if (scoreTeam2 > scoreTeam1) winnerText = `🏆 ¡Escuadrón Ganador: ${team2Name}! 🏆`;
-        else winnerText = "🤝 ¡Empate de Hackeo Perfecto! 🤝";
+    //} else {
+    //    resultsTitle.innerText = "🏆 DUELO CIBERNÉTICO FINALIZADO 🏆";
+    //    let winnerText = "";
+    //    if (scoreTeam1 > scoreTeam2) winnerText = `🏆 ¡Escuadrón Ganador: ${team1Name}! 🏆`;
+    //    else if (scoreTeam2 > scoreTeam1) winnerText = `🏆 ¡Escuadrón Ganador: ${team2Name}! 🏆`;
+    //    else winnerText = "🤝 ¡Empate de Hackeo Perfecto! 🤝";
 
-        winnerMessage.innerText = winnerText;
+    //    winnerMessage.innerText = winnerText;
+    //    finalScores.innerHTML = `
+    //        <p><strong>${team1Name}:</strong> ${scoreTeam1} puntos</p>
+    //        <p><strong>${team2Name}:</strong> ${scoreTeam2} puntos</p>
+    //    `;
+    //}
+
+    } else {
+        // ==========================================
+        // REPORTE COMPETITIVO: DUELO CIBERNÉTICO
+        // ==========================================
+
+        resultsTitle.innerText = "⚡ DUELO CIBERNÉTICO ⚡";
+
+        const isTie = scoreTeam1 === scoreTeam2;
+        const team1Wins = scoreTeam1 > scoreTeam2;
+        const team2Wins = scoreTeam2 > scoreTeam1;
+
+        // Protección de nombres al insertarlos en HTML
+        const escapeHTML = (value) => String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+
+        const safeTeam1 = escapeHTML(team1Name);
+        const safeTeam2 = escapeHTML(team2Name);
+
+        const serverNames = {
+            servidor1: "Firewall de Red",
+            servidor2: "Decodificador",
+            servidor3: "Cifrado Core",
+            root: "Infiltración Total ROOT"
+        };
+
+        const difficultyNames = {
+            1: "Novato",
+            2: "Analista",
+            3: "Elite Hacker"
+        };
+
+        const questionNames = {
+            multiple: "Opción Múltiple",
+            direct: "Entrada Directa",
+            mixed: "Mixto"
+        };
+
+        if (isTie) {
+            winnerMessage.innerText = "🤝 ¡DUELO EMPATADO!";
+        } else {
+            winnerMessage.innerText = team1Wins
+                ? `🏆 ¡VICTORIA DE ${team1Name}!`
+                : `🏆 ¡VICTORIA DE ${team2Name}!`;
+        }
+
+        const teamCard = (name, score, winner, icon) => `
+            <article class="duel-team-card ${winner ? 'duel-winner' : ''}">
+                <div class="duel-team-icon">${icon}</div>
+                <div class="duel-team-name">${name}</div>
+                <div class="duel-team-score">${score}</div>
+                <div class="duel-team-unit">ACCESOS EXITOSOS</div>
+                <div class="duel-team-status">
+                    ${isTie ? '🤝 EMPATE' : winner ? '🏆 ESCUADRÓN VENCEDOR' : '🛡️ ESCUADRÓN FINALISTA'}
+                </div>
+            </article>
+        `;
+
         finalScores.innerHTML = `
-            <p><strong>${team1Name}:</strong> ${scoreTeam1} puntos</p>
-            <p><strong>${team2Name}:</strong> ${scoreTeam2} puntos</p>
+            <div class="duel-report">
+                <div class="duel-system-status">
+                    <span class="duel-status-dot"></span>
+                    OPERACIÓN FINALIZADA // INFORME DE MISIÓN
+                </div>
+
+                <div class="duel-arena">
+                    ${teamCard(safeTeam1, scoreTeam1, team1Wins, '⚡')}
+
+                    <div class="duel-versus">VS</div>
+
+                    ${teamCard(safeTeam2, scoreTeam2, team2Wins, '🛡️')}
+                </div>
+
+                <div class="duel-summary">
+                    <div class="duel-summary-title">
+                        📡 REGISTRO DE INFILTRACIÓN
+                    </div>
+
+                    <div class="duel-summary-grid">
+                        <div>
+                            <span>SERVIDOR</span>
+                            <strong>${serverNames[selectedServer] || 'Desconocido'}</strong>
+                        </div>
+                        <div>
+                            <span>DIFICULTAD</span>
+                            <strong>Nivel ${difficultyLevel}: ${difficultyNames[difficultyLevel] || ''}</strong>
+                        </div>
+                        <div>
+                            <span>VALIDACIÓN</span>
+                            <strong>${questionNames[questionType] || 'Mixto'}</strong>
+                        </div>
+                        <div>
+                            <span>ENIGMAS PROGRAMADOS</span>
+                            <strong>${maxRounds}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="duel-evidence">
+                    📷 Captura esta pantalla como evidencia del duelo.
+                </p>
+            </div>
         `;
     }
+
+
+
 
     showScreen('screen-results');
     playSFX('victory');
@@ -1248,6 +1418,27 @@ async function loadLeaderboard() {
         tbody.innerHTML = '<tr><td colspan="4">No se pudo cargar la tabla de líderes.</td></tr>';
     }
 }
+
+
+/* ==========================================
+   MICROCIRUGÍA 05: PLACEHOLDER RESPONSIVO
+   ========================================== */
+
+function updateDirectAnswerPlaceholder() {
+    const input = document.getElementById('direct-answer');
+    if (!input) return;
+
+    const isMobile = window.matchMedia('(max-width: 650px)').matches;
+
+    input.placeholder = isMobile
+        ? input.dataset.placeholderMobile
+        : 'Respuesta';
+}
+
+// Aplicar al cargar y al cambiar el tamaño de ventana
+updateDirectAnswerPlaceholder();
+window.addEventListener('resize', updateDirectAnswerPlaceholder);
+
 
 // ==========================================
 // 7. EXPOSICIÓN GLOBAL A WINDOW

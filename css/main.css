@@ -17,6 +17,9 @@ body {
     align-items: center;
     justify-content: center;
     overflow-x: hidden;
+
+    padding-bottom: 90px;
+    padding-top: 10px;
 }
 
 /* CONTENEDOR DE PANTALLA CON CAPA SEMITRANSPARENTE */
@@ -31,7 +34,7 @@ body {
     text-align: center;
     background: rgba(10, 15, 29, 0.75); /* Oscurece ligeramente el fondo para legibilidad */
     backdrop-filter: blur(1px);
-    transform: translateY(-50px); /* Sube la tarjeta 20 píxeles */
+    transform: translateY(10px); /* Sube la tarjeta 20 píxeles */
 }
 
 /* PORTADA CON IMAGEN CENTRAL */

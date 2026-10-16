@@ -13,6 +13,9 @@ body {
     margin: 0;
     position: relative;
     box-sizing: border-box;
+
+    padding-bottom: 70px;
+    
 }
 
 body::before {
@@ -35,7 +38,7 @@ body::before {
    2. BARRA SUPERIOR (HEADER)
    ========================================== */
 .top-bar {
-    position: relative;
+    position: fixed;
     z-index: 10;
     width: 100%;
     display: flex;
@@ -94,6 +97,8 @@ body::before {
     margin: auto 0;
     transform: translateY(-50px);
     box-sizing: border-box;
+
+    margin-top: 120px;
 }
 
 .glitch-title {

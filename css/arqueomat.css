@@ -23,7 +23,7 @@ body {
    2. BARRA SUPERIOR (HEADER)
    ========================================== */
 .top-bar {
-    position: relative;
+    position: fixed;
     z-index: 10;
     width: 100%;
     display: flex;
@@ -90,6 +90,9 @@ body {
     margin: auto 0; /* Centrado vertical en el espacio disponible */
     transform: translateY(-50px); /* Sube la tarjeta 20 píxeles */
     box-sizing: border-box;
+
+    margin-top: 120px;
+    margin-bottom: 50px;
 }
 
 .screen {

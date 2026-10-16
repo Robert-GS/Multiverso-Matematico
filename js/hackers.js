@@ -530,25 +530,49 @@ function generateServer2Challenge() {
                 { id: 'p4', left: 'Inverso Aditivo', right: 'a + (-a) = 0' }
             ],
             // Opción 3: Leyes de Exponentes Básicas
+            //[
+            //    { id: 'p1', left: 'Producto de igual base', right: 'aᵐ · aⁿ = aᵐ⁺ⁿ' },
+            //    { id: 'p2', left: 'Cociente de igual base', right: 'aᵐ / aⁿ = aᵐ⁻ⁿ' },
+            //    { id: 'p3', left: 'Exponente Cero', right: 'a⁰ = 1' },
+            //    { id: 'p4', left: 'Potencia de una potencia', right: '(aᵐ)ⁿ = aᵐ·ⁿ' }
+            //],
             [
-                { id: 'p1', left: 'Producto de igual base', right: 'aᵐ · aⁿ = aᵐ⁺ⁿ' },
-                { id: 'p2', left: 'Cociente de igual base', right: 'aᵐ / aⁿ = aᵐ⁻ⁿ' },
-                { id: 'p3', left: 'Exponente Cero', right: 'a⁰ = 1' },
-                { id: 'p4', left: 'Potencia de una potencia', right: '(aᵐ)ⁿ = aᵐ·ⁿ' }
+                { id: 'p1', left: 'Inverso Multiplicativo', right: 'a · (1/a) = 1' },
+                { id: 'p2', left: 'Positivo / Negativo', right: '(+) / (-) = -' },
+                { id: 'p3', left: 'Negativo / Negativo', right: '(-) / (-) = +' },
+                { id: 'p4', left: 'Inverso Aditivo', right: 'a + (-a) = 0' }
             ],
             // Opción 4: Jerarquía de Operaciones y Estructura
+            //[
+            //    { id: 'p1', left: 'Prioridad Máxima', right: 'Paréntesis y Corchetes' },
+            //    { id: 'p2', left: 'Segunda Prioridad', right: 'Potencias y Raíces' },
+            //    { id: 'p3', left: 'Tercera Prioridad', right: 'Multiplicación y División' },
+            //    { id: 'p4', left: 'Última Prioridad', right: 'Suma y Resta' }
+            //],
             [
-                { id: 'p1', left: 'Prioridad Máxima', right: 'Paréntesis y Corchetes' },
-                { id: 'p2', left: 'Segunda Prioridad', right: 'Potencias y Raíces' },
-                { id: 'p3', left: 'Tercera Prioridad', right: 'Multiplicación y División' },
-                { id: 'p4', left: 'Última Prioridad', right: 'Suma y Resta' }
+                { id: 'p1', left: 'Inverso Multiplicativo', right: 'a · (1/a) = 1' },
+                { id: 'p2', left: 'Positivo / Negativo', right: '(+) / (-) = -' },
+                { id: 'p3', left: 'Elemento Neutro (Suma)', right: 'a + 0 = a' },
+                { id: 'p4', left: 'Propiedad Distributiva', right: 'a · (b + c) = a·b + a·c' }
             ],
             // Opción 5: Elementos y Propiedades Especiales
             [
                 { id: 'p1', left: 'Elemento Neutro (Multiplicación)', right: 'a · 1 = a' },
-                { id: 'p2', left: 'Elemento Absorbente', right: 'a · 0 = 0' },
+                { id: 'p2', left: 'Elemento Neutro (Suma)', right: 'a + 0 = a' },
                 { id: 'p3', left: 'Inverso Multiplicativo', right: 'a · (1/a) = 1' },
                 { id: 'p4', left: 'Conmutativa (Producto)', right: 'a · b = b · a' }
+            ],
+            [
+                { id: 'p1', left: 'Positivo / Negativo', right: '(+) / (-) = -' },
+                { id: 'p2', left: 'Elemento Neutro (Suma)', right: 'x + 0 = x' },
+                { id: 'p3', left: 'Propiedad Distributiva', right: 'x · (y + z) = x·y + x·z' },
+                { id: 'p4', left: 'Conmutativa (Producto)', right: 'x · y = y · x' }
+            ],
+            [
+                { id: 'p1', left: 'Inverso Multiplicativo', right: 'x · (1/x) = 1' },
+                { id: 'p2', left: 'Conmutativa (Producto)', right: 'x · y = y · x' },
+                { id: 'p3', left: 'Propiedad Distributiva', right: 'x · (y + z) = x·y + x·z' },
+                { id: 'p4', left: 'Inverso Aditivo', right: 'x + (-x) = 0' }
             ]
         ];
 

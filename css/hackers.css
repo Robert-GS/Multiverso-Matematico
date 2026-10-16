@@ -23,7 +23,7 @@ body {
    2. BARRA SUPERIOR (TOP BAR)
    ========================================== */
 .top-bar {
-    position: relative;
+    position: fixed;
     z-index: 10;
     width: 100%;
     display: flex;
@@ -92,6 +92,9 @@ body {
     margin: auto 0;
     transform: translateY(-20px);
     box-sizing: border-box;
+
+    margin-top: 100px;
+    margin-bottom: 70px;
 }
 
 .screen {

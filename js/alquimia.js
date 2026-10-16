@@ -85,6 +85,9 @@ let team2Name = "Sombra Estelar";
 // Puntajes
 let scoreTeam1 = 0;
 let scoreTeam2 = 0;
+let attemptsTeam1 = 0;
+let attemptsTeam2 = 0;
+let duelAborted = false;
 let soloCorrect = 0;
 let soloTotal = 0;
 
@@ -112,7 +115,7 @@ const screenCover = document.getElementById('screen-cover');
 
 function startFromCover() {
     if (screenCover && !screenCover.classList.contains('hidden')) {
-        showScreen('screen-server'); 
+        openGrimoire(); 
     }
 }
 
@@ -203,6 +206,9 @@ function startGame(event) {
 function resetStats() {
     scoreTeam1 = 0;
     scoreTeam2 = 0;
+    attemptsTeam1 = 0;
+    attemptsTeam2 = 0;
+    duelAborted = false;
     soloCorrect = 0;
     soloTotal = 0;
     currentTurn = 1;
@@ -805,6 +811,8 @@ function processResult(isCorrect) {
             feedback.innerText = `💥 ¡EL CALDERO HA EXPLOTADO! La respuesta correcta era: ${correctAnswer}`;
         }
     } else {
+        if (currentTurn === 1) attemptsTeam1++;
+        else attemptsTeam2++;
         const activeTeamName = currentTurn === 1 ? team1Name : team2Name;
         if (isCorrect) {
             playSFX('correct');
@@ -855,7 +863,10 @@ function confirmEndGame() {
         ? "¿Deseas finalizar la sesión de alquimia y obtener tu pergamino de resultados?" 
         : "¿Estás seguro de que deseas abortar el duelo místico?";
 
-    if (confirm(msg)) endGame();
+    if (confirm(msg)) {
+        if (gameMode === 'equipos') duelAborted = true;
+        endGame();
+    }
 }
 
 // ==========================================
@@ -925,21 +936,42 @@ async function endGame() {
         }
 
     } else {
-        resultsTitle.innerText = "🏆 DUELO MÍSTICO FINALIZADO 🏆";
-        let winnerText = "";
-        if (scoreTeam1 > scoreTeam2) winnerText = `🏆 ¡Gremio Ganador: ${team1Name}! 🏆`;
-        else if (scoreTeam2 > scoreTeam1) winnerText = `🏆 ¡Gremio Ganador: ${team2Name}! 🏆`;
-        else winnerText = "🤝 ¡Empate Alquímico Perfecto! 🤝";
-
-        winnerMessage.innerText = winnerText;
+        resultsTitle.innerText = "✦ EL VEREDICTO DEL CONSEJO ALQUÍMICO ✦";
+        const tie = scoreTeam1 === scoreTeam2;
+        const winner = scoreTeam1 > scoreTeam2 ? 1 : scoreTeam2 > scoreTeam1 ? 2 : 0;
+        const completed = attemptsTeam1 + attemptsTeam2;
+        const totalSuccess = scoreTeam1 + scoreTeam2;
+        const duelAccuracy = completed ? Math.round(totalSuccess * 100 / completed) : 0;
+        const tomeNames = { tomo1: 'Unidades y Equivalencias', tomo2: 'Destilaciones y Reducción', tomo3: 'Proporciones y Elixires', root: 'Prueba del Gran Alquimista' };
+        const escapeText = (value) => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        const card = (name, score, attempts, number) => `
+            <article class="duel-guild ${!duelAborted && winner === number ? 'duel-guild-winner' : ''}">
+                <div class="duel-guild-seal" aria-hidden="true">${number === 1 ? '🔥' : '🌙'}</div>
+                <div class="duel-guild-name">${escapeText(name)}</div>
+                <div class="duel-guild-score">${score}<small> puntos</small></div>
+                <div class="duel-guild-stats">${score} aciertos de ${attempts} intentos</div>
+                <div class="duel-guild-rate">Efectividad: ${attempts ? Math.round(score * 100 / attempts) : 0}%</div>
+                ${!duelAborted && winner === number ? '<div class="duel-winner-tag">✦ GREMIO VENCEDOR ✦</div>' : ''}
+            </article>`;
+        winnerMessage.innerText = duelAborted ? '⚗️ Duelo interrumpido · Resultados parciales' : tie ? '🤝 ¡Honor compartido! Los gremios han empatado' : `👑 ¡${winner === 1 ? team1Name : team2Name} conquista el duelo! 👑`;
         finalScores.innerHTML = `
-            <p><strong>${team1Name}:</strong> ${scoreTeam1} puntos</p>
-            <p><strong>${team2Name}:</strong> ${scoreTeam2} puntos</p>
-        `;
+            <div class="duel-ceremony">
+                <div class="duel-laurels" aria-hidden="true">${duelAborted ? '📜' : tie ? '⚖️' : '👑'}</div>
+                <p class="duel-ceremony-kicker">${duelAborted ? 'ACTA DE ENFRENTAMIENTO' : tie ? 'VEREDICTO DE IGUALDAD' : 'CEREMONIA DE CORONACIÓN'}</p>
+                <div class="duel-podium">${card(team1Name, scoreTeam1, attemptsTeam1, 1)}<div class="duel-versus">VS</div>${card(team2Name, scoreTeam2, attemptsTeam2, 2)}</div>
+                <div class="duel-summary">
+                    <div><span>Encantamientos resueltos</span><strong>${completed} / ${maxRounds}</strong></div>
+                    <div><span>Aciertos combinados</span><strong>${totalSuccess}</strong></div>
+                    <div><span>Efectividad global</span><strong>${duelAccuracy}%</strong></div>
+                </div>
+                <p class="duel-context">📜 ${escapeText(tomeNames[selectedServer] || selectedServer)} · Nivel ${difficultyLevel}${duelAborted ? ' · Duelo sin concluir' : ''}</p>
+                <p class="duel-oath">✦ LA MAGIA NACE DEL EQUILIBRIO MATEMÁTICO ✦</p>
+            </div>`;
     }
 
+    document.getElementById('screen-results').classList.toggle('duel-results-active', gameMode === 'equipos');
     showScreen('screen-results');
-    playSFX('victory');
+    if (!duelAborted) playSFX('victory');
 }
 
 function resetToServerSelection() {
@@ -1032,6 +1064,71 @@ async function loadLeaderboard() {
 }
 
 // ==========================================
+// GRIMORIO VIVIENTE - HISTORIA INTRODUCTORIA
+// Independiente de la lógica de los reactivos
+// ==========================================
+const grimoireScenes = [
+    {
+        chapter: 'CAPÍTULO I',
+        title: 'El despertar del Grimorio',
+        image: 'img/alquimia/escena01.png',
+        alt: 'Los dos alquimistas descubren el Grimorio Fragmentado',
+        story: 'En lo alto de una antigua torre, dos jóvenes alquimistas descubren que el legendario Grimorio de las Proporciones ha sido fragmentado por una fuerza misteriosa. Sin su magia, las pociones pierden el equilibrio, los cristales se debilitan y las fórmulas comienzan a desvanecerse. Solo quienes dominen el poder de los números podrán restaurarlo.'
+    },
+    {
+        chapter: 'CAPÍTULO II',
+        title: 'Los tres tomos perdidos',
+        image: 'img/alquimia/escena02.png',
+        alt: 'Los alquimistas encuentran tres tomos mágicos en una biblioteca arcana',
+        story: 'Para recuperar los secretos del Grimorio, deberán superar los desafíos de tres tomos ancestrales: Unidades y Equivalencias; Destilaciones y Reducción; y Proporciones y Elixires. Cada desafío superado devolverá una parte de su poder. Pero una proporción equivocada podría desestabilizar la magia del taller.'
+    },
+    {
+        chapter: 'CAPÍTULO III',
+        title: 'El pacto de los dos alquimistas',
+        image: 'img/alquimia/escena03.png',
+        alt: 'Ambos alquimistas unen sus poderes para restaurar el Grimorio',
+        story: 'Ante el altar del Gran Alquimista, ambos descubren el secreto final: ninguna fórmula puede restaurarse sin equilibrio. Con ingenio, conocimiento y trabajo en equipo, deberán unir los tres tomos y devolver la armonía al mundo de la alquimia. ¡El destino del Grimorio está en sus manos!'
+    }
+];
+let grimoirePage = 0;
+
+function renderGrimoirePage() {
+    const scene = grimoireScenes[grimoirePage];
+    document.getElementById('grimoire-image').src = scene.image;
+    document.getElementById('grimoire-image').alt = scene.alt;
+    document.getElementById('grimoire-chapter').textContent = scene.chapter;
+    document.getElementById('grimoire-title').textContent = scene.title;
+    document.getElementById('grimoire-story').textContent = scene.story;
+    document.getElementById('grimoire-oath').classList.toggle('hidden', grimoirePage !== grimoireScenes.length - 1);
+    document.getElementById('grimoire-count').textContent = `Página ${grimoirePage + 1} de ${grimoireScenes.length}`;
+    document.getElementById('grimoire-prev').disabled = grimoirePage === 0;
+    document.getElementById('grimoire-next').textContent = grimoirePage === grimoireScenes.length - 1
+        ? '✨ Comenzar aventura →' : 'Siguiente página →';
+}
+function openGrimoire() {
+    grimoirePage = 0;
+    renderGrimoirePage();
+    showScreen('screen-grimoire');
+}
+function previousGrimoirePage() {
+    if (grimoirePage > 0) {
+        grimoirePage--;
+        renderGrimoirePage();
+    }
+}
+function nextGrimoirePage() {
+    if (grimoirePage < grimoireScenes.length - 1) {
+        grimoirePage++;
+        renderGrimoirePage();
+    } else {
+        showScreen('screen-server');
+    }
+}
+function skipGrimoire() {
+    showScreen('screen-server');
+}
+
+// ==========================================
 // 7. EXPOSICIÓN GLOBAL A WINDOW
 // ==========================================
 window.showScreen = showScreen;
@@ -1057,3 +1154,7 @@ window.onLeaderboardLevelChange = onLeaderboardLevelChange;
 window.onLeaderboardTypeChange = onLeaderboardTypeChange;
 window.openLeaderboardModal = openLeaderboardModal;
 window.closeLeaderboardModal = closeLeaderboardModal;
+window.openGrimoire = openGrimoire;
+window.previousGrimoirePage = previousGrimoirePage;
+window.nextGrimoirePage = nextGrimoirePage;
+window.skipGrimoire = skipGrimoire;

@@ -13,6 +13,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
 }
 
 .hidden {
@@ -23,7 +24,7 @@ body {
    2. BARRA SUPERIOR (TOP BAR)
    ========================================== */
 .top-bar {
-    position: relative;
+    position: fixed;
     z-index: 10;
     width: 100%;
     display: flex;
@@ -91,6 +92,9 @@ body {
     margin: auto 0;
     transform: translateY(-20px);
     box-sizing: border-box;
+
+    margin-top: 90px;
+    margin-bottom: 60px;
 }
 
 .screen {
@@ -721,4 +725,129 @@ button:hover:not(:disabled) {
 
 .leaderboard-table tbody tr:hover {
     background: rgba(255, 215, 0, 0.1);
+}
+/* ==========================================
+   GRIMORIO VIVIENTE - ESTILOS AISLADOS
+   ========================================== */
+#screen-grimoire { width: 100%; gap: 15px; }
+.grimoire-heading { color: #f8d88d; font-size: clamp(1.25rem, 3vw, 1.8rem); font-weight: bold; text-shadow: 0 0 12px #a855f7; }
+.grimoire-book { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); width: 100%; max-width: 820px; border: 8px solid #4c2d1a; border-radius: 15px; box-shadow: 0 12px 30px #0009, inset 0 0 0 2px #c29a54; overflow: hidden; background: #d7b782; }
+.grimoire-page { min-width: 0; box-sizing: border-box; min-height: 370px; }
+.grimoire-art-page { background: #59351d; padding: 12px; display: flex; align-items: stretch; border-right: 5px solid #77502c; }
+.grimoire-art-page img { width: 100%; height: 100%; max-height: 500px; object-fit: cover; border: 2px solid #b78a4d; border-radius: 5px; }
+.grimoire-text-page { color: #49301d; padding: clamp(18px, 3vw, 32px); background: radial-gradient(ellipse at center, #f2dfb6 0%, #d8b581 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; }
+.grimoire-chapter { color: #79502d; font-weight: bold; font-size: .85rem; letter-spacing: 2px; }
+#screen-grimoire #grimoire-title { color: #55311a; font-size: clamp(1.25rem, 2.5vw, 1.8rem); margin: 0; }
+.grimoire-ornament { color: #8c592b; }
+#grimoire-story { font-size: clamp(.95rem, 1.6vw, 1.12rem); line-height: 1.65; margin: 4px 0; text-align: center; }
+.grimoire-count { font-size: .8rem; color: #805d3d; margin-top: 10px; }
+.grimoire-controls { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.grimoire-controls button { border-color: #e8bc62; color: #ffe4a5; }
+.grimoire-controls button:disabled { opacity: .35; cursor: not-allowed; }
+.grimoire-skip { background: transparent; border: 0; color: #d4b8e8; font-size: .9rem; text-decoration: underline; padding: 7px; }
+@media (max-width: 650px) {
+    #screen-grimoire { gap: 12px; }
+    .grimoire-book { grid-template-columns: minmax(0,1fr); max-width: 450px; border-width: 5px; }
+    .grimoire-page { min-height: 0; }
+    .grimoire-art-page { padding: 8px; border-right: 0; border-bottom: 4px solid #77502c; }
+    .grimoire-art-page img { height: auto; max-height: 260px; aspect-ratio: 16/10; object-fit: cover; }
+    .grimoire-text-page { padding: 18px 16px; }
+    #grimoire-story { line-height: 1.5; }
+    .grimoire-controls button { font-size: .9rem; padding: 10px 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #screen-grimoire * { animation: none !important; transition: none !important; }
+}
+
+/* ==========================================
+   MICRO CIRUGÍA: GRIMORIO HORIZONTAL 4:3
+   Solo se amplía la tarjeta mientras el libro está visible.
+   ========================================== */
+.game-card:has(#screen-grimoire:not(.hidden)) {
+    width: 96%;
+    max-width: 1200px;
+}
+#screen-grimoire .grimoire-book {
+    max-width: 1120px;
+    align-items: stretch;
+}
+#screen-grimoire .grimoire-art-page {
+    align-items: center;
+}
+#screen-grimoire .grimoire-art-page img {
+    display: block;
+    width: 100%;
+    height: 80%;
+    max-height: none;
+    aspect-ratio: 16 / 9;
+    object-fit: fill;
+    box-sizing: border-box;
+}
+@media (max-width: 650px) {
+    .game-card:has(#screen-grimoire:not(.hidden)) {
+        width: 96%;
+        padding: 12px;
+    }
+    #screen-grimoire .grimoire-book {
+        max-width: 450px;
+    }
+    #screen-grimoire .grimoire-art-page img {
+        max-height: none;
+        aspect-ratio: 4 / 3;
+        object-fit: contain;
+    }
+}
+
+/* JURAMENTO DEL GRIMORIO - visible únicamente en la tercera escena */
+#screen-grimoire .grimoire-oath {
+    width: 100%; box-sizing: border-box; padding: 13px 12px;
+    margin-top: 8px; border: 1px solid #a67a3f; border-radius: 10px;
+    background: linear-gradient(145deg, #32243c, #21182d);
+    box-shadow: inset 0 0 0 1px #594361, 0 5px 12px #3d281d44;
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    text-align: center;
+
+}
+#screen-grimoire .grimoire-oath-symbol { color: #e9c47a; font-size: 1.25rem; }
+#screen-grimoire .grimoire-oath-label { color: #e9c47a; font-size: .69rem; font-weight: 700; letter-spacing: 1.5px; }
+#screen-grimoire .grimoire-oath-motto { color: #f5dda2; font-size: clamp(.94rem, 1.65vw, 1.17rem); line-height: 1.4; text-shadow: 0 0 10px #f5dda233; }
+#screen-grimoire .grimoire-oath-signature { color: #c9b8d3; font-size: .77rem; font-style: italic; }
+
+/* ==========================================
+   CEREMONIA DEL CONSEJO ALQUÍMICO — SOLO COMPETITIVO
+   ========================================== */
+.game-card:has(#screen-results.duel-results-active:not(.hidden)) { width: 96%; max-width: 1050px; }
+#screen-results.duel-results-active { width: 100%; gap: 12px; }
+#screen-results.duel-results-active #results-title { color: #f5d78b; font-size: clamp(1.25rem, 3vw, 1.9rem); margin: 4px 0; text-shadow: 0 0 16px #a855f7aa; }
+#screen-results.duel-results-active #winner-message { color: #f8e6ba; font-size: clamp(1.05rem, 2.4vw, 1.55rem); margin: 4px 0 10px; overflow-wrap: anywhere; }
+#screen-results.duel-results-active #final-scores { width: 100%; }
+.duel-ceremony { padding: 22px clamp(12px,3vw,32px); border: 2px solid #c9a35c; border-radius: 18px; background: radial-gradient(ellipse at 50% 0%, #54356a 0%, #261334 48%, #150c24 100%); box-shadow: inset 0 0 0 3px #23172d, 0 0 30px #c9a35c33; }
+.duel-laurels { font-size: 3.3rem; filter: drop-shadow(0 0 14px #ffd70088); }
+.duel-ceremony-kicker { color: #e8c782; letter-spacing: .2em; font-size: .8rem; font-weight: bold; margin: 5px 0 20px; }
+.duel-podium { display: grid; grid-template-columns: minmax(0,1fr) 60px minmax(0,1fr); gap: 12px; align-items: center; }
+.duel-guild { position: relative; min-width: 0; border: 1px solid #9868c2; border-radius: 16px; padding: 20px 10px; background: linear-gradient(160deg,#342044,#1c112b); box-shadow: 0 10px 22px #0006; }
+.duel-guild-winner { border: 2px solid #ffda72; background: linear-gradient(160deg,#5b3a47,#33213c 55%,#1e1529); box-shadow: 0 0 26px #ffd70055, inset 0 0 16px #ffd70018; transform: translateY(-7px); }
+.duel-guild-seal { font-size: 2.5rem; }
+.duel-guild-name { font-size: clamp(1.05rem,2.2vw,1.5rem); color: #f7e4ba; font-weight: bold; overflow-wrap: anywhere; margin: 8px 0; }
+.duel-guild-score { font-size: clamp(2.7rem,6vw,4.3rem); color: #ffdc7b; font-weight: bold; line-height: 1.15; text-shadow: 0 0 14px #ffd70055; }
+.duel-guild-score small { font-size: .85rem; color: #dac7e6; font-weight: normal; }
+.duel-guild-stats, .duel-guild-rate { color: #dfd0eb; font-size: .95rem; margin-top: 7px; }
+.duel-winner-tag { margin-top: 15px; padding: 7px 5px; color: #251525; background: linear-gradient(90deg,#c69c48,#ffe8a1,#c69c48); border-radius: 7px; font-size: .8rem; font-weight: bold; letter-spacing: .04em; }
+.duel-versus { color: #d9b97d; font-size: 1.25rem; font-weight: bold; text-shadow: 0 0 12px #a855f7; }
+.duel-summary { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin-top: 22px; }
+.duel-summary > div { padding: 12px 7px; background: #160e24b8; border: 1px solid #a57b4c; border-radius: 10px; display: flex; flex-direction: column; gap: 7px; }
+.duel-summary span { color: #d7c6e0; font-size: .83rem; }
+.duel-summary strong { color: #f7d78e; font-size: 1.35rem; }
+.duel-context { color: #d7c1e7; font-size: .9rem; margin: 18px 0 10px; }
+.duel-oath { color: #f3d59c; font-size: .85rem; letter-spacing: .1em; margin: 15px 0 2px; }
+@media(max-width:650px) { .game-card:has(#screen-results.duel-results-active:not(.hidden)) { padding: 12px; } .duel-ceremony { padding: 16px 9px; } .duel-podium { grid-template-columns: minmax(0,1fr) 24px minmax(0,1fr); gap: 5px; } .duel-guild { padding: 14px 5px; } .duel-guild-seal { font-size: 1.9rem; } .duel-versus { font-size: .8rem; } .duel-guild-stats, .duel-guild-rate { font-size: .75rem; } .duel-winner-tag { font-size: .65rem; } .duel-summary { gap: 5px; } .duel-summary span { font-size: .72rem; } .duel-summary strong { font-size: 1.05rem; } }
+@media(prefers-reduced-motion:reduce) { .duel-guild-winner { transition: none; } }
+
+/* ==========================================
+   AJUSTE: ESPACIO INFERIOR EN RESULTADOS
+   ========================================== */
+
+.game-card:has(#screen-results:not(.hidden)) {
+    margin-bottom: 110px;
+    margin-top: 50px;
 }

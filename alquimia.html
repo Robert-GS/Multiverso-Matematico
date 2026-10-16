@@ -28,6 +28,34 @@
             </div>
         </section>
 
+        <!-- GRIMORIO VIVIENTE: INTRODUCCIÓN NARRATIVA -->
+        <section id="screen-grimoire" class="screen hidden" aria-label="Historia del Grimorio Fragmentado">
+            <div class="grimoire-heading">✦ El Grimorio Fragmentado ✦</div>
+            <div class="grimoire-book">
+                <div class="grimoire-page grimoire-art-page">
+                    <img id="grimoire-image" src="img/alquimia/escena01.png" alt="Dos alquimistas descubren un antiguo grimorio" loading="eager">
+                </div>
+                <div class="grimoire-page grimoire-text-page">
+                    <span id="grimoire-chapter" class="grimoire-chapter">CAPÍTULO I</span>
+                    <h2 id="grimoire-title">El despertar del Grimorio</h2>
+                    <div class="grimoire-ornament">✧ ❦ ✧</div>
+                    <p id="grimoire-story"></p>
+                    <div id="grimoire-oath" class="grimoire-oath hidden" aria-label="Juramento del Grimorio">
+                        <span class="grimoire-oath-symbol" aria-hidden="true">✦ ❦ ✦</span>
+                        <span class="grimoire-oath-label">EL JURAMENTO DEL GRIMORIO</span>
+                        <strong class="grimoire-oath-motto">LA MAGIA NACE DEL EQUILIBRIO MATEMÁTICO</strong>
+                        <span class="grimoire-oath-signature">Alquimia Matemática</span>
+                    </div>
+                    <div id="grimoire-count" class="grimoire-count">Página 1 de 3</div>
+                </div>
+            </div>
+            <div class="grimoire-controls">
+                <button id="grimoire-prev" type="button" onclick="previousGrimoirePage()">← Anterior</button>
+                <button id="grimoire-next" type="button" onclick="nextGrimoirePage()">Siguiente página →</button>
+            </div>
+            <button class="grimoire-skip" type="button" onclick="skipGrimoire()">Omitir historia e ir a los tomos</button>
+        </section>
+
         <!-- PANTALLA 2: SELECCIÓN DE TOMO / TEMA -->
         <section id="screen-server" class="screen hidden">
             <h2>Selecciona el Tomo de Alquimia a Estudiar</h2>
@@ -67,7 +95,7 @@
             <form id="setup-form-solo" onsubmit="startSoloGame(event)">
                 <div class="input-group">
                     <label for="player-name">Nombre Completo del Alumno:</label>
-                    <input type="text" id="player-name" placeholder="Ej. Luna Valiente" required autocomplete="off">
+                    <input type="text" id="player-name" placeholder="Grupo - Apellido Nombre" required autocomplete="off">
                 </div>
 
                 <div class="infinite-mode-notice">

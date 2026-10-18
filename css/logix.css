@@ -59,7 +59,7 @@ body::before {
 }
 
 .audio-controls-group {
-    display: flex;
+    display: block;
     align-items: center;
     gap: 10px;
 }
@@ -136,7 +136,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: auto;
     object-position: center top;
     z-index: 1;
 }

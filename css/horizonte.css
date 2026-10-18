@@ -47,7 +47,7 @@ body {
 }
 
 .audio-controls-group {
-    display: flex;
+    display: block;
     align-items: center;
     gap: 10px;
 }
@@ -110,8 +110,8 @@ body {
    4. PORTADA CÓSMICA
    ========================================== */
 #screen-cover {
-    background: url('../img/horizonte/portada.png') no-repeat center center;
-    background-size: cover;
+    /*background: url('../img/horizonte/portada.png') no-repeat center center;
+    background-size: cover; */
     width: 100%;
     min-height: 480px;
     height: 60vh;
@@ -136,6 +136,17 @@ body {
     width: 100%;
     height: 40%;
     background: linear-gradient(to top, rgba(5, 8, 20, 0.95), transparent);
+    z-index: 1;
+}
+
+.cover-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: auto;
+    object-position: center top;
     z-index: 1;
 }
 
@@ -683,3 +694,34 @@ button:hover:not(:disabled) {
 .horizonte-triunfo-visual img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
 .horizonte-triunfo-visual figcaption{padding:12px 8px;background:linear-gradient(90deg,#081b34,#183b60,#081b34);color:#d7f3ff;text-align:center;font-weight:800;letter-spacing:.13em;font-size:clamp(.78rem,1.7vw,1.05rem);text-shadow:0 0 12px #62c8ff}
 @media(max-width:650px){#screen-results:has(.cosmo-ceremony) .horizonte-triunfo-visual{margin:9px auto 15px;border-radius:10px}.horizonte-triunfo-visual figcaption{padding:9px 5px;letter-spacing:.06em}}
+
+/* ==========================================
+   MICROCIRUGÍA 04: LEADERBOARD RESPONSIVO
+   Ajuste exclusivo para celulares
+   ========================================== */
+
+@media (max-width: 600px) {
+
+    /* Colocar los filtros uno debajo del otro */
+    .leaderboard-filters-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Alinear etiquetas y selectores */
+    .leaderboard-filter-group {
+        width: 100%;
+        max-width: 280px;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+
+    /* Evitar que los selectores desborden */
+    .leaderboard-select {
+        max-width: 65%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+}

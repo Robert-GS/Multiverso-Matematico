@@ -60,7 +60,7 @@ body {
 }
 
 .audio-controls-group {
-  display: flex;
+  display: block;
   align-items: center;
   gap: 10px;
 }
@@ -113,8 +113,8 @@ body {
 
 /* PORTADA */
 #screen-cover {
-  background: url('../img/nexus/portada.png') no-repeat center center;
-  background-size: cover;
+  /* background: url('../img/nexus/portada.png') no-repeat center center;
+  background-size: cover; */
   justify-content: flex-end;
   align-items: center;
   padding-bottom: 40px;
@@ -124,9 +124,21 @@ body {
   border-radius: 10px;
 }
 
+.cover-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: auto;
+    object-position: center top;
+    z-index: 0;
+}
+
 .blink-text {
   font-size: 1.1rem;
   font-weight: bold;
+  text-align: center;
   color: var(--cyan-neon);
   background: rgba(4, 7, 20, 0.85);
   letter-spacing: 2px;
@@ -3299,3 +3311,4 @@ td:first-child {
 #screen-team-result .nexus-finale p { color: #e7efff; line-height: 1.55; margin: 10px auto; max-width: 760px; }
 #screen-team-result .nexus-finale .nexus-finale-motto { color: #ffd77b; font-weight: 900; letter-spacing: .04em; margin-top: 18px; }
 @media (max-width: 620px) { #screen-story { padding: 12px; } #screen-story .nexus-story-text { font-size: .98rem; } #screen-story .nexus-story-actions { gap: 8px; } }
+

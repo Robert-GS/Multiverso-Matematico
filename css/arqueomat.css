@@ -45,7 +45,7 @@ body {
 }
 
 .audio-controls-group {
-    display: flex;
+    display: block; /* antes flex */
     align-items: center;
     gap: 10px;
 }
@@ -105,8 +105,9 @@ body {
    4. PANTALLA DE PORTADA
    ========================================== */
 #screen-cover {
-    background: url('../img/arqueomat/portada.jpg') no-repeat center center;
-    background-size: cover;
+    /*background: url('../img/arqueomat/portada.jpg') no-repeat center center;
+    background-size: auto; /*antes cover */
+    background-color: #000;
     width: 100%;
     min-height: 500px;
     height: 65vh; 
@@ -121,6 +122,17 @@ body {
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
+}
+
+.cover-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: auto;
+    object-position: center top;
+    z-index: 1;
 }
 
 #screen-cover::after {

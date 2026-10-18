@@ -47,7 +47,7 @@ body {
 }
 
 .audio-controls-group {
-    display: flex;
+    display: block;
     align-items: center;
     gap: 10px;
 }
@@ -107,8 +107,8 @@ body {
    4. PORTADA MÍSTICA
    ========================================== */
 #screen-cover {
-    background: url('../img/alquimia/portada.png') no-repeat center center;
-    background-size: cover;
+    /*background: url('../img/alquimia/portada.png') no-repeat center center;
+    background-size: cover; */
     width: 100%;
     min-height: 480px;
     height: 60vh;
@@ -136,6 +136,17 @@ body {
     z-index: 1;
 }
 
+.cover-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: auto;
+    object-position: center top;
+    z-index: 1;
+}
+
 .blink-text-full {
     position: relative;
     z-index: 2;
@@ -144,6 +155,7 @@ body {
     font-weight: bold;
     letter-spacing: 1px;
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    text-align: center;
     background: rgba(20, 10, 35, 0.85);
     padding: 12px 28px;
     border-radius: 30px;
@@ -895,4 +907,35 @@ button:hover:not(:disabled) {
 @media (max-width: 650px) {
     #screen-results.duel-results-active .alquimia-consagracion { border-radius: 10px; }
     #screen-results.duel-results-active .alquimia-consagracion figcaption { padding: 9px 5px; letter-spacing: .06em; }
+}
+
+/* ==========================================
+   MICROCIRUGÍA 04: LEADERBOARD RESPONSIVO
+   Ajuste exclusivo para celulares
+   ========================================== */
+
+@media (max-width: 600px) {
+
+    /* Colocar los filtros uno debajo del otro */
+    .leaderboard-filters-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Alinear etiquetas y selectores */
+    .leaderboard-filter-group {
+        width: 100%;
+        max-width: 280px;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+
+    /* Evitar que los selectores desborden */
+    .leaderboard-select {
+        max-width: 65%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
 }

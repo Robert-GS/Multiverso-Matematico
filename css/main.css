@@ -79,6 +79,8 @@ body {
     border-bottom: 1px solid rgba(0, 240, 255, 0.2);
 }
 
+
+
 .logo {
     font-size: 1.2rem;
     color: #00f0ff;
@@ -193,7 +195,7 @@ body {
 .thumb-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: auto;
 }
 
 .module-card h3 {

@@ -537,3 +537,65 @@ button:hover:not(:disabled) {
 .leaderboard-table th { background: rgba(212, 175, 55, 0.25); color: #d4af37; position: sticky; top: 0; z-index: 2; }
 .leaderboard-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.03); }
 .leaderboard-table tbody tr:hover { background: rgba(46, 204, 113, 0.1); }
+/* DIARIO DE EXPEDICIÓN: estilos activos solo mientras la historia es visible */
+.game-card:has(#screen-story:not(.hidden)){width:min(96%,1180px);max-width:1180px;padding:clamp(12px,2vw,24px);transform:none;margin:28px 0}
+#screen-story{width:100%;align-items:stretch}
+.go-expedition{background:linear-gradient(135deg,#19251a,#0e1b15);border:2px solid #aa8b47;border-radius:13px;padding:clamp(12px,2vw,22px);box-shadow:inset 0 0 30px #0009,0 0 20px #c19b3530}
+.go-heading{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:#e7c784;font-size:.8rem;font-weight:bold;letter-spacing:.1em;margin-bottom:14px}
+.go-layout{display:grid;grid-template-columns:minmax(150px,215px) minmax(0,1fr);gap:16px}
+.go-map{border:1px solid #b89a5e;border-radius:9px;background:radial-gradient(ellipse at center,#9c8a5a,#6b5739);padding:17px 10px;color:#2a2114;box-shadow:inset 0 0 28px #382a24a6;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.go-map-title{font-size:.94rem;letter-spacing:.08em;font-weight:900;border-bottom:2px solid #4e3924;padding-bottom:10px}
+.go-map-route{display:flex;flex-direction:column;align-items:center;margin:20px 0}
+.go-map-stop{display:flex;flex-direction:column;align-items:center;gap:5px;opacity:.43;transition:all .3s}
+.go-map-stop span{font-size:2rem;border:2px solid #503f25;width:56px;height:56px;display:grid;place-items:center;border-radius:50%}
+.go-map-stop small{font-size:.75rem;font-weight:900;letter-spacing:.08em}
+.go-map-stop.go-active{opacity:1;color:#fff1bd;text-shadow:0 0 10px #f8cf75}
+.go-map-stop.go-active span{background:#564322;border-color:#e5c56c;box-shadow:0 0 17px #ffe18b}
+.go-map-path{height:43px;border-left:3px dashed #513e27;margin:5px}
+.go-map p{font-size:.8rem;line-height:1.5;max-width:165px}
+.go-journal{min-width:0}
+.go-photo{overflow:hidden;border:3px solid #9e7b3e;border-radius:6px;box-shadow:0 7px 22px #0009;line-height:0}
+.go-photo img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
+.go-page{background:linear-gradient(135deg,#e8d5a7,#c7aa72);color:#352716;text-align:left;margin-top:12px;padding:clamp(15px,2.5vw,28px);border-radius:5px;border:1px solid #8a6b3c;box-shadow:inset 0 0 25px #8b64382c}
+.go-date{color:#745127;font-size:.8rem;letter-spacing:.1em;font-weight:bold}
+#screen-story .go-page h2{color:#4b331c;font-size:clamp(1.3rem,2.7vw,1.9rem);text-align:left;margin:9px 0}
+#go-text{font-size:clamp(.95rem,1.4vw,1.06rem);line-height:1.65;margin:0}
+#go-inscription{color:#6b481c;font-size:.88rem;font-weight:bold;margin:15px 0 0}
+.go-motto{text-align:center;margin-top:20px;padding:15px 8px;border-top:2px solid #9a7235;border-bottom:2px solid #9a7235}
+.go-motto span{display:block;font-size:.74rem;letter-spacing:.1em;margin-bottom:10px}
+.go-motto strong{font-size:clamp(1rem,2vw,1.3rem);line-height:1.5;color:#50320c}
+.go-controls{display:flex;justify-content:space-between;gap:10px;margin-top:15px;flex-wrap:wrap}
+.go-controls button{background:#34412a;border:1px solid #c4a258;border-radius:7px;color:#f8e9bf;padding:12px 16px;cursor:pointer;font-weight:bold}
+.go-controls button:hover:not(:disabled){background:#50663a}
+.go-controls button:disabled{opacity:.4;cursor:default}
+#go-next{background:#80601f;color:#fff3c8}
+#go-skip{background:transparent;border-color:#68765b;color:#cbd3bb}
+@media(max-width:700px){.game-card:has(#screen-story:not(.hidden)){width:98%;padding:8px;margin:14px 0}.go-layout{grid-template-columns:1fr}.go-map{padding:9px}.go-map-route{flex-direction:row;margin:9px 0}.go-map-path{height:0;width:34px;border-left:0;border-top:3px dashed #513e27;margin:0 5px}.go-map-stop span{width:38px;height:38px;font-size:1.3rem}.go-map p{max-width:none;margin:0;font-size:.72rem}.go-controls{display:grid;grid-template-columns:1fr 1fr}.go-controls button{font-size:.79rem;padding:10px 5px}#go-skip{grid-column:1/-1;grid-row:2}}
+
+
+/* EL JUICIO DE LOS GUARDIANES · Solo cuando la ceremonia competitiva es visible */
+.game-card:has(#screen-results:not(.hidden) .go-ceremony){width:min(96%,1080px);max-width:1080px;transform:none;margin:24px 0;padding:clamp(12px,2vw,25px)}
+#screen-results:has(.go-ceremony){width:100%;gap:8px}
+#screen-results:has(.go-ceremony) #results-title{color:#f4d48b;text-shadow:0 2px 15px #d5a64088;font-size:clamp(1.35rem,3vw,2.25rem);margin:8px 0}
+#screen-results:has(.go-ceremony) #winner-message{font-size:clamp(1rem,2vw,1.4rem);color:#ccebc5;margin:4px 0 12px}
+#screen-results:has(.go-ceremony) #final-scores{width:100%}
+.go-ceremony{background:linear-gradient(160deg,#0d2018,#26351f 55%,#111e16);border:1px solid #9f8544;border-radius:13px;padding:clamp(10px,2vw,20px);box-shadow:inset 0 0 25px #050b0988}
+.go-ceremony-art{height:clamp(145px,24vw,285px);background:linear-gradient(to top,#0c211bb8,transparent 65%),url('../img/guardianes/ceremonia.webp') center 45%/cover;border:2px solid #b89750;border-radius:9px;position:relative;overflow:hidden;box-shadow:0 0 22px #e3b35a35}
+.go-ceremony-banner{position:absolute;bottom:0;left:0;right:0;padding:15px 5px;background:linear-gradient(transparent,#0d201bea);font-weight:bold;color:#ffe6a5;text-shadow:0 2px 7px #000;letter-spacing:.08em;font-size:clamp(.72rem,1.6vw,1.05rem)}
+.go-ceremony-intro{max-width:740px;margin:17px auto;color:#dfdec9;line-height:1.55}
+.go-ceremony-teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:14px 0}
+.go-ceremony-team{min-width:0;border:1px solid #6c805d;border-radius:11px;background:linear-gradient(145deg,#15251c,#1b3026);padding:18px 12px;box-shadow:inset 0 0 18px #0006}
+.go-ceremony-team.go-honored{border:2px solid #e9c56f;background:linear-gradient(150deg,#46361d,#263621 75%);box-shadow:0 0 20px #dcb35b45,inset 0 0 20px #c3983030}
+.go-team-emblem{font-size:2.5rem;color:#e4c16b;line-height:1.2}
+.go-team-honor{font-size:.76rem;letter-spacing:.1em;color:#c7d6ad;font-weight:bold;margin:10px 0}
+.go-honored .go-team-honor{color:#ffdc80}
+.go-team-name{overflow-wrap:anywhere;font-size:clamp(1.1rem,2.2vw,1.55rem);color:#f4ead0;margin:8px 0}
+.go-team-points span{display:block;color:#f5d27a;font-size:clamp(2.5rem,5vw,4rem);font-weight:bold;line-height:1.1}
+.go-team-points small{font-size:.75rem;letter-spacing:.07em;color:#c7d5c0}
+.go-team-tribute{font-size:.9rem;color:#d3dfcc;margin:12px 0 0;line-height:1.45}
+.go-ceremony-summary{padding:13px;border:1px dashed #8c9e75;border-radius:7px;color:#d9e8cc;background:#15251a}
+.go-ceremony-oath{margin:16px 0 8px;padding:19px 12px;border:1px solid #c6a45a;border-radius:9px;background:radial-gradient(ellipse at center,#52401e,#1b291d 80%);box-shadow:0 0 18px #b28e3440}
+.go-ceremony-oath small{display:block;color:#d4bf84;letter-spacing:.14em;margin-bottom:10px}
+.go-ceremony-oath strong{display:block;color:#fff0b7;font-size:clamp(1rem,2.3vw,1.5rem);line-height:1.5;text-shadow:0 0 12px #c79a4a}
+.go-ceremony-foot{color:#b8cba9;font-size:.83rem;margin:10px 0 2px}
+@media(max-width:650px){.game-card:has(#screen-results:not(.hidden) .go-ceremony){width:98%;padding:9px;margin:14px 0}.go-ceremony-teams{grid-template-columns:1fr}.go-ceremony-team{padding:13px}.go-ceremony-art{height:170px}}

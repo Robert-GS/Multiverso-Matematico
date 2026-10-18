@@ -28,6 +28,29 @@
             </div>
         </section>
 
+        <!-- BITÁCORA NARRATIVA: TRES CAPÍTULOS -->
+        <section id="screen-story" class="screen hidden" aria-label="Bitácora de las leyendas del Abismo">
+            <div class="story-heading"><span>⚓ BITÁCORA DE NAVEGACIÓN</span><span id="story-progress">Capítulo 1 de 3</span></div>
+            <div class="story-cabin">
+                <div class="story-illustration"><img id="story-image" src="img/navegantes/escena01.webp" alt="Los capitanes estudian el mapa perdido"></div>
+                <article class="story-parchment">
+                    <div class="story-chapter" id="story-chapter">CAPÍTULO I</div>
+                    <h2 id="story-title">El mapa de las mareas olvidadas</h2>
+                    <div id="story-text" class="story-text"></div>
+                    <div id="story-oath" class="story-oath hidden" aria-label="Juramento de los Navegantes">
+                        <span class="story-oath-heading">⚓ EL JURAMENTO DE LOS NAVEGANTES ⚓</span>
+                        <span class="story-oath-words">«QUE RUJAN LOS MARES, EL CONOCIMIENTO GUIARÁ NUESTRO DESTINO»</span>
+                    </div>
+                    <div class="story-ornament" aria-hidden="true">✦ ⚓ ✦</div>
+                </article>
+            </div>
+            <div class="story-navigation">
+                <button type="button" id="story-prev" onclick="previousStoryPage()">⬅ Anterior</button>
+                <button type="button" class="story-skip" onclick="skipStory()">Saltar introducción ⤴</button>
+                <button type="button" id="story-next" onclick="nextStoryPage()">Siguiente ➜</button>
+            </div>
+        </section>
+
         <!-- PANTALLA 2: SELECCIÓN DE ISLA / TEMA -->
         <section id="screen-server" class="screen hidden">
             <h2>Selecciona la Isla del Archipiélago</h2>
@@ -173,6 +196,11 @@
 
         <!-- PANTALLA 7: REPORTES Y RESULTADOS -->
         <section id="screen-results" class="screen hidden">
+            <!-- Ilustración ceremonial: visible únicamente en resultados competitivos -->
+            <figure class="naval-victory-art">
+                <img src="img/navegantes/gloria_siete_mares.png" alt="Dos jóvenes navegantes celebran el regreso de la flota a un puerto legendario al atardecer" loading="lazy">
+                <figcaption>⚓ LA GLORIA DE LOS SIETE MARES ⚓</figcaption>
+            </figure>
             <h1 id="results-title">📜 BITÁCORA DE NAVEGACIÓN OFICIAL 📜</h1>
             <h2 id="winner-message"></h2>
             <div class="final-scores" id="final-scores"></div>

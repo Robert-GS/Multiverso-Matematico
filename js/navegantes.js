@@ -93,7 +93,7 @@ let sequenceExpectedOrder = [];
 let currentSequenceOrder = [];
 
 function startFromCover() {
-    if (screenCover && !screenCover.classList.contains('hidden')) showScreen('screen-server');
+    if (screenCover && !screenCover.classList.contains('hidden')) openStory();
 }
 
 document.addEventListener('keydown', e => {
@@ -111,6 +111,54 @@ document.addEventListener('keydown', e => {
 });
 
 if (screenCover) screenCover.addEventListener('click', startFromCover);
+
+// Introducción narrativa; no interviene en partidas, puntuaciones ni Firebase.
+const storyPages = [
+    {
+        chapter: 'CAPÍTULO I', title: 'El mapa de las mareas olvidadas',
+        image: 'img/navegantes/escena01.webp', alt: 'Los dos capitanes descifran un mapa antiguo en su galeón',
+        paragraphs: [
+            'En lo más profundo del océano, una antigua leyenda habla de un archipiélago que desapareció de todos los mapas. Sus islas, cuentan los marineros, guardan los secretos del Exponente Perdido: un conocimiento capaz de revelar rutas imposibles y tesoros inimaginables.',
+            'Una tarde, dos capitanes que comparten el mando de un mismo galeón encuentran un mapa marcado con extraños símbolos. Ninguno puede descifrarlo por sí solo. Al unir sus ideas y conocimientos matemáticos, descubren una ruta que apunta hacia las mareas olvidadas.',
+            'Sin perder tiempo, reúnen a su tripulación. La aventura está por comenzar.'
+        ]
+    },
+    {
+        chapter: 'CAPÍTULO II', title: 'Las tres islas del destino',
+        image: 'img/navegantes/escena02.webp', alt: 'Los capitanes contemplan tres islas, un remolino y una gruta luminosa',
+        paragraphs: [
+            'Tras días de navegación, el horizonte revela tres islas rodeadas de corrientes misteriosas. El mapa advierte que ninguna embarcación podrá cruzarlas sin comprender las leyes de las matemáticas.',
+            'En la primera, el Viento en la Popa exige dominar las potencias y sus propiedades. En la segunda, el Remolino del Inverso desafía a quien ignore los exponentes negativos. En la tercera, el Cerrojo de la Gruta solo cede ante quienes comprenden las raíces y la cancelación de potencias.',
+            'Los capitanes consultan el mapa, escuchan a su tripulación y acuerdan enfrentar cada desafío juntos. Tres islas. Tres secretos. Una misma travesía.'
+        ]
+    },
+    {
+        chapter: 'CAPÍTULO III', title: 'El juramento del Abismo',
+        image: 'img/navegantes/escena03.webp', alt: 'Los capitanes afrontan juntos al legendario Calamar del Abismo',
+        paragraphs: [
+            'Más allá de las tres islas aguarda el verdadero guardián del tesoro: el legendario Calamar del Abismo. Sus tentáculos se alzan entre relámpagos y olas gigantescas, como si el propio océano quisiera poner a prueba a los navegantes.',
+            'Una capitana toma el timón mientras su compañero prepara la defensa del galeón. Ambos saben que ninguna espada bastará: deberán confiar en lo aprendido, resolver cada desafío y actuar como una sola tripulación.',
+            'El mapa señala la última ruta. El destino está en sus manos. ¡Es hora de levar anclas y escribir su propia leyenda!'
+        ]
+    }
+];
+let storyIndex = 0;
+function openStory() { storyIndex = 0; renderStoryPage(); showScreen('screen-story'); }
+function renderStoryPage() {
+    const page = storyPages[storyIndex];
+    document.getElementById('story-progress').textContent = `Capítulo ${storyIndex + 1} de ${storyPages.length}`;
+    document.getElementById('story-chapter').textContent = page.chapter;
+    document.getElementById('story-title').textContent = page.title;
+    const img = document.getElementById('story-image'); img.src = page.image; img.alt = page.alt;
+    const textBox = document.getElementById('story-text'); textBox.replaceChildren();
+    page.paragraphs.forEach(paragraph => { const p = document.createElement('p'); p.textContent = paragraph; textBox.appendChild(p); });
+    document.getElementById('story-oath').classList.toggle('hidden', storyIndex !== storyPages.length - 1);
+    document.getElementById('story-prev').disabled = storyIndex === 0;
+    document.getElementById('story-next').textContent = storyIndex === storyPages.length - 1 ? '⚓ ¡Levar anclas!' : 'Siguiente ➜';
+}
+function previousStoryPage() { if (storyIndex > 0) { storyIndex--; renderStoryPage(); } }
+function nextStoryPage() { if (storyIndex < storyPages.length - 1) { storyIndex++; renderStoryPage(); } else skipStory(); }
+function skipStory() { showScreen('screen-server'); }
 
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
@@ -811,11 +859,43 @@ async function endGame() {
             } catch (err) { console.error("Error al guardar en Firestore:", err); }
         }
     } else {
-        resultsTitle.innerText = "🏆 BATALLA NAVAL FINALIZADA 🏆";
-        winnerMessage.innerText = scoreTeam1 > scoreTeam2 ? `🏆 ¡Galeón Victorioso: ${team1Name}! 🏆` :
-                                 scoreTeam2 > scoreTeam1 ? `🏆 ¡Galeón Victorioso: ${team2Name}! 🏆` :
-                                 "🤝 ¡Empate Marítimo Perfecto! 🤝";
-        finalScores.innerHTML = `<p><strong>${team1Name}:</strong> ${scoreTeam1} pts</p><p><strong>${team2Name}:</strong> ${scoreTeam2} pts</p>`;
+        // Ceremonia competitiva: presentación solamente, sin modificar el puntaje.
+        const shots = Math.max(0, currentRound - 1);
+        const attempts1 = Math.ceil(shots / 2);
+        const attempts2 = Math.floor(shots / 2);
+        const tie = scoreTeam1 === scoreTeam2;
+        const winningTeam = scoreTeam1 > scoreTeam2 ? team1Name : team2Name;
+        const escapeHTML = (value) => String(value).replace(/[&<>"']/g, char =>
+            ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        const teamCard = (name, score, attempts, victorious, side) => `
+            <article class="naval-result-ship ${victorious ? 'naval-champion' : ''}">
+                <div class="naval-ship-icon" aria-hidden="true">${side === 1 ? '⛵' : '🚢'}</div>
+                <div class="naval-ship-role">${victorious ? '🏆 GALEÓN VICTORIOSO' : tie ? '⚓ HONOR COMPARTIDO' : '⚓ GALEÓN CONTENDIENTE'}</div>
+                <h3>${escapeHTML(name)}</h3>
+                <div class="naval-ship-score">${score}<span> puntos</span></div>
+                <div class="naval-ship-stats"><span>🎯 Aciertos: <b>${score}</b></span><span>💥 Disparos: <b>${attempts}</b></span><span>🧭 Precisión: <b>${attempts ? Math.round(score / attempts * 100) : 0}%</b></span></div>
+            </article>`;
+        resultsTitle.innerText = "⚓ EL VEREDICTO DE LOS SIETE MARES ⚓";
+        winnerMessage.innerText = tie
+            ? "🤝 ¡Dos galeones, un mismo honor!"
+            : `🏆 ¡Victoria para ${winningTeam}!`;
+        finalScores.innerHTML = `
+            <div class="naval-ceremony">
+                <p class="naval-ceremony-intro">${tie
+                    ? 'Los cañones callan y el océano reconoce a dos tripulaciones de igual valor.'
+                    : 'Los cañones guardan silencio. ¡El mar proclama al galeón vencedor!'}</p>
+                <div class="naval-result-fleet">
+                    ${teamCard(team1Name, scoreTeam1, attempts1, !tie && scoreTeam1 > scoreTeam2, 1)}
+                    <div class="naval-versus" aria-label="contra">⚔️<span>VS</span></div>
+                    ${teamCard(team2Name, scoreTeam2, attempts2, !tie && scoreTeam2 > scoreTeam1, 2)}
+                </div>
+                <div class="naval-battle-summary">
+                    <span>📜 Disparos realizados: <strong>${shots} de ${maxRounds}</strong></span>
+                    <span>🎯 Aciertos totales: <strong>${scoreTeam1 + scoreTeam2}</strong></span>
+                    <span>🌊 Resultado: <strong>${tie ? 'Empate honorable' : 'Victoria por ' + Math.abs(scoreTeam1 - scoreTeam2) + (Math.abs(scoreTeam1 - scoreTeam2) === 1 ? ' punto' : ' puntos')}</strong></span>
+                </div>
+                <p class="naval-ceremony-footer">«QUE RUJAN LOS MARES, EL CONOCIMIENTO GUIARÁ NUESTRO DESTINO»</p>
+            </div>`;
     }
     showScreen('screen-results');
     playSFX('victory');
@@ -884,6 +964,9 @@ async function loadLeaderboard() {
 
 // 7. EXPOSICIÓN GLOBAL
 window.showScreen = showScreen;
+window.previousStoryPage = previousStoryPage;
+window.nextStoryPage = nextStoryPage;
+window.skipStory = skipStory;
 window.selectServer = selectServer;
 window.selectDifficulty = selectDifficulty;
 window.selectGameMode = selectGameMode;

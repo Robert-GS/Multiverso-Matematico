@@ -91,6 +91,22 @@
             </form>
         </section>
 
+        <!-- HISTORIA DEL MULTIVERSO: visible antes de cada nueva misión -->
+        <section id="screen-story" class="screen hidden" aria-label="Historia del Nexus">
+            <div class="nexus-story-panel">
+                <div class="nexus-story-counter" id="nexus-story-counter" aria-live="polite">ESCENA 1 DE 5</div>
+                <img id="nexus-story-image" src="img/nexus/escena01.png" alt="La fractura del Multiverso" class="nexus-story-image">
+                <h2 id="nexus-story-title">LA FRACTURA</h2>
+                <div id="nexus-story-text" class="nexus-story-text"></div>
+                <p id="nexus-story-motto" class="nexus-story-motto hidden">CUANDO EL CONOCIMIENTO CONVERGE, EL MULTIVERSO MATEMÁTICO DESPIERTA.</p>
+                <div class="nexus-story-actions">
+                    <button type="button" class="btn-back" id="nexus-story-prev" onclick="nexusStoryPrevious()">⬅ ANTERIOR</button>
+                    <button type="button" class="btn-back" onclick="nexusStorySkip()">⏭ OMITIR HISTORIA</button>
+                    <button type="button" class="btn-primary" id="nexus-story-next" onclick="nexusStoryNext()">CONTINUAR ➜</button>
+                </div>
+            </div>
+        </section>
+
         <!-- PANTALLA 4: ZONA DE JUEGO -->
         <section id="screen-game" class="screen hidden">
             <div class="game-header">
@@ -536,6 +552,17 @@
         <section id="screen-team-result" class="screen hidden">
 
             <div class="nexus-team-result">
+
+                <!-- Epílogo visual del Multiverso; exclusivo del resultado competitivo -->
+                <div class="nexus-finale">
+                    <img src="img/nexus/escena06.png" alt="Los dos exploradores celebran la restauración del Nexus y la unión de los siete mundos" class="nexus-finale-image">
+                    <div class="nexus-finale-heading">LA CONVERGENCIA DE LOS SIETE MUNDOS</div>
+                    <p>Los desafíos han concluido. Los siete portales recuperan su luz y el Nexus despierta: la conexión del Multiverso Matemático ha sido restaurada.</p>
+                    <p>Ambos equipos respondieron al llamado. Sus conocimientos hicieron posible esta última aventura.</p>
+                    <p class="nexus-finale-motto">CUANDO EL CONOCIMIENTO CONVERGE, EL MULTIVERSO MATEMÁTICO DESPIERTA.</p>
+                </div>
+
+
 
                 <div class="team-result-icon">
                     🏆

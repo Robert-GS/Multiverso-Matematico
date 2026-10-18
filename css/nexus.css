@@ -3278,3 +3278,24 @@ td:first-child {
         min-width: 540px;
     }
 }
+/* =====================================================
+   HISTORIA NEXUS: estilos aislados en #screen-story
+   ===================================================== */
+#screen-story { padding: 22px; justify-content: flex-start; }
+#screen-story .nexus-story-panel { width: 100%; max-width: 850px; margin: 0 auto; text-align: center; }
+#screen-story .nexus-story-counter { color: #89eaff; font-size: .85rem; letter-spacing: .19em; margin-bottom: 12px; font-weight: 800; }
+#screen-story .nexus-story-image { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border: 2px solid #20d9fa; border-radius: 12px; box-shadow: 0 0 20px #00d2ff55; }
+#screen-story h2 { margin: 18px 0 12px; color: #e6d4ff; letter-spacing: .1em; text-shadow: 0 0 12px #bd6bff99; }
+#screen-story .nexus-story-text { max-width: 760px; margin: auto; line-height: 1.65; text-align: left; color: #e9f3ff; font-size: 1.05rem; }
+#screen-story .nexus-story-text p { margin: 0 0 12px; }
+#screen-story .nexus-story-motto { font-size: clamp(1rem, 2.6vw, 1.35rem); color: #ffd77b; text-shadow: 0 0 15px #ffb70388; font-weight: 900; margin: 20px auto; max-width: 740px; letter-spacing: .06em; }
+#screen-story .nexus-story-actions { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 24px; padding-bottom: 10px; }
+#screen-story .nexus-story-actions button { min-height: 42px; }
+#screen-story button:disabled { opacity: .35; cursor: not-allowed; }
+/* CEREMONIA: solo en el informe de equipos */
+#screen-team-result .nexus-finale { text-align: center; margin: 0 auto 22px; width: 100%; }
+#screen-team-result .nexus-finale-image { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; border: 2px solid #00d2ff; box-shadow: 0 0 24px #00d2ff77; }
+#screen-team-result .nexus-finale-heading { color: #ffcf72; font-weight: 900; letter-spacing: .08em; font-size: clamp(1.05rem, 2.8vw, 1.45rem); margin: 20px 0 12px; text-shadow: 0 0 12px #ffb70366; }
+#screen-team-result .nexus-finale p { color: #e7efff; line-height: 1.55; margin: 10px auto; max-width: 760px; }
+#screen-team-result .nexus-finale .nexus-finale-motto { color: #ffd77b; font-weight: 900; letter-spacing: .04em; margin-top: 18px; }
+@media (max-width: 620px) { #screen-story { padding: 12px; } #screen-story .nexus-story-text { font-size: .98rem; } #screen-story .nexus-story-actions { gap: 8px; } }

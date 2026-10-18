@@ -90,7 +90,7 @@ let selectedStamps = [];
 const screenCover = document.getElementById('screen-cover');
 
 function startFromCover() {
-    if (screenCover && !screenCover.classList.contains('hidden')) showScreen('screen-server');
+    if (screenCover && !screenCover.classList.contains('hidden')) beginGuardianStory();
 }
 
 document.addEventListener('keydown', e => {
@@ -108,6 +108,29 @@ document.addEventListener('keydown', e => {
 });
 
 if (screenCover) screenCover.addEventListener('click', startFromCover);
+
+// Diario de expedición: independiente de la lógica de preguntas, puntos y Firebase.
+const goChapters = [
+ {date:'DIARIO · ENTRADA I',coordinate:'MAPA DESCUBIERTO',title:'El llamado de las ruinas',text:'Tras días de caminar entre la niebla y la espesura, dos exploradores encuentran las ruinas de una ciudad olvidada. Un mapa ancestral señala un templo cuyos mecanismos solo responden a quienes comprenden el orden de las operaciones. La expedición apenas comienza: cada símbolo podría ser una pista, y cada decisión, la llave de una nueva cámara.',inscription:'PRIMERA PISTA · El Altar de la Jerarquía protege la entrada.',alt:'Una exploradora señala un templo perdido mientras su compañero examina el mapa'},
+ {date:'DIARIO · ENTRADA II',coordinate:'SELLOS DESCIFRADOS',title:'Los sellos del conocimiento',text:'En el interior del templo, círculos de piedra cubiertos de símbolos impiden el paso. La exploradora ajusta los anillos del mecanismo mientras su compañero contrasta las inscripciones con el diario. Descubren que los sellos obedecen a una secuencia precisa: agrupaciones, operaciones y números opuestos deben interpretarse con cuidado. Solo trabajando juntos consiguen que las piedras comiencen a moverse.',inscription:'SEGUNDA PISTA · Los Sellos Concéntricos y el Espejo del Opuesto.',alt:'Dos exploradores descifran un mecanismo de anillos concéntricos en las ruinas'},
+ {date:'DIARIO · ENTRADA III',coordinate:'LEGADO REVELADO',title:'El legado de los Guardianes',text:'En la cámara más profunda aguarda el Santo Grial del Orden: un artefacto de piedra y luz que conserva la sabiduría de los antiguos guardianes. Ambos exploradores combinan lo aprendido y activan el mecanismo final. El templo despierta, y comprenden que su tesoro más valioso no es el oro: es el conocimiento que permite resolver lo desconocido.',inscription:'PRUEBA FINAL · El Santo Grial del Orden reúne las tres cámaras.',alt:'Dos exploradores activan juntos el artefacto luminoso del templo'}
+];
+let goChapterIndex = 0;
+function renderGuardianStory() {
+ const c=goChapters[goChapterIndex];
+ document.getElementById('go-photo').src=`img/guardianes/escena-${goChapterIndex+1}.webp`;
+ document.getElementById('go-photo').alt=c.alt;
+ for (const [id,value] of [['go-date',c.date],['go-coordinate',c.coordinate],['go-title',c.title],['go-text',c.text],['go-inscription',c.inscription]]) document.getElementById(id).textContent=value;
+ document.querySelectorAll('[data-go-stop]').forEach((el,i)=>el.classList.toggle('go-active',i<=goChapterIndex));
+ document.getElementById('go-motto').classList.toggle('hidden',goChapterIndex!==2);
+ document.getElementById('go-prev').disabled=goChapterIndex===0;
+ document.getElementById('go-next').textContent=goChapterIndex===2?'🏛️ Entrar al templo →':goChapterIndex===0?'Descifrar los sellos →':'Revelar el legado →';
+}
+function beginGuardianStory(){goChapterIndex=0;renderGuardianStory();showScreen('screen-story');}
+document.getElementById('go-prev').addEventListener('click',()=>{if(goChapterIndex>0){goChapterIndex--;renderGuardianStory();}});
+document.getElementById('go-next').addEventListener('click',()=>{if(goChapterIndex<2){goChapterIndex++;renderGuardianStory();}else showScreen('screen-server');});
+document.getElementById('go-skip').addEventListener('click',()=>showScreen('screen-server'));
+
 
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
@@ -588,11 +611,41 @@ async function endGame() {
             } catch (err) { console.error("Error al guardar en Firestore:", err); }
         }
     } else {
-        resultsTitle.innerText = "🏆 EXPEDICIÓN CONCLUIDA 🏆";
-        winnerMessage.innerText = scoreTeam1 > scoreTeam2 ? `🏆 ¡Gremio Victorioso: ${team1Name}! 🏆` :
-                                 scoreTeam2 > scoreTeam1 ? `🏆 ¡Gremio Victorioso: ${team2Name}! 🏆` :
-                                 "🤝 ¡Armonía y Empate Absoluto! 🤝";
-        finalScores.innerHTML = `<p><strong>${team1Name}:</strong> ${scoreTeam1} pts</p><p><strong>${team2Name}:</strong> ${scoreTeam2} pts</p>`;
+        // Ceremonia competitiva: presentación independiente de la lógica de puntuación.
+        resultsTitle.innerText = '🏛️ EL JUICIO DE LOS GUARDIANES 🏛️';
+        const empate = scoreTeam1 === scoreTeam2;
+        winnerMessage.innerText = empate
+            ? '⚖️ ¡El templo honra a ambos gremios por igual!'
+            : '✨ ¡Los Guardianes han pronunciado su veredicto!';
+        finalScores.replaceChildren();
+        const ceremony = document.createElement('div');
+        ceremony.className = 'go-ceremony';
+        ceremony.innerHTML = `
+            <div class="go-ceremony-art" role="img" aria-label="Santuario ancestral de la ceremonia de los Guardianes">
+                <div class="go-ceremony-banner">✦ EL CONSEJO ANCESTRAL HA DESPERTADO ✦</div>
+            </div>
+            <p class="go-ceremony-intro">Dos gremios han enfrentado los enigmas del templo. La sabiduría de los Guardianes reconoce su esfuerzo y revela el resultado de la expedición.</p>
+            <div class="go-ceremony-teams"></div>
+            <div class="go-ceremony-summary"></div>
+            <div class="go-ceremony-oath"><small>EL JURAMENTO DE LOS GUARDIANES</small><strong>«QUE DESPIERTEN LOS TEMPLOS,<br> EL ORDEN REVELARÁ SUS SECRETOS»</strong></div>
+            <p class="go-ceremony-foot">✦ El conocimiento es el verdadero tesoro de esta expedición ✦</p>`;
+        const teams = ceremony.querySelector('.go-ceremony-teams');
+        [[team1Name, scoreTeam1, 1], [team2Name, scoreTeam2, 2]].forEach(([name, score, number]) => {
+            const wins = empate || (number === 1 ? scoreTeam1 > scoreTeam2 : scoreTeam2 > scoreTeam1);
+            const card = document.createElement('article');
+            card.className = `go-ceremony-team ${wins ? 'go-honored' : ''}`;
+            card.innerHTML = `<div class="go-team-emblem">${number === 1 ? '☀' : '✦'}</div><div class="go-team-honor"></div><h3 class="go-team-name"></h3><div class="go-team-points"><span></span><small>SELLOS CONQUISTADOS</small></div><p class="go-team-tribute"></p>`;
+            card.querySelector('.go-team-honor').textContent = empate ? '⚖️ GUARDIÁN DEL EQUILIBRIO' : wins ? '🏆 GREMIO CONSAGRADO' : '🛡️ GREMIO HONORABLE';
+            card.querySelector('.go-team-name').textContent = name;
+            card.querySelector('.go-team-points span').textContent = score;
+            card.querySelector('.go-team-tribute').textContent = empate ? 'El templo reconoce la sabiduría compartida.' : wins ? 'Su dominio del orden abrió las puertas del legado.' : 'Su valor y conocimiento honran esta expedición.';
+            teams.append(card);
+        });
+        const summary = ceremony.querySelector('.go-ceremony-summary');
+        summary.textContent = empate
+            ? `⚖️ Empate ancestral · ${scoreTeam1} sellos por gremio · ${scoreTeam1 + scoreTeam2} sellos en total`
+            : `📜 Diferencia de ${Math.abs(scoreTeam1 - scoreTeam2)} sello(s) · ${scoreTeam1 + scoreTeam2} sellos conquistados entre ambos gremios`;
+        finalScores.append(ceremony);
     }
     showScreen('screen-results');
     playSFX('victory');

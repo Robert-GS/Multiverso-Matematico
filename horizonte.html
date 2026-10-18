@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horizonte Cósmico: Las Medidas del Universo</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ctext y=%2750%27 font-size=%2750%27%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="css/horizonte.css">
 </head>
 <body>
@@ -25,6 +26,29 @@
         <section id="screen-cover" class="screen active" style="cursor: pointer;">
             <div class="blink-text-full">
                 Presiona <strong>[ ENTER ]</strong> para Iniciar Secuencia de Despegue
+            </div>
+        </section>
+
+        <!-- INTRODUCCIÓN: CONSOLA HOLOGRÁFICA PERSISTENTE -->
+        <section id="screen-story" class="screen hidden" aria-label="Protocolo Última Frontera">
+            <div class="hc-console">
+                <div class="hc-head"><span>◈ CENTRO DE CONTROL · MISIÓN H-07</span><span id="hc-status">● SEÑAL ENTRANTE</span></div>
+                <div class="hc-progress" aria-label="Progreso de la misión">
+                    <span class="hc-active">01 · SEÑAL</span><span>02 · RUTA</span><span>03 · RESCATE</span>
+                </div>
+                <img id="hc-image" src="img/horizonte/historia-1.webp" alt="Dos exploradores analizan una señal holográfica de emergencia">
+                <div class="hc-report">
+                    <div id="hc-label">TRANSMISIÓN 01 · SEÑAL DE SOCORRO</div>
+                    <h2 id="hc-title">La señal del Horizonte</h2>
+                    <p id="hc-text"></p>
+                    <p id="hc-math"></p>
+                    <div id="hc-oath" class="hidden"><small>EL JURAMENTO DEL HORIZONTE</small><strong>«MEDIMOS EL UNIVERSO CON NÚMEROS,<br>ALCANZAMOS EL INFINITO CON CONOCIMIENTO»</strong></div>
+                </div>
+                <div class="hc-buttons">
+                    <button type="button" id="hc-prev">◀ Registro anterior</button>
+                    <button type="button" id="hc-skip">Omitir introducción</button>
+                    <button type="button" id="hc-next">Calcular ruta ▶</button>
+                </div>
             </div>
         </section>
 
@@ -180,6 +204,10 @@
         <section id="screen-results" class="screen hidden">
             <h1 id="results-title">📜 TELEMETRÍA FINAL DE MISIÓN 📜</h1>
             <h2 id="winner-message"></h2>
+            <figure class="horizonte-triunfo-visual" aria-label="El Triunfo del Horizonte: los exploradores celebran el regreso de su misión espacial">
+                <img src="img/horizonte/triunfo_horizonte.png" alt="Dos exploradores celebran ante un planeta, una galaxia luminosa y una flota espacial" loading="eager">
+                <figcaption>✦ EL TRIUNFO DEL HORIZONTE ✦</figcaption>
+            </figure>
             <div class="final-scores" id="final-scores"></div>
             <button class="btn-start" onclick="resetToServerSelection()">Nueva Expedición 🔄</button>
         </section>

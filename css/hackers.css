@@ -1314,6 +1314,82 @@ button:hover:not(:disabled) {
     }
 }
 
+/* ==========================================
+   MICROCIRUGÍA 04: LEADERBOARD RESPONSIVO
+   Ajuste exclusivo para celulares
+   ========================================== */
+
+@media (max-width: 600px) {
+
+    /* Colocar los filtros uno debajo del otro */
+    .leaderboard-filters-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Alinear etiquetas y selectores */
+    .leaderboard-filter-group {
+        width: 100%;
+        max-width: 280px;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+
+    /* Evitar que los selectores desborden */
+    .leaderboard-select {
+        max-width: 65%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+}
 
 
 
+
+
+/* ===========================================================
+   ACCESO SUPREMO — ESCENA DE PREMIACIÓN COMPETITIVA
+   Se muestra solo cuando el reporte dinámico de duelo existe.
+   No modifica los resultados individuales ni otros paneles.
+   =========================================================== */
+#screen-results .hackers-victory-scene {
+    display: none;
+}
+#screen-results:has(.duel-report) .hackers-victory-scene {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 0 auto 1.4rem;
+    overflow: hidden;
+    border: 1px solid rgba(0, 240, 255, 0.7);
+    border-radius: 12px;
+    background: #050b18;
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.06), 0 0 28px rgba(0, 240, 255, 0.22);
+}
+#screen-results .hackers-victory-scene img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+#screen-results .hackers-victory-scene figcaption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.3rem 0.7rem 0.65rem;
+    background: linear-gradient(transparent, rgba(1, 7, 20, 0.95));
+    color: #b9fbff;
+    font: 700 clamp(0.72rem, 2vw, 1.1rem) 'Consolas', monospace;
+    text-align: center;
+    letter-spacing: 0.13em;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.65);
+}
+#screen-results .hackers-victory-scene figcaption span { color: #fa4ac9; }
+@media (max-width: 600px) {
+    #screen-results:has(.duel-report) .hackers-victory-scene { margin-bottom: 1rem; border-radius: 8px; }
+    #screen-results .hackers-victory-scene figcaption { letter-spacing: 0.04em; padding-bottom: 0.4rem; }
+}

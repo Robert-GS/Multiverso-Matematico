@@ -108,7 +108,7 @@ const screenCover = document.getElementById('screen-cover');
 
 function startFromCover() {
     if (screenCover && !screenCover.classList.contains('hidden')) {
-        showScreen('screen-server'); 
+        startHorizonStory();
     }
 }
 
@@ -127,6 +127,19 @@ document.addEventListener('keydown', function(e) {
 });
 
 if (screenCover) screenCover.addEventListener('click', startFromCover);
+
+// Introducción holográfica: independiente del juego, marcadores y Firebase.
+const horizonChapters=[
+{title:'La señal del Horizonte',label:'TRANSMISIÓN 01 · SEÑAL DE SOCORRO',status:'● SEÑAL ENTRANTE',text:'Una transmisión fragmentada revela la desaparición de la estación científica Horizonte. Sus últimas coordenadas mezclan magnitudes expresadas en distintas unidades. Dos jóvenes especialistas unen sus conocimientos para interpretar la señal, verificar las medidas y preparar una expedición de rescate.',math:'📏 Conexión matemática: unidades de medida y Sistema Internacional',alt:'Dos exploradores analizan una señal holográfica de emergencia'},
+{title:'El océano de las magnitudes',label:'TRANSMISIÓN 02 · NAVEGACIÓN ESTELAR',status:'● RUTA EN CÁLCULO',text:'La nave se interna en una nebulosa que altera sus instrumentos. Las distancias son inmensas y las referencias cambian a cada instante. La tripulación utiliza notación científica, razones, proporciones y escalas para transformar los datos en una ruta segura hacia la estación perdida.',math:'🌌 Conexión matemática: notación científica, razones y proporciones',alt:'Nave espacial atraviesa una nebulosa de colores entre asteroides'},
+{title:'Más allá del último horizonte',label:'TRANSMISIÓN 03 · PROTOCOLO DE RESCATE',status:'● RESCATE AUTORIZADO',text:'La estación aparece al borde de una anomalía gravitacional. El tiempo se agota: ambos exploradores contrastan cálculos, coordinan la navegación y ajustan la maniobra. Solo combinando medidas, magnitudes y proporciones podrán completar el rescate. Su mayor fuerza será el conocimiento compartido.',math:'🛰️ Conexión matemática: integración de los tres sectores',alt:'Dos astronautas maniobran junto a una estación amenazada por un vórtice cósmico'}];
+let horizonChapter=0;
+function renderHorizonStory(){const c=horizonChapters[horizonChapter];for(const [id,value] of Object.entries({'hc-title':c.title,'hc-label':c.label,'hc-status':c.status,'hc-text':c.text,'hc-math':c.math}))document.getElementById(id).textContent=value;const im=document.getElementById('hc-image');im.src=`img/horizonte/historia-${horizonChapter+1}.webp`;im.alt=c.alt;document.querySelectorAll('.hc-progress span').forEach((el,i)=>el.classList.toggle('hc-active',i<=horizonChapter));document.getElementById('hc-oath').classList.toggle('hidden',horizonChapter!==2);document.getElementById('hc-prev').disabled=horizonChapter===0;document.getElementById('hc-next').textContent=horizonChapter===2?'🚀 Iniciar expedición':horizonChapter===0?'Calcular ruta ▶':'Autorizar rescate ▶';}
+function startHorizonStory(){horizonChapter=0;renderHorizonStory();showScreen('screen-story');}
+document.getElementById('hc-prev').addEventListener('click',()=>{if(horizonChapter>0){horizonChapter--;renderHorizonStory();}});
+document.getElementById('hc-next').addEventListener('click',()=>{if(horizonChapter<2){horizonChapter++;renderHorizonStory();}else showScreen('screen-server');});
+document.getElementById('hc-skip').addEventListener('click',()=>showScreen('screen-server'));
+
 
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
@@ -911,17 +924,47 @@ async function endGame() {
         }
 
     } else {
-        resultsTitle.innerText = "🏆 GUERRA DE ESCUADRONES FINALIZADA 🏆";
-        let winnerText = "";
-        if (scoreTeam1 > scoreTeam2) winnerText = `🏆 ¡Escuadrón Ganador: ${team1Name}! 🏆`;
-        else if (scoreTeam2 > scoreTeam1) winnerText = `🏆 ¡Escuadrón Ganador: ${team2Name}! 🏆`;
-        else winnerText = "🤝 ¡Empate Cósmico Perfecto! 🤝";
-
-        winnerMessage.innerText = winnerText;
+        // CEREMONIA INTERGALÁCTICA: presentación exclusivamente; se conservan
+        // los turnos, la asignación de puntos y los datos del modo solitario.
+        const roundsPlayed = Math.max(0, currentRound - 1);
+        const turnsOne = Math.ceil(roundsPlayed / 2);
+        const turnsTwo = Math.floor(roundsPlayed / 2);
+        const isTie = scoreTeam1 === scoreTeam2;
+        const lead = scoreTeam1 > scoreTeam2 ? 1 : scoreTeam2 > scoreTeam1 ? 2 : 0;
+        const safeText = value => String(value).replace(/[&<>"']/g, c =>
+            ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const shipPanel = (name, score, turns, index) => {
+            const winner = lead === index;
+            const efficiency = turns ? Math.round(100 * score / turns) : 0;
+            return `<article class="cosmo-squad ${winner ? 'cosmo-squad-winner' : ''} ${isTie ? 'cosmo-squad-tie' : ''}">
+                <div class="cosmo-squad-ship" aria-hidden="true">${index === 1 ? '🚀' : '🛸'}</div>
+                <div class="cosmo-squad-rank">${winner ? '✦ ESCUADRÓN VICTORIOSO ✦' : isTie ? '✦ HONOR ESTELAR COMPARTIDO ✦' : 'ESCUADRÓN EXPLORADOR'}</div>
+                <h3>${safeText(name)}</h3>
+                <div class="cosmo-score">${score}<span> puntos</span></div>
+                <div class="cosmo-stats"><span>🎯 Aciertos <b>${score}</b></span><span>🛰️ Turnos <b>${turns}</b></span><span>✨ Precisión <b>${efficiency}%</b></span></div>
+            </article>`;
+        };
+        resultsTitle.innerText = '🌌 EL VEREDICTO DE LAS GALAXIAS 🌌';
+        winnerMessage.innerText = isTie ? '🤝 ¡Dos escuadrones, una misma gloria!' :
+            `🏆 ¡${lead === 1 ? team1Name : team2Name} conquista el horizonte!`;
         finalScores.innerHTML = `
-            <p><strong>${team1Name}:</strong> ${scoreTeam1} puntos</p>
-            <p><strong>${team2Name}:</strong> ${scoreTeam2} puntos</p>
-        `;
+            <div class="cosmo-ceremony">
+                <div class="cosmo-ceremony-kicker">CENTRO DE CONTROL · TRANSMISIÓN FINAL</div>
+                <p class="cosmo-ceremony-message">${isTie
+                    ? 'La misión concluye en equilibrio: ambos escuadrones reciben el reconocimiento del Consejo Galáctico.'
+                    : '¡Misión cumplida! El Consejo Galáctico reconoce al escuadrón que alcanzó la mayor puntuación.'}</p>
+                <div class="cosmo-squads">
+                    ${shipPanel(team1Name, scoreTeam1, turnsOne, 1)}
+                    <div class="cosmo-versus" aria-label="contra"><span>⚡</span><b>VS</b></div>
+                    ${shipPanel(team2Name, scoreTeam2, turnsTwo, 2)}
+                </div>
+                <div class="cosmo-telemetry">
+                    <div><small>TRANSMISIONES</small><strong>${roundsPlayed} / ${maxRounds}</strong></div>
+                    <div><small>ACIERTOS TOTALES</small><strong>${scoreTeam1 + scoreTeam2}</strong></div>
+                    <div><small>RESULTADO</small><strong>${isTie ? 'Empate honorable' : 'Diferencia: ' + Math.abs(scoreTeam1 - scoreTeam2) + ' pt' + (Math.abs(scoreTeam1 - scoreTeam2) === 1 ? '' : 's')}</strong></div>
+                </div>
+                <div class="cosmo-ceremony-oath"><small>EL JURAMENTO DEL HORIZONTE</small><p>«MEDIMOS EL UNIVERSO CON NÚMEROS,<br>ALCANZAMOS EL INFINITO CON CONOCIMIENTO»</p></div>
+            </div>`;
     }
 
     showScreen('screen-results');

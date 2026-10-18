@@ -851,3 +851,48 @@ button:hover:not(:disabled) {
     margin-bottom: 110px;
     margin-top: 50px;
 }
+/* ==========================================
+   LA CONSAGRACIÓN DE LOS GREMIOS
+   Solo visible en resultados competitivos.
+   Sin alterar el veredicto ni los marcadores.
+   ========================================== */
+#screen-results .alquimia-consagracion { display: none; }
+#screen-results.duel-results-active .alquimia-consagracion {
+    display: block;
+    width: 100%;
+    margin: 0 0 10px;
+    overflow: hidden;
+    border: 2px solid #d5ac64;
+    border-radius: 16px;
+    background: #21132d;
+    box-shadow: 0 0 24px #d5ac643b, inset 0 0 0 2px #342041;
+}
+#screen-results.duel-results-active .alquimia-consagracion img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+#screen-results.duel-results-active .alquimia-consagracion figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 10px 13px;
+    text-align: center;
+    background: linear-gradient(90deg, #21132d, #4b2857, #21132d);
+    color: #ffe2a2;
+    letter-spacing: .12em;
+}
+#screen-results.duel-results-active .alquimia-consagracion figcaption span {
+    font-size: clamp(.63rem, 1.5vw, .8rem);
+    color: #d4b8e7;
+}
+#screen-results.duel-results-active .alquimia-consagracion figcaption strong {
+    font-size: clamp(.9rem, 2.4vw, 1.4rem);
+    text-shadow: 0 0 12px #ffd78166;
+}
+@media (max-width: 650px) {
+    #screen-results.duel-results-active .alquimia-consagracion { border-radius: 10px; }
+    #screen-results.duel-results-active .alquimia-consagracion figcaption { padding: 9px 5px; letter-spacing: .06em; }
+}

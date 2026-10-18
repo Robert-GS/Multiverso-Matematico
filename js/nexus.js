@@ -108,6 +108,54 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ==========================================
+// HISTORIA CINEMATOGRÁFICA DEL NEXUS
+// Se ejecuta después de configurar la partida; no modifica reactivos ni puntuaciones.
+// ==========================================
+const nexusStoryScenes = [["LA FRACTURA", ["Durante incontables eras, siete mundos permanecieron unidos por una fuerza invisible: el conocimiento.", "Pero algo ha cambiado. Las conexiones que mantenían el equilibrio del Multiverso Matemático comienzan a desvanecerse. Sus portales pierden energía y una inquietante oscuridad amenaza con separarlos para siempre.", "En el corazón de todos ellos, el Nexus emite su última señal de auxilio."]], ["EL LLAMADO DEL NEXUS", ["Al acercarse al núcleo, los exploradores escuchan una voz que parece provenir de todos los universos al mismo tiempo.", "«Soy el Nexus, el vínculo que mantiene unidos los siete mundos».", "«Mi energía se está agotando. Ningún universo puede restaurarme por sí solo, porque cada uno conserva una parte esencial del conocimiento».", "«Solo quienes sean capaces de reunir esas siete fuerzas podrán despertar nuevamente al Multiverso Matemático»."]], ["LOS ECOS DE SIETE MUNDOS", ["Ante los exploradores aparecen siete portales. Cada uno conserva la esencia de una aventura, una prueba y un conocimiento.", "La lógica que abre caminos. Los números que cuentan historias. Las propiedades que revelan el orden oculto. Las fracciones que transforman la materia. Las potencias que desafían los límites. La medición que permite explorar el cosmos. Y la jerarquía que devuelve el equilibrio.", "«No son conocimientos separados», explica el Nexus. «Son siete partes de una misma sabiduría. Y ha llegado el momento de reunirlas»."]], ["EL NÚCLEO DE LA CONVERGENCIA", ["Los siete portales responden al llamado, pero su energía permanece fragmentada.", "«La convergencia no puede completarse por sí sola», advierte el Nexus.", "«Para restaurar la conexión deberán superar desafíos procedentes de los siete universos».", "«Cada respuesta correcta fortalecerá la armonía entre los mundos. Cada decisión pondrá a prueba lo que han aprendido».", "Los exploradores comprenden entonces que el destino del Multiverso no depende de una fuerza extraordinaria... Depende de su conocimiento."]], ["EL ÚLTIMO UMBRAL", ["El camino está abierto.", "Frente a los exploradores se alza el último umbral: una puerta de energía que conduce al corazón del Nexus.", "Detrás de ellos esperan siete mundos. Delante, los desafíos que pondrán a prueba todo lo aprendido.", "La voz del Nexus resuena por última vez: «No importa de qué universo provenga el conocimiento. Lo verdaderamente extraordinario ocurre cuando somos capaces de unirlo».", "Los exploradores intercambian una mirada decidida y avanzan hacia la luz.", "La convergencia está por comenzar."]]];
+let nexusStoryIndex = 0;
+
+function renderNexusStory() {
+    const [titulo, parrafos] = nexusStoryScenes[nexusStoryIndex];
+    const image = document.getElementById('nexus-story-image');
+    image.src = `img/nexus/escena${String(nexusStoryIndex + 1).padStart(2, '0')}.png`;
+    image.alt = titulo;
+    document.getElementById('nexus-story-title').textContent = titulo;
+    document.getElementById('nexus-story-counter').textContent = `ESCENA ${nexusStoryIndex + 1} DE ${nexusStoryScenes.length}`;
+    const container = document.getElementById('nexus-story-text');
+    container.replaceChildren();
+    for (const contenido of parrafos) {
+        const p = document.createElement('p');
+        p.textContent = contenido;
+        container.appendChild(p);
+    }
+    document.getElementById('nexus-story-motto').classList.toggle('hidden', nexusStoryIndex !== 4);
+    document.getElementById('nexus-story-prev').disabled = nexusStoryIndex === 0;
+    document.getElementById('nexus-story-next').textContent = nexusStoryIndex === 4 ? '🚀 COMENZAR MISIÓN' : 'CONTINUAR ➜';
+    document.getElementById('nexus-container').scrollIntoView({behavior:'auto', block:'start'});
+}
+function iniciarHistoriaNexus() {
+    nexusStoryIndex = 0;
+    showScreen('screen-story');
+    renderNexusStory();
+}
+function nexusStoryPrevious() {
+    if (nexusStoryIndex > 0) { nexusStoryIndex--; renderNexusStory(); }
+}
+function nexusStoryNext() {
+    if (nexusStoryIndex < nexusStoryScenes.length - 1) {
+        nexusStoryIndex++;
+        renderNexusStory();
+    } else { nexusStorySkip(); }
+}
+function nexusStorySkip() {
+    showScreen('screen-game');
+    cargarPreguntaActual();
+}
+window.nexusStoryPrevious = nexusStoryPrevious;
+window.nexusStoryNext = nexusStoryNext;
+window.nexusStorySkip = nexusStorySkip;
+
+// ==========================================
 // 2. ESTADO DEL JUEGO
 // ==========================================
 let gameState = {
@@ -252,8 +300,7 @@ function iniciarPartida(event) {
         }
     });
 
-    showScreen('screen-game');
-    cargarPreguntaActual();
+    iniciarHistoriaNexus();
 }
 
 // ==========================================

@@ -142,7 +142,8 @@ function showScreen(screenId) {
 
 function selectServer(server) {
     selectedServer = server;
-    showScreen('screen-difficulty');
+    //showScreen('screen-difficulty');
+    showScreen('screen-mode');
 }
 
 function selectDifficulty(level) {
@@ -318,7 +319,9 @@ function renderStandardGame(challengeData) {
 
     correctAnswer = challengeData.correct;
 
-    if (challengeData.forceDirect) {
+    if (challengeData.forceMultiple) {
+        currentQuestionMode = 'multiple';
+    } else if (challengeData.forceDirect) {
         currentQuestionMode = 'direct';
     } else if (questionType === 'mixed') {
         currentQuestionMode = Math.random() < 0.5 ? 'multiple' : 'direct';
@@ -479,6 +482,16 @@ function renderTreeGame(challengeData) {
 
     const root = document.createElement('div');
     root.className = 'tree-node root-node';
+    // Cápsula horizontal: solo presentación del reactivo de amplificación.
+    root.style.width = 'auto';
+    root.style.minWidth = '170px';
+    root.style.maxWidth = '95%';
+    root.style.height = '68px';
+    root.style.padding = '8px 22px';
+    root.style.boxSizing = 'border-box';
+    root.style.borderRadius = '999px';
+    root.style.whiteSpace = 'nowrap';
+    root.style.fontSize = '1.35rem';
     root.innerText = challengeData.rootValue;
     nodesContainer.appendChild(root);
 
@@ -490,7 +503,9 @@ function renderTreeGame(challengeData) {
         input.type = 'text';
         input.className = 'tree-node-input';
         input.dataset.nodeId = key;
-        input.placeholder = '?';
+        input.placeholder = key === 'numerador' ? 'Num' : key === 'denominador' ? 'Den' : '?';
+        input.setAttribute('aria-label', key === 'numerador' ? 'Numerador' : key === 'denominador' ? 'Denominador' : 'Respuesta');
+        input.style.fontSize = '0.9rem';
         branch.appendChild(input);
     }
 
@@ -517,15 +532,14 @@ function checkTreeAnswer() {
     // Obtener los valores esperados de la pregunta actual
     let expectedValues = Object.values(treeExpectedValues);
 
-    // Ordenar ambos arreglos de menor a mayor para ignorar el orden de ingreso
-    userValues.sort((a, b) => a - b);
-    expectedValues.sort((a, b) => a - b);
+    // En amplificación el orden importa: numerador primero, denominador después.
+    // No ordenar los valores: intercambiarlos representa otra fracción.
 
     // Comprobar si coinciden exactamente todos los factores
     let isCorrect = userValues.length === expectedValues.length &&
         userValues.every((val, index) => val === expectedValues[index]);
 
-    correctAnswer = expectedValues.join(' × ');
+    correctAnswer = expectedValues.join('/');
     processResult(isCorrect);
 }
 
@@ -533,241 +547,282 @@ function checkTreeAnswer() {
 // GENERADORES POR TOMO (INCLUYEN NUEVOS REACTIVOS)
 // ------------------------------------------------------------------
 
+// Generadores alineados con los contenidos estudiados en el aula.
+// Los retos de interacción propia (balance, sequence, multiSelect, tree)
+// mantienen su interfaz independientemente de multiple/direct/mixed.
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function numericOptions(answer, min = 1) {
+    const values = new Set([String(answer)]);
+    let offset = 1;
+    while (values.size < 4) {
+        if (answer - offset >= min) values.add(String(answer - offset));
+        values.add(String(answer + offset));
+        offset++;
+    }
+    return shuffleArray([...values].slice(0, 4));
+}
+
+function fractionOptions(numerator, denominator) {
+    const correct = `${numerator}/${denominator}`;
+    const values = new Set([correct]);
+    let offset = 1;
+    while (values.size < 4) {
+        if (numerator + offset > 0 && (numerator + offset) * denominator !== numerator * denominator)
+            values.add(`${numerator + offset}/${denominator}`);
+        if (numerator - offset > 0) values.add(`${numerator - offset}/${denominator}`);
+        if (denominator + offset > 0 && numerator * (denominator + offset) !== numerator * denominator)
+            values.add(`${numerator}/${denominator + offset}`);
+        offset++;
+    }
+    return shuffleArray([...values].slice(0, 4));
+}
+
 function generateTomo1Challenge() {
-    const rand = Math.random();
-
-    if (rand < 0.35) {
-        // REACTIVO DE BALANZA DE TRANSMUTACIÓN
-        const targetVal = Math.floor(Math.random() * 8) + 2;
-        const knownVal = Math.floor(Math.random() * (targetVal - 1)) + 1;
-        const missingVal = targetVal - knownVal;
-
-        let options = new Set([missingVal.toString()]);
-        while (options.size < 4) {
-            let fake = missingVal + (Math.floor(Math.random() * 5) + 1) * (Math.random() < 0.5 ? 1 : -1);
-            if (fake > 0 && fake !== missingVal) options.add(fake.toString());
-        }
-
+    if (Math.random() < 0.5) {
+        // Fracción aparente -> entero. Reutiliza la balanza de cuatro opciones.
+        const whole = randomInt(2, 9);
+        const den = randomInt(2, 9);
         return {
             type: 'balance',
-            instruction: `⚖️ BALANZA DE TRANSMUTACIÓN: Coloca el reactivo en el platillo izquierdo para equilibrar la masa de ${targetVal} unidades:`,
-            leftPan: `? + ${knownVal}`,
-            rightPan: `${targetVal}`,
-            correct: missingVal.toString(),
-            options: shuffleArray(Array.from(options))
-        };
-
-    } else if (rand < 0.7) {
-        // EQUIVALENCIA ESTÁNDAR
-        const num = Math.floor(Math.random() * 5) + 1;
-        const den = Math.floor(Math.random() * 5) + num + 1;
-        const mult = Math.floor(Math.random() * 3) + 2;
-
-        const ans = `${num * mult}/${den * mult}`;
-
-        let options = new Set([ans]);
-        while (options.size < 4) {
-            let fNum = Math.floor(Math.random() * 12) + 1;
-            let fDen = Math.floor(Math.random() * 12) + 1;
-            if (fNum / fDen !== num / den) options.add(`${fNum}/${fDen}`);
-        }
-
-        return {
-            type: 'standard',
-            instruction: `🔮 BALANZA DE EQUIVALENCIA: ¿Cuál de las siguientes esencias tiene el mismo valor volumétrico que la fórmula base?`,
-            display: `Fórmula Base: [ ${num}/${den} ]`,
-            correct: ans,
-            options: shuffleArray(Array.from(options)),
-            forceDirect: false
-        };
-
-    } else {
-        // CRISTALIZACIÓN UNIFORME ESTÁNDAR
-        const entero = Math.floor(Math.random() * 6) + 2;
-        const den = Math.floor(Math.random() * 4) + 2;
-        const num = entero * den;
-
-        const ans = `${num}/${den}`;
-
-        let options = new Set([ans]);
-        while (options.size < 4) {
-            let fakeNum = num + (Math.floor(Math.random() * 5) + 1) * (Math.random() < 0.5 ? 1 : -1);
-            if (fakeNum > 0 && fakeNum !== num) options.add(`${fakeNum}/${den}`);
-        }
-
-        return {
-            type: 'standard',
-            instruction: `⚖️ CRISTALIZACIÓN UNIFORME: Convierte la cantidad exacta de frascos enteros a la fracción correspondiente:`,
-            display: `Frascos Enteros: [ ${entero} ] en denominadores de ${den} partes = ?`,
-            correct: ans,
-            options: shuffleArray(Array.from(options))
+            instruction: '⚖️ DESCRISTALIZACIÓN ALQUÍMICA: ¿Cuántos frascos enteros representa esta fracción aparente?',
+            leftPan: `${whole * den}/${den}`,
+            rightPan: '? enteros',
+            correct: String(whole),
+            options: numericOptions(whole)
         };
     }
+
+    // Entero -> fracción aparente. La respuesta directa solicita la fracción completa.
+    const whole = randomInt(2, 7);
+    const den = randomInt(2, 6);
+    const numerator = whole * den;
+    const correct = `${numerator}/${den}`;
+    return {
+        type: 'standard',
+        instruction: '⚖️ CRISTALIZACIÓN UNIFORME: Escribe la fracción completa (numerador/denominador) que representa los enteros indicados.',
+        display: `Frascos enteros: [ ${whole} ] · Denominador requerido: ${den} · Fracción = ?`,
+        correct,
+        options: fractionOptions(numerator, den)
+    };
 }
 
 function generateTomo2Challenge() {
-    const rand = Math.random();
-
-    if (rand < 0.3) {
-        // REACTIVO DE SECUENCIA DE PASOS
-        const num1 = Math.floor(Math.random() * 4) + 1;
-        const den1 = 3;
-        const num2 = Math.floor(Math.random() * 4) + 1;
-        const den2 = 2;
-
-        const stepsCorrect = [
-            `Obtener común denominador (6)`,
-            `Convertir primera fracción (${num1}/${den1} ➔ ${num1 * 2}/6)`,
-            `Convertir segunda fracción (${num2}/${den2} ➔ ${num2 * 3}/6)`,
-            `Sumar numeradores (${num1 * 2} + ${num2 * 3} = ${num1 * 2 + num2 * 3}/6)`
-        ];
-
-        return {
-            type: 'sequence',
-            instruction: `🧪 SECUENCIA DE DESTILACIÓN: Ordena cronológicamente los pasos para resolver la suma de elixires: (${num1}/${den1} + ${num2}/${den2})`,
-            steps: stepsCorrect,
-            correctOrder: stepsCorrect
-        };
-
-    } else if (rand < 0.6) {
-        // REACTIVO DE SELECCIÓN MÚLTIPLE DE FRASCOS
-        let numbers = [];
-        let primes = [];
-        while (numbers.length < 6) {
-            let n = Math.floor(Math.random() * 20) + 2;
-            if (!numbers.includes(n)) {
-                numbers.push(n);
-                if (isPrime(n)) primes.push(n);
-            }
-        }
-
-        if (primes.length === 0) {
-            numbers[0] = 7;
-            primes.push(7);
-        }
-
-        return {
-            type: 'multiSelect',
-            instruction: `🔮 SELECCIÓN MÚLTIPLE: Selecciona únicamente los frascos que contengan Elementos Primos (números primos):`,
-            items: numbers,
-            correctItems: primes
-        };
-
-    } else {
-        // SIMPLIFICACIÓN ESTÁNDAR
-        const factor = Math.floor(Math.random() * 4) + 2;
-        const simpleNum = Math.floor(Math.random() * 4) + 1;
-        let simpleDen = Math.floor(Math.random() * 5) + simpleNum + 1;
-
-        const divisor = mcd(simpleNum, simpleDen);
-        const finalNum = simpleNum / divisor;
-        const finalDen = simpleDen / divisor;
-
-        const rawNum = finalNum * factor;
-        const rawDen = finalDen * factor;
-
-        const ans = `${finalNum}/${finalDen}`;
-
-        let options = new Set([ans]);
+    const variant = randomInt(0, 5);
+    if (variant === 0) {
+        // Reconocer una fracción equivalente entre cuatro alternativas.
+        const n = randomInt(1, 5);
+        const d = randomInt(n + 1, n + 6);
+        const k = randomInt(2, 5);
+        const correct = `${n * k}/${d * k}`;
+        const options = new Set([correct]);
+        let offset = 1;
         while (options.size < 4) {
-            let fakeN = Math.floor(Math.random() * 6) + 1;
-            let fakeD = Math.floor(Math.random() * 8) + 2;
-            if (fakeN / fakeD !== finalNum / finalDen) options.add(`${fakeN}/${fakeD}`);
+            options.add(`${n * k + offset}/${d * k}`);
+            options.add(`${n * k}/${d * k + offset}`);
+            offset++;
         }
-
         return {
             type: 'standard',
-            instruction: `🧪 DESTILACIÓN PURA: Simplifica la siguiente mezcla a su forma irreducible para evitar una explosión:`,
-            display: `Mezcla Bruta: [ ${rawNum}/${rawDen} ] = ?`,
-            correct: ans,
-            options: shuffleArray(Array.from(options))
+            instruction: '🔮 BALANZA DE EQUIVALENCIA: ¿Cuál de las siguientes fracciones equivale a la fórmula base?',
+            display: `Fórmula base: [ ${n}/${d} ]`,
+            correct,
+            options: shuffleArray([...options].slice(0, 4)),
+            forceMultiple: true // Varias respuestas directas serían matemáticamente válidas.
         };
     }
+    if (variant === 1) {
+        // Hallar el numerador desconocido mediante producto cruzado.
+        const n = randomInt(1, 5);
+        const d = randomInt(n + 1, n + 6);
+        const k = randomInt(2, 5);
+        const missing = n * k;
+        return {
+            type: 'balance',
+            instruction: '⚖️ BALANZA DE TRANSMUTACIÓN: Encuentra el numerador faltante para equilibrar las fracciones.',
+            leftPan: `${n}/${d}`,
+            rightPan: `?/${d * k}`,
+            correct: String(missing),
+            options: numericOptions(missing)
+        };
+    }
+    if (variant === 2) {
+        // Simplificación a forma irreducible.
+        const n = randomInt(1, 5);
+        const d = randomInt(n + 1, n + 6);
+        const common = mcd(n, d);
+        const reducedN = n / common;
+        const reducedD = d / common;
+        const k = randomInt(2, 6);
+        return {
+            type: 'standard',
+            instruction: '🧪 DESTILACIÓN PURA: Simplifica la mezcla a su forma irreducible. Escribe la fracción completa (numerador/denominador).',
+            display: `Mezcla bruta: [ ${reducedN * k}/${reducedD * k} ] = ?`,
+            correct: `${reducedN}/${reducedD}`,
+            options: fractionOptions(reducedN, reducedD)
+        };
+    }
+    if (variant === 3) {
+        // Orden de simplificación con pasos inequívocos.
+        const n = randomInt(1, 5);
+        const d = randomInt(n + 1, n + 6);
+        const common = mcd(n, d);
+        const rn = n / common;
+        const rd = d / common;
+        const k = randomInt(2, 6);
+        const rawN = rn * k;
+        const rawD = rd * k;
+        const steps = [
+            `Calcular el MCD de ${rawN} y ${rawD}: ${k}`,
+            `Dividir el numerador entre ${k}: ${rawN} ÷ ${k} = ${rn}`,
+            `Dividir el denominador entre ${k}: ${rawD} ÷ ${k} = ${rd}`,
+            `Escribir la fracción irreducible: ${rn}/${rd}`
+        ];
+        return {
+            type: 'sequence',
+            instruction: `🧪 SECUENCIA DE DESTILACIÓN: Ordena los pasos del procedimiento para simplificar ${rawN}/${rawD}.`,
+            steps,
+            correctOrder: steps
+        };
+    }
+    if (variant === 4) {
+        // Identificar todas las fracciones equivalentes de seis frascos.
+        //const n = randomInt(1, 4);
+        //const d = randomInt(n + 1, n + 5);
+        const n = randomInt(1, 9);
+        const d = randomInt(n + 1, n + 7);
+
+        const g = mcd(n, d);
+        const rn = n / g;
+        const rd = d / g;
+        const factors = shuffleArray([2, 3, 4, 5, 6]);
+        const valid = factors.slice(0, 3).map(k => `${rn * k}/${rd * k}`);
+        const invalid = factors.slice(0, 3).map((k, i) => `${rn * k + i + 1}/${rd * k}`);
+        return {
+            type: 'multiSelect',
+            instruction: `🔮 SELECCIÓN DE ESENCIAS EQUIVALENTES: Selecciona TODOS los frascos equivalentes a ${rn}/${rd}.`,
+            items: shuffleArray([...valid, ...invalid]),
+            correctItems: valid
+        };
+    }
+    // Árbol de dos campos: numerador y denominador amplificados.
+    const n = randomInt(1, 5);
+    const d = randomInt(n + 1, n + 6);
+    const k = randomInt(2, 5);
+    return {
+        type: 'tree',
+        instruction: `🌿 RED DE AMPLIFICACIÓN: Multiplica numerador y denominador de ${n}/${d} por k = ${k}. Escribe el numerador y el denominador resultantes en las dos casillas.`,
+        rootValue: `${n}/${d} × ${k}/${k}`,
+        expected: { numerador: n * k, denominador: d * k }
+    };
 }
 
 function generateTomo3Challenge() {
-    const rand = Math.random();
+    // Solo proporcionalidad directa, inversa y porcentajes.
+    const chosen = ['directa', 'inversa', 'porcentaje'][randomInt(0, 2)];
+    if (chosen === 'directa') {
+        //const basePot = randomInt(4, 10);
+        //const baseElix = randomInt(3, 8);  // antes 2, 4
+        const basePot = randomInt(4, 10);
+        const baseElix = randomIntExcept(3, 8, basePot);
+        const factor = randomInt(2, 5);
+        const targetElix = baseElix * factor;
+        const ans = basePot * factor;
+        return {
+            type: 'standard',
+            instruction: '📜 ESCALADO DE RECETA: Ajusta la dosis de Polvo de Estrellas para elaborar elixires múltiples:',
+            display: `Si ${baseElix} pociones usan ${basePot}g de polvo, ¿cuántos gramos usan ${targetElix} pociones?`,
+            correct: String(ans),
+            options: numericOptions(ans)
+        };
+    }
+    if (chosen === 'inversa') {
+        //const magos1 = 2;
+        //const horas1 = randomInt(1, 4) * 3;
+        //const magos2 = 6;
+        //const ans = magos1 * horas1 / magos2;
 
-    if (rand < 0.3) {
-        // REACTIVO DE ÁRBOLES DE FACTORIZACIÓN ALQUÍMICA
-        const primes = [2, 3, 5, 7];
-        const p1 = primes[Math.floor(Math.random() * primes.length)];
-        const p2 = primes[Math.floor(Math.random() * primes.length)];
-        const rootVal = p1 * p2;
+        let magos1, magos2;
+
+        do {
+            magos1 = randomInt(2, 12);
+            magos2 = randomInt(magos1 + 1, 12);
+        } while (magos2 % gcd(magos1, magos2) !== 0);
+
+        const divisor = magos2 / gcd(magos1, magos2);
+        //const horas1 = divisor * randomInt(1, 4);
+
+        const horas1 = divisor * randomIntExcept(1, 4, magos2 / divisor);
+
+        const ans = magos1 * horas1 / magos2;
 
         return {
-            type: 'tree',
-            instruction: `🌿 RED DE TRANSMUTACIÓN: Descompón el elixir principal en sus factores primos base:`,
-            rootValue: rootVal,
-            expected: { n1: p1, n2: p2 }
+            type: 'standard',
+            instruction: '⏳ TRABAJO EN EQUIPO (PROPORCIÓN INVERSA): Tiempo de encantamiento de un pergamino:',
+            display: `Si ${magos1} alquimistas tardan ${horas1} horas en canalizar una poción, ¿cuántas horas tardarán ${magos2} alquimistas?`,
+            correct: String(ans),
+            options: numericOptions(ans)
         };
-
-    } else {
-        // PROPORCIONES ESTÁNDAR
-        const types = ['directa', 'inversa', 'porcentaje'];
-        const chosen = types[Math.floor(Math.random() * types.length)];
-
-        if (chosen === 'directa') {
-            const basePot = Math.floor(Math.random() * 4) + 2;
-            const baseElix = Math.floor(Math.random() * 3) + 2;
-            const factor = Math.floor(Math.random() * 3) + 2;
-
-            const targetElix = baseElix * factor;
-            const ans = (basePot * factor).toString();
-
-            let options = new Set([ans]);
-            while (options.size < 4) {
-                let fake = parseInt(ans) + (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 1 : -1);
-                if (fake > 0) options.add(fake.toString());
-            }
-
-            return {
-                type: 'standard',
-                instruction: `📜 ESCALADO DE RECETA: Ajusta la dosis de Polvo de Estrellas para elaborar elixires múltiples:`,
-                display: `Si ${baseElix} pociones usan ${basePot}g de polvo, ¿cuántos gramos usan ${targetElix} pociones?`,
-                correct: ans,
-                options: shuffleArray(Array.from(options))
-            };
-        } else if (chosen === 'inversa') {
-            const magos1 = 2;
-            const horas1 = (Math.floor(Math.random() * 4) + 1) * 3; 
-            const magos2 = 6;
-
-            const ans = ((magos1 * horas1) / magos2).toString();
-
-            let options = new Set([ans]);
-            while (options.size < 4) {
-                let fake = parseInt(ans) + (Math.floor(Math.random() * 3) + 1);
-                if (fake > 0) options.add(fake.toString());
-            }
-
-            return {
-                type: 'standard',
-                instruction: `⏳ TRABAJO EN EQUIPO (PROPORCIÓN INVERSA): Tiempo de encantamiento de un pergamino:`,
-                display: `Si ${magos1} alquimistas tardan ${horas1} horas en canalizar una poción, ¿cuántas horas tardarán ${magos2} alquimistas?`,
-                correct: ans,
-                options: shuffleArray(Array.from(options))
-            };
-        } else {
-            const pct = (Math.floor(Math.random() * 4) + 1) * 10;
-            const total = (Math.floor(Math.random() * 5) + 2) * 10;
-            const ans = ((pct * total) / 100).toString();
-
-            let options = new Set([ans]);
-            while (options.size < 4) {
-                let fake = parseInt(ans) + (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 2 : -2);
-                if (fake >= 0) options.add(fake.toString());
-            }
-
-            return {
-                type: 'standard',
-                instruction: `🔮 CONCENTRACIÓN DE MAGIA: Calcula la pureza de la poción:`,
-                display: `¿Cuánto es el ${pct}% de una esencia de ${total} ml?`,
-                correct: ans,
-                options: shuffleArray(Array.from(options))
-            };
-        }
     }
+    // Porcentajes: mismo contenido, enunciado y rangos que la versión original.
+    //const pct = randomInt(1, 4) * 10;
+    //const pct = randomInt(1, 45);
+    //const total = randomInt(2, 15) * 10;  //antes 2 a 6
+    //const ans = pct * total / 100;
+    
+    let ans, pct, total;
+
+    const porcentajes = [
+        3, 5, 10, 15, 20, 25, 30, 40, 50,
+        60, 70, 75, 80, 90,
+        110, 120, 125, 130, 140, 150
+    ];
+
+    do {
+        ans = randomInt(2, 50);
+
+        pct = porcentajes[randomInt(0, porcentajes.length - 1)];
+
+        total = ans * 100 / pct;
+
+    } while (
+        !Number.isInteger(total) ||
+        total % 10 !== 0 ||
+        total < 20 ||
+        total > 150 ||
+        total === 100
+    );
+
+    
+    let options = new Set([String(ans)]);
+    while (options.size < 4) {
+        const fake = ans + randomInt(1, 4) * (Math.random() < 0.5 ? 2 : -2);
+        if (fake >= 0) options.add(String(fake));
+    }
+    return {
+        type: 'standard',
+        instruction: '🔮 CONCENTRACIÓN DE MAGIA: Calcula la pureza de la poción:',
+        display: `¿Cuánto es el ${pct}% de una esencia de ${total} ml?`,
+        correct: String(ans),
+        options: shuffleArray([...options])
+    };
+}
+
+function gcd(a, b) {
+    while (b) {
+        [a, b] = [b, a % b];
+    }
+    return a;
+}
+
+function randomIntExcept(min, max, excluded) {
+    let n;
+    do {
+        n = randomInt(min, max);
+    } while (n === excluded);
+    return n;
 }
 
 // ==========================================
@@ -1080,7 +1135,7 @@ const grimoireScenes = [
         title: 'Los tres tomos perdidos',
         image: 'img/alquimia/escena02.png',
         alt: 'Los alquimistas encuentran tres tomos mágicos en una biblioteca arcana',
-        story: 'Para recuperar los secretos del Grimorio, deberán superar los desafíos de tres tomos ancestrales: Unidades y Equivalencias; Destilaciones y Reducción; y Proporciones y Elixires. Cada desafío superado devolverá una parte de su poder. Pero una proporción equivocada podría desestabilizar la magia del taller.'
+        story: 'Para recuperar los secretos del Grimorio, deberán superar los desafíos de tres tomos ancestrales: Unidades y Fracciones; Destilaciones y Reducción; y Proporciones y Elixires. Cada desafío superado devolverá una parte de su poder. Pero una proporción equivocada podría desestabilizar la magia del taller.'
     },
     {
         chapter: 'CAPÍTULO III',

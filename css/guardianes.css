@@ -51,7 +51,8 @@ body {
     gap: 10px;
 }
 
-.btn-audio, .btn-settings {
+.btn-audio,
+.btn-settings {
     background: rgba(212, 175, 55, 0.12);
     border: 1px solid #d4af37;
     color: #f39c12;
@@ -63,9 +64,12 @@ body {
     transition: all 0.3s ease;
 }
 
-.btn-settings { padding: 6px 10px; }
+.btn-settings {
+    padding: 6px 10px;
+}
 
-.btn-audio:hover, .btn-settings:hover {
+.btn-audio:hover,
+.btn-settings:hover {
     background: #d4af37;
     color: #0b1a24;
     box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
@@ -89,6 +93,9 @@ body {
     margin: auto 0;
     transform: translateY(-20px);
     box-sizing: border-box;
+
+    margin-top: 40px;
+    margin-bottom: 90px;
 }
 
 .screen {
@@ -158,8 +165,17 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.97); }
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.97);
+    }
 }
 
 /* ==========================================
@@ -189,7 +205,8 @@ body {
     font-size: 0.95rem;
 }
 
-.input-group input, .input-group select {
+.input-group input,
+.input-group select {
     width: 100%;
     padding: 10px;
     font-size: 1rem;
@@ -402,8 +419,13 @@ button:hover:not(:disabled) {
     color: #a0aec0;
 }
 
-.footer-logo { height: 40px; }
-.footer-separator { color: #d4af37; }
+.footer-logo {
+    height: 40px;
+}
+
+.footer-separator {
+    color: #d4af37;
+}
 
 .infinite-mode-notice {
     background: rgba(212, 175, 55, 0.12);
@@ -420,94 +442,115 @@ button:hover:not(:disabled) {
 
 /* Módulos de Juego */
 .game-module-container {
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background: rgba(20, 15, 30, 0.6);
-  border: 1px solid #d4af37;
-  border-radius: 8px;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(20, 15, 30, 0.6);
+    border: 1px solid #d4af37;
+    border-radius: 8px;
 }
 
 /* Balanza Templaria */
 .balance-scale {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-size: 1.5rem;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 1rem;
-  border-radius: 8px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 1rem;
+    border-radius: 8px;
 }
+
 .scale-pan {
-  min-width: 120px;
-  min-height: 50px;
-  border-bottom: 3px solid #d4af37;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+    min-width: 120px;
+    min-height: 50px;
+    border-bottom: 3px solid #d4af37;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
 /* Drag & Drop y Secuencia */
-.slots-container, .bank-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 10px;
+.slots-container,
+.bank-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
 }
+
 .draggable-item {
-  background: #2a1b40;
-  border: 1px solid #9370db;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: grab;
-  text-align: center;
-  transition: transform 0.2s;
+    background: #2a1b40;
+    border: 1px solid #9370db;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: grab;
+    text-align: center;
+    transition: transform 0.2s;
 }
-.draggable-item:active { cursor: grabbing; }
+
+.draggable-item:active {
+    cursor: grabbing;
+}
 
 /* Selección Múltiple */
 .stamp-card {
-  background: #1e1b2e;
-  border: 2px solid #5c4084;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
+    background: #1e1b2e;
+    border: 2px solid #5c4084;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
+
 .stamp-card.selected {
-  border-color: #ffd700;
-  background: #3b2a56;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    border-color: #ffd700;
+    background: #3b2a56;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
 }
 
 /* Contenedor principal de Selección Múltiple */
 #multi-select-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem; /* Espaciado automático uniforme entre elementos */
-  padding: 1.5rem 1rem 2rem 1rem; /* Padding inferior extra para dar respiro al borde */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    /* Espaciado automático uniforme entre elementos */
+    padding: 1.5rem 1rem 2rem 1rem;
+    /* Padding inferior extra para dar respiro al borde */
 }
 
 /* Ajuste específico para el botón de confirmación */
 #btn-submit-multi {
-  margin-top: 1rem; /* Separa el botón de la cuadrícula de sellos */
-  padding: 0.8rem 2rem;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 1rem;
+    /* Separa el botón de la cuadrícula de sellos */
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 #btn-submit-multi:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
 }
 
 
 /* LEADERBOARD (TABLA DE HONOR DEL TEMPLO) */
-.leaderboard-modal { max-width: 550px !important; width: 95%; }
-.leaderboard-tabs { display: flex; gap: 6px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap; }
+.leaderboard-modal {
+    max-width: 550px !important;
+    width: 95%;
+}
+
+.leaderboard-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .tab-btn {
     padding: 8px 12px;
     font-size: 0.85rem;
@@ -517,11 +560,14 @@ button:hover:not(:disabled) {
     border-radius: 6px;
     cursor: pointer;
 }
-.tab-btn.active, .tab-btn:hover {
+
+.tab-btn.active,
+.tab-btn:hover {
     background: #d4af37;
     color: #0d130e;
     font-weight: bold;
 }
+
 .leaderboard-filters-row {
     display: flex;
     justify-content: space-between;
@@ -532,7 +578,15 @@ button:hover:not(:disabled) {
     border-radius: 8px;
     border: 1px solid rgba(212, 175, 55, 0.3);
 }
-.leaderboard-filter-group { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #d4af37; }
+
+.leaderboard-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #d4af37;
+}
+
 .leaderboard-select {
     background: rgba(13, 26, 17, 0.9);
     color: #ffffff;
@@ -541,75 +595,537 @@ button:hover:not(:disabled) {
     padding: 4px 8px;
     font-size: 0.85rem;
 }
-.leaderboard-subtitle { font-size: 0.85rem; color: #2ecc71; margin-top: -8px; margin-bottom: 12px; }
-.leaderboard-container { max-height: 260px; overflow-y: auto; margin-bottom: 18px; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 8px; background: rgba(9, 20, 12, 0.8); }
-.leaderboard-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-.leaderboard-table th, .leaderboard-table td { padding: 10px 12px; text-align: center; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
-.leaderboard-table th { background: rgba(212, 175, 55, 0.25); color: #d4af37; position: sticky; top: 0; z-index: 2; }
-.leaderboard-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.03); }
-.leaderboard-table tbody tr:hover { background: rgba(46, 204, 113, 0.1); }
+
+.leaderboard-subtitle {
+    font-size: 0.85rem;
+    color: #2ecc71;
+    margin-top: -8px;
+    margin-bottom: 12px;
+}
+
+.leaderboard-container {
+    max-height: 260px;
+    overflow-y: auto;
+    margin-bottom: 18px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px;
+    background: rgba(9, 20, 12, 0.8);
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.leaderboard-table th {
+    background: rgba(212, 175, 55, 0.25);
+    color: #d4af37;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.leaderboard-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.leaderboard-table tbody tr:hover {
+    background: rgba(46, 204, 113, 0.1);
+}
+
 /* DIARIO DE EXPEDICIÓN: estilos activos solo mientras la historia es visible */
-.game-card:has(#screen-story:not(.hidden)){width:min(96%,1180px);max-width:1180px;padding:clamp(12px,2vw,24px);transform:none;margin:28px 0}
-#screen-story{width:100%;align-items:stretch}
-.go-expedition{background:linear-gradient(135deg,#19251a,#0e1b15);border:2px solid #aa8b47;border-radius:13px;padding:clamp(12px,2vw,22px);box-shadow:inset 0 0 30px #0009,0 0 20px #c19b3530}
-.go-heading{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:#e7c784;font-size:.8rem;font-weight:bold;letter-spacing:.1em;margin-bottom:14px}
-.go-layout{display:grid;grid-template-columns:minmax(150px,215px) minmax(0,1fr);gap:16px}
-.go-map{border:1px solid #b89a5e;border-radius:9px;background:radial-gradient(ellipse at center,#9c8a5a,#6b5739);padding:17px 10px;color:#2a2114;box-shadow:inset 0 0 28px #382a24a6;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.go-map-title{font-size:.94rem;letter-spacing:.08em;font-weight:900;border-bottom:2px solid #4e3924;padding-bottom:10px}
-.go-map-route{display:flex;flex-direction:column;align-items:center;margin:20px 0}
-.go-map-stop{display:flex;flex-direction:column;align-items:center;gap:5px;opacity:.43;transition:all .3s}
-.go-map-stop span{font-size:2rem;border:2px solid #503f25;width:56px;height:56px;display:grid;place-items:center;border-radius:50%}
-.go-map-stop small{font-size:.75rem;font-weight:900;letter-spacing:.08em}
-.go-map-stop.go-active{opacity:1;color:#fff1bd;text-shadow:0 0 10px #f8cf75}
-.go-map-stop.go-active span{background:#564322;border-color:#e5c56c;box-shadow:0 0 17px #ffe18b}
-.go-map-path{height:43px;border-left:3px dashed #513e27;margin:5px}
-.go-map p{font-size:.8rem;line-height:1.5;max-width:165px}
-.go-journal{min-width:0}
-.go-photo{overflow:hidden;border:3px solid #9e7b3e;border-radius:6px;box-shadow:0 7px 22px #0009;line-height:0}
-.go-photo img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
-.go-page{background:linear-gradient(135deg,#e8d5a7,#c7aa72);color:#352716;text-align:left;margin-top:12px;padding:clamp(15px,2.5vw,28px);border-radius:5px;border:1px solid #8a6b3c;box-shadow:inset 0 0 25px #8b64382c}
-.go-date{color:#745127;font-size:.8rem;letter-spacing:.1em;font-weight:bold}
-#screen-story .go-page h2{color:#4b331c;font-size:clamp(1.3rem,2.7vw,1.9rem);text-align:left;margin:9px 0}
-#go-text{font-size:clamp(.95rem,1.4vw,1.06rem);line-height:1.65;margin:0}
-#go-inscription{color:#6b481c;font-size:.88rem;font-weight:bold;margin:15px 0 0}
-.go-motto{text-align:center;margin-top:20px;padding:15px 8px;border-top:2px solid #9a7235;border-bottom:2px solid #9a7235}
-.go-motto span{display:block;font-size:.74rem;letter-spacing:.1em;margin-bottom:10px}
-.go-motto strong{font-size:clamp(1rem,2vw,1.3rem);line-height:1.5;color:#50320c}
-.go-controls{display:flex;justify-content:space-between;gap:10px;margin-top:15px;flex-wrap:wrap}
-.go-controls button{background:#34412a;border:1px solid #c4a258;border-radius:7px;color:#f8e9bf;padding:12px 16px;cursor:pointer;font-weight:bold}
-.go-controls button:hover:not(:disabled){background:#50663a}
-.go-controls button:disabled{opacity:.4;cursor:default}
-#go-next{background:#80601f;color:#fff3c8}
-#go-skip{background:transparent;border-color:#68765b;color:#cbd3bb}
-@media(max-width:700px){.game-card:has(#screen-story:not(.hidden)){width:98%;padding:8px;margin:14px 0}.go-layout{grid-template-columns:1fr}.go-map{padding:9px}.go-map-route{flex-direction:row;margin:9px 0}.go-map-path{height:0;width:34px;border-left:0;border-top:3px dashed #513e27;margin:0 5px}.go-map-stop span{width:38px;height:38px;font-size:1.3rem}.go-map p{max-width:none;margin:0;font-size:.72rem}.go-controls{display:grid;grid-template-columns:1fr 1fr}.go-controls button{font-size:.79rem;padding:10px 5px}#go-skip{grid-column:1/-1;grid-row:2}}
+.game-card:has(#screen-story:not(.hidden)) {
+    width: min(96%, 1180px);
+    max-width: 1180px;
+    padding: clamp(12px, 2vw, 24px);
+    transform: none;
+    margin: 28px 100
+}
+
+#screen-story {
+    width: 100%;
+    align-items: stretch
+}
+
+.go-expedition {
+    background: linear-gradient(135deg, #19251a, #0e1b15);
+    border: 2px solid #aa8b47;
+    border-radius: 13px;
+    padding: clamp(12px, 2vw, 22px);
+    box-shadow: inset 0 0 30px #0009, 0 0 20px #c19b3530
+}
+
+.go-heading {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: #e7c784;
+    font-size: .8rem;
+    font-weight: bold;
+    letter-spacing: .1em;
+    margin-bottom: 14px
+}
+
+.go-layout {
+    display: grid;
+    grid-template-columns: minmax(150px, 215px) minmax(0, 1fr);
+    gap: 16px
+}
+
+.go-map {
+    border: 1px solid #b89a5e;
+    border-radius: 9px;
+    background: radial-gradient(ellipse at center, #9c8a5a, #6b5739);
+    padding: 17px 10px;
+    color: #2a2114;
+    box-shadow: inset 0 0 28px #382a24a6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
+}
+
+.go-map-title {
+    font-size: .94rem;
+    letter-spacing: .08em;
+    font-weight: 900;
+    border-bottom: 2px solid #4e3924;
+    padding-bottom: 10px
+}
+
+.go-map-route {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0
+}
+
+.go-map-stop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    opacity: .43;
+    transition: all .3s
+}
+
+.go-map-stop span {
+    font-size: 2rem;
+    border: 2px solid #503f25;
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%
+}
+
+.go-map-stop small {
+    font-size: .75rem;
+    font-weight: 900;
+    letter-spacing: .08em
+}
+
+.go-map-stop.go-active {
+    opacity: 1;
+    color: #fff1bd;
+    text-shadow: 0 0 10px #f8cf75
+}
+
+.go-map-stop.go-active span {
+    background: #564322;
+    border-color: #e5c56c;
+    box-shadow: 0 0 17px #ffe18b
+}
+
+.go-map-path {
+    height: 43px;
+    border-left: 3px dashed #513e27;
+    margin: 5px
+}
+
+.go-map p {
+    font-size: .8rem;
+    line-height: 1.5;
+    max-width: 165px
+}
+
+.go-journal {
+    min-width: 0
+}
+
+.go-photo {
+    overflow: hidden;
+    border: 3px solid #9e7b3e;
+    border-radius: 6px;
+    box-shadow: 0 7px 22px #0009;
+    line-height: 0
+}
+
+.go-photo img {
+    width: 100%;
+    aspect-ratio: 3/2;
+    object-fit: cover;
+    display: block
+}
+
+.go-page {
+    background: linear-gradient(135deg, #e8d5a7, #c7aa72);
+    color: #352716;
+    text-align: left;
+    margin-top: 12px;
+    padding: clamp(15px, 2.5vw, 28px);
+    border-radius: 5px;
+    border: 1px solid #8a6b3c;
+    box-shadow: inset 0 0 25px #8b64382c
+}
+
+.go-date {
+    color: #745127;
+    font-size: .8rem;
+    letter-spacing: .1em;
+    font-weight: bold
+}
+
+#screen-story .go-page h2 {
+    color: #4b331c;
+    font-size: clamp(1.3rem, 2.7vw, 1.9rem);
+    text-align: left;
+    margin: 9px 0
+}
+
+#go-text {
+    font-size: clamp(.95rem, 1.4vw, 1.06rem);
+    line-height: 1.65;
+    margin: 0
+}
+
+#go-inscription {
+    color: #6b481c;
+    font-size: .88rem;
+    font-weight: bold;
+    margin: 15px 0 0
+}
+
+.go-motto {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px 8px;
+    border-top: 2px solid #9a7235;
+    border-bottom: 2px solid #9a7235
+}
+
+.go-motto span {
+    display: block;
+    font-size: .74rem;
+    letter-spacing: .1em;
+    margin-bottom: 10px
+}
+
+.go-motto strong {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    line-height: 1.5;
+    color: #50320c
+}
+
+.go-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap
+}
+
+.go-controls button {
+    background: #34412a;
+    border: 1px solid #c4a258;
+    border-radius: 7px;
+    color: #f8e9bf;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-weight: bold
+}
+
+.go-controls button:hover:not(:disabled) {
+    background: #50663a
+}
+
+.go-controls button:disabled {
+    opacity: .4;
+    cursor: default
+}
+
+#go-next {
+    background: #80601f;
+    color: #fff3c8
+}
+
+#go-skip {
+    background: transparent;
+    border-color: #68765b;
+    color: #cbd3bb
+}
+
+@media(max-width:700px) {
+    .game-card:has(#screen-story:not(.hidden)) {
+        width: 98%;
+        padding: 8px;
+        margin: 14px 0
+    }
+
+    .go-layout {
+        grid-template-columns: 1fr
+    }
+
+    .go-map {
+        padding: 9px
+    }
+
+    .go-map-route {
+        flex-direction: row;
+        margin: 9px 0
+    }
+
+    .go-map-path {
+        height: 0;
+        width: 34px;
+        border-left: 0;
+        border-top: 3px dashed #513e27;
+        margin: 0 5px
+    }
+
+    .go-map-stop span {
+        width: 38px;
+        height: 38px;
+        font-size: 1.3rem
+    }
+
+    .go-map p {
+        max-width: none;
+        margin: 0;
+        font-size: .72rem
+    }
+
+    .go-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr
+    }
+
+    .go-controls button {
+        font-size: .79rem;
+        padding: 10px 5px
+    }
+
+    #go-skip {
+        grid-column: 1/-1;
+        grid-row: 2
+    }
+}
 
 
 /* EL JUICIO DE LOS GUARDIANES · Solo cuando la ceremonia competitiva es visible */
-.game-card:has(#screen-results:not(.hidden) .go-ceremony){width:min(96%,1080px);max-width:1080px;transform:none;margin:24px 0;padding:clamp(12px,2vw,25px)}
-#screen-results:has(.go-ceremony){width:100%;gap:8px}
-#screen-results:has(.go-ceremony) #results-title{color:#f4d48b;text-shadow:0 2px 15px #d5a64088;font-size:clamp(1.35rem,3vw,2.25rem);margin:8px 0}
-#screen-results:has(.go-ceremony) #winner-message{font-size:clamp(1rem,2vw,1.4rem);color:#ccebc5;margin:4px 0 12px}
-#screen-results:has(.go-ceremony) #final-scores{width:100%}
-.go-ceremony{background:linear-gradient(160deg,#0d2018,#26351f 55%,#111e16);border:1px solid #9f8544;border-radius:13px;padding:clamp(10px,2vw,20px);box-shadow:inset 0 0 25px #050b0988}
-.go-ceremony-art{height:clamp(145px,24vw,285px);background:linear-gradient(to top,#0c211bb8,transparent 65%),url('../img/guardianes/ceremonia.webp') center 45%/cover;border:2px solid #b89750;border-radius:9px;position:relative;overflow:hidden;box-shadow:0 0 22px #e3b35a35}
-.go-ceremony-banner{position:absolute;bottom:0;left:0;right:0;padding:15px 5px;background:linear-gradient(transparent,#0d201bea);font-weight:bold;color:#ffe6a5;text-shadow:0 2px 7px #000;letter-spacing:.08em;font-size:clamp(.72rem,1.6vw,1.05rem)}
-.go-ceremony-intro{max-width:740px;margin:17px auto;color:#dfdec9;line-height:1.55}
-.go-ceremony-teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:14px 0}
-.go-ceremony-team{min-width:0;border:1px solid #6c805d;border-radius:11px;background:linear-gradient(145deg,#15251c,#1b3026);padding:18px 12px;box-shadow:inset 0 0 18px #0006}
-.go-ceremony-team.go-honored{border:2px solid #e9c56f;background:linear-gradient(150deg,#46361d,#263621 75%);box-shadow:0 0 20px #dcb35b45,inset 0 0 20px #c3983030}
-.go-team-emblem{font-size:2.5rem;color:#e4c16b;line-height:1.2}
-.go-team-honor{font-size:.76rem;letter-spacing:.1em;color:#c7d6ad;font-weight:bold;margin:10px 0}
-.go-honored .go-team-honor{color:#ffdc80}
-.go-team-name{overflow-wrap:anywhere;font-size:clamp(1.1rem,2.2vw,1.55rem);color:#f4ead0;margin:8px 0}
-.go-team-points span{display:block;color:#f5d27a;font-size:clamp(2.5rem,5vw,4rem);font-weight:bold;line-height:1.1}
-.go-team-points small{font-size:.75rem;letter-spacing:.07em;color:#c7d5c0}
-.go-team-tribute{font-size:.9rem;color:#d3dfcc;margin:12px 0 0;line-height:1.45}
-.go-ceremony-summary{padding:13px;border:1px dashed #8c9e75;border-radius:7px;color:#d9e8cc;background:#15251a}
-.go-ceremony-oath{margin:16px 0 8px;padding:19px 12px;border:1px solid #c6a45a;border-radius:9px;background:radial-gradient(ellipse at center,#52401e,#1b291d 80%);box-shadow:0 0 18px #b28e3440}
-.go-ceremony-oath small{display:block;color:#d4bf84;letter-spacing:.14em;margin-bottom:10px}
-.go-ceremony-oath strong{display:block;color:#fff0b7;font-size:clamp(1rem,2.3vw,1.5rem);line-height:1.5;text-shadow:0 0 12px #c79a4a}
-.go-ceremony-foot{color:#b8cba9;font-size:.83rem;margin:10px 0 2px}
-@media(max-width:650px){.game-card:has(#screen-results:not(.hidden) .go-ceremony){width:98%;padding:9px;margin:14px 0}.go-ceremony-teams{grid-template-columns:1fr}.go-ceremony-team{padding:13px}.go-ceremony-art{height:170px}}
+.game-card:has(#screen-results:not(.hidden) .go-ceremony) {
+    width: min(96%, 1080px);
+    max-width: 1080px;
+    transform: none;
+    margin: 24px 0;
+    padding: clamp(12px, 2vw, 25px)
+}
+
+#screen-results:has(.go-ceremony) {
+    width: 100%;
+    gap: 8px
+}
+
+#screen-results:has(.go-ceremony) #results-title {
+    color: #f4d48b;
+    text-shadow: 0 2px 15px #d5a64088;
+    font-size: clamp(1.35rem, 3vw, 2.25rem);
+    margin: 8px 0
+}
+
+#screen-results:has(.go-ceremony) #winner-message {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    color: #ccebc5;
+    margin: 4px 0 12px
+}
+
+#screen-results:has(.go-ceremony) #final-scores {
+    width: 100%
+}
+
+.go-ceremony {
+    background: linear-gradient(160deg, #0d2018, #26351f 55%, #111e16);
+    border: 1px solid #9f8544;
+    border-radius: 13px;
+    padding: clamp(10px, 2vw, 20px);
+    box-shadow: inset 0 0 25px #050b0988
+}
+
+.go-ceremony-art {
+    height: clamp(145px, 24vw, 285px);
+    background: linear-gradient(to top, #0c211bb8, transparent 65%), url('../img/guardianes/ceremonia.webp') center 45%/cover;
+    border: 2px solid #b89750;
+    border-radius: 9px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 22px #e3b35a35
+}
+
+.go-ceremony-banner {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 5px;
+    background: linear-gradient(transparent, #0d201bea);
+    font-weight: bold;
+    color: #ffe6a5;
+    text-shadow: 0 2px 7px #000;
+    letter-spacing: .08em;
+    font-size: clamp(.72rem, 1.6vw, 1.05rem)
+}
+
+.go-ceremony-intro {
+    max-width: 740px;
+    margin: 17px auto;
+    color: #dfdec9;
+    line-height: 1.55
+}
+
+.go-ceremony-teams {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    margin: 14px 0
+}
+
+.go-ceremony-team {
+    min-width: 0;
+    border: 1px solid #6c805d;
+    border-radius: 11px;
+    background: linear-gradient(145deg, #15251c, #1b3026);
+    padding: 18px 12px;
+    box-shadow: inset 0 0 18px #0006
+}
+
+.go-ceremony-team.go-honored {
+    border: 2px solid #e9c56f;
+    background: linear-gradient(150deg, #46361d, #263621 75%);
+    box-shadow: 0 0 20px #dcb35b45, inset 0 0 20px #c3983030
+}
+
+.go-team-emblem {
+    font-size: 2.5rem;
+    color: #e4c16b;
+    line-height: 1.2
+}
+
+.go-team-honor {
+    font-size: .76rem;
+    letter-spacing: .1em;
+    color: #c7d6ad;
+    font-weight: bold;
+    margin: 10px 0
+}
+
+.go-honored .go-team-honor {
+    color: #ffdc80
+}
+
+.go-team-name {
+    overflow-wrap: anywhere;
+    font-size: clamp(1.1rem, 2.2vw, 1.55rem);
+    color: #f4ead0;
+    margin: 8px 0
+}
+
+.go-team-points span {
+    display: block;
+    color: #f5d27a;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: bold;
+    line-height: 1.1
+}
+
+.go-team-points small {
+    font-size: .75rem;
+    letter-spacing: .07em;
+    color: #c7d5c0
+}
+
+.go-team-tribute {
+    font-size: .9rem;
+    color: #d3dfcc;
+    margin: 12px 0 0;
+    line-height: 1.45
+}
+
+.go-ceremony-summary {
+    padding: 13px;
+    border: 1px dashed #8c9e75;
+    border-radius: 7px;
+    color: #d9e8cc;
+    background: #15251a
+}
+
+.go-ceremony-oath {
+    margin: 16px 0 8px;
+    padding: 19px 12px;
+    border: 1px solid #c6a45a;
+    border-radius: 9px;
+    background: radial-gradient(ellipse at center, #52401e, #1b291d 80%);
+    box-shadow: 0 0 18px #b28e3440
+}
+
+.go-ceremony-oath small {
+    display: block;
+    color: #d4bf84;
+    letter-spacing: .14em;
+    margin-bottom: 10px
+}
+
+.go-ceremony-oath strong {
+    display: block;
+    color: #fff0b7;
+    font-size: clamp(1rem, 2.3vw, 1.5rem);
+    line-height: 1.5;
+    text-shadow: 0 0 12px #c79a4a
+}
+
+.go-ceremony-foot {
+    color: #b8cba9;
+    font-size: .83rem;
+    margin: 10px 0 2px
+}
+
+@media(max-width:650px) {
+    .game-card:has(#screen-results:not(.hidden) .go-ceremony) {
+        width: 98%;
+        padding: 9px;
+        margin: 14px 0
+    }
+
+    .go-ceremony-teams {
+        grid-template-columns: 1fr
+    }
+
+    .go-ceremony-team {
+        padding: 13px
+    }
+
+    .go-ceremony-art {
+        height: 170px
+    }
+}
 
 /* ==========================================
    MICROCIRUGÍA 04: LEADERBOARD RESPONSIVO

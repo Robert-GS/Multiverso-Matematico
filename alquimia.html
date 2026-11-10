@@ -61,9 +61,9 @@
         <section id="screen-server" class="screen hidden">
             <h2>Selecciona el Tomo de Alquimia a Estudiar</h2>
             <div class="menu-grid">
-                <button onclick="selectServer('tomo1')">📜 Tomo 1: Unidades y Equivalencias<br><small>(Fracciones, Enteros y Concepto)</small></button>
-                <button onclick="selectServer('tomo2')">🧪 Tomo 2: Destilaciones y Reducción<br><small>(Simplificación y Operaciones)</small></button>
-                <button onclick="selectServer('tomo3')">⚖️ Tomo 3: Proporciones y Elixires<br><small>(Proporción Directa, Inversa y %)</small></button>
+                <button onclick="selectServer('tomo1')">📜 Tomo 1: Unidades y Fracciones<br><small>(Enteros y Fracciones Aparentes)</small></button>
+                <button onclick="selectServer('tomo2')">🧪 Tomo 2: Destilaciones y Reducción<br><small>(Fracciones Equivalentes, Simplificacion y Amplificación)</small></button>
+                <button onclick="selectServer('tomo3')">⚖️ Tomo 3: Proporciones y Elixires<br><small>(Proporción Directa, Inversa y Porcentajes)</small></button>
                 <button class="btn-root-mode" onclick="selectServer('root')">🔮 GRAN ALQUIMISTA: Prueba de Maestro<br><small>(Evalúa todos los tomos)</small></button>
             </div>
             <button class="btn-back" onclick="showScreen('screen-cover')">⬅ Regresar a la Entrada</button>
@@ -87,7 +87,8 @@
                 <button onclick="selectGameMode('solitario')">🧙‍♂️ Experimento Solitario (Práctica/Evaluación)</button>
                 <button onclick="selectGameMode('equipos')">⚔️ Duelo de Gremios (Competencia por Equipos)</button>
             </div>
-            <button class="btn-back" onclick="showScreen('screen-difficulty')">⬅ Regresar a Maestría</button>
+            <!-- <button class="btn-back" onclick="showScreen('screen-difficulty')">⬅ Regresar a Maestría</button> -->
+            <button class="btn-back" onclick="showScreen('screen-server')">⬅ Regresar a Tomos</button>
         </section>
 
         <!-- PANTALLA 5A: REGISTRO APRENDIZ SOLITARIO -->
@@ -189,7 +190,7 @@
 
             <!-- NUEVO REACTIVO: ÁRBOLES DE FACTORIZACIÓN ALQUÍMICA -->
             <div id="tree-game-container" class="tree-container hidden">
-                <svg id="tree-svg-canvas" class="tree-svg"></svg>
+                <!-- <svg id="tree-svg-canvas" class="tree-svg"></svg> -->
                 <div id="tree-nodes-container" class="tree-nodes"></div>
             </div>
 

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guardianes del Orden: El Templo de las Operaciones</title>
     <link rel="stylesheet" href="css/guardianes.css">
 </head>
+
 <body>
 
     <!-- BARRA SUPERIOR DEL TEMPLO -->
@@ -31,38 +33,52 @@
 
         <!-- DIARIO DE EXPEDICIÓN · INTRODUCCIÓN -->
         <section id="screen-story" class="screen hidden" aria-label="Diario de expedición">
-          <div class="go-expedition">
-            <div class="go-heading"><span>✦ ARCHIVO DE CAMPO · EXPEDICIÓN 07</span><span id="go-coordinate">MAPA DESCUBIERTO</span></div>
-            <div class="go-layout">
-              <aside class="go-map" aria-label="Mapa del recorrido arqueológico">
-                <div class="go-map-title">MAPA DEL TEMPLO</div>
-                <div class="go-map-route">
-                  <div class="go-map-stop" data-go-stop="0"><span>◈</span><small>ENTRADA</small></div>
-                  <div class="go-map-path"></div>
-                  <div class="go-map-stop" data-go-stop="1"><span>◈</span><small>SELLOS</small></div>
-                  <div class="go-map-path"></div>
-                  <div class="go-map-stop" data-go-stop="2"><span>✦</span><small>LEGADO</small></div>
+            <div class="go-expedition">
+                <div class="go-heading"><span>✦ ARCHIVO DE CAMPO · EXPEDICIÓN 07</span><span id="go-coordinate">MAPA
+                        DESCUBIERTO</span></div>
+                <div class="go-layout">
+                    <aside class="go-map" aria-label="Mapa del recorrido arqueológico">
+                        <div class="go-map-title">MAPA DEL TEMPLO</div>
+                        <div class="go-map-route">
+                            <div class="go-map-stop" data-go-stop="0"><span>◈</span><small>ENTRADA</small></div>
+                            <div class="go-map-path"></div>
+                            <div class="go-map-stop" data-go-stop="1"><span>◈</span><small>SELLOS</small></div>
+                            <div class="go-map-path"></div>
+                            <div class="go-map-stop" data-go-stop="2"><span>✦</span><small>LEGADO</small></div>
+                        </div>
+                        <p>La ruta se revela conforme avanza la expedición.</p>
+                    </aside>
+                    <div class="go-journal">
+                        <div class="go-photo"><img id="go-photo" src="img/guardianes/escena-1.webp"
+                                alt="Exploradores descubren un templo perdido en la selva"></div>
+                        <article class="go-page"><span class="go-date" id="go-date">DIARIO · ENTRADA I</span>
+                            <h2 id="go-title">El llamado de las ruinas</h2>
+                            <p id="go-text"></p>
+                            <p id="go-inscription"></p>
+                            <div id="go-motto" class="go-motto hidden"><span>EL JURAMENTO DE LOS
+                                    GUARDIANES</span><strong>«QUE DESPIERTEN LOS TEMPLOS,<br> EL ORDEN REVELARÁ SUS
+                                    SECRETOS»</strong></div>
+                        </article>
+                    </div>
                 </div>
-                <p>La ruta se revela conforme avanza la expedición.</p>
-              </aside>
-              <div class="go-journal">
-                <div class="go-photo"><img id="go-photo" src="img/guardianes/escena-1.webp" alt="Exploradores descubren un templo perdido en la selva"></div>
-                <article class="go-page"><span class="go-date" id="go-date">DIARIO · ENTRADA I</span><h2 id="go-title">El llamado de las ruinas</h2><p id="go-text"></p><p id="go-inscription"></p>
-                <div id="go-motto" class="go-motto hidden"><span>EL JURAMENTO DE LOS GUARDIANES</span><strong>«QUE DESPIERTEN LOS TEMPLOS,<br> EL ORDEN REVELARÁ SUS SECRETOS»</strong></div></article>
-              </div>
+                <div class="go-controls"><button type="button" id="go-prev">← Página anterior</button><button
+                        type="button" id="go-skip">Omitir historia</button><button type="button" id="go-next">Abrir el
+                        diario →</button></div>
             </div>
-            <div class="go-controls"><button type="button" id="go-prev">← Página anterior</button><button type="button" id="go-skip">Omitir historia</button><button type="button" id="go-next">Abrir el diario →</button></div>
-          </div>
         </section>
 
         <!-- PANTALLA 2: SELECCIÓN DE SALA / TEMA -->
         <section id="screen-server" class="screen hidden">
             <h2>Selecciona la Cámara del Templo</h2>
             <div class="menu-grid">
-                <button onclick="selectServer('sala1')">🏛️ Sala 1: Altar de la Jerarquía<br><small>(Prioridad de operaciones y potencias)</small></button>
-                <button onclick="selectServer('sala2')">🔮 Sala 2: Sellos Concéntricos<br><small>(Paréntesis, corchetes y llaves)</small></button>
-                <button onclick="selectServer('sala3')">📜 Sala 3: Espejo del Opuesto<br><small>(Resta como suma del opuesto y reales)</small></button>
-                <button class="btn-root-mode" onclick="selectServer('root')">👑 EL SANTO GRIAL DEL ORDEN<br><small>(Prueba completa del Guardián Supremo)</small></button>
+                <button onclick="selectServer('sala1')">🏛️ Sala 1: Altar de la Jerarquía<br><small>(Prioridad de
+                        operaciones y potencias)</small></button>
+                <button onclick="selectServer('sala2')">🔮 Sala 2: Sellos Concéntricos<br><small>(Paréntesis, corchetes
+                        y llaves)</small></button>
+                <button onclick="selectServer('sala3')">📜 Sala 3: Espejo del Opuesto<br><small>(Resta como suma del
+                        opuesto y reales)</small></button>
+                <button class="btn-root-mode" onclick="selectServer('root')">👑 EL SANTO GRIAL DEL
+                    ORDEN<br><small>(Prueba completa del Guardián Supremo)</small></button>
             </div>
             <button class="btn-back" onclick="showScreen('screen-cover')">⬅ Regresar a la Entrada</button>
         </section>
@@ -94,11 +110,13 @@
             <form id="setup-form-solo" onsubmit="startSoloGame(event)">
                 <div class="input-group">
                     <label for="player-name">Nombre del Guardián / Explorador:</label>
-                    <input type="text" id="player-name" placeholder="Ej. Indiana Jones" required autocomplete="off">
+                    <input type="text" id="player-name" placeholder="Grupo - Apellido Nombre" required
+                        autocomplete="off">
                 </div>
 
                 <div class="infinite-mode-notice">
-                    <span>♾️</span> <strong>Modo Exploración Libre:</strong> Resuelve acertijos al ritmo del templo. La expedición finalizará al pulsar <em>"Salir del Templo"</em>.
+                    <span>♾️</span> <strong>Modo Exploración Libre:</strong> Resuelve acertijos al ritmo del templo. La
+                    expedición finalizará al pulsar <em>"Salir del Templo"</em>.
                 </div>
 
                 <div class="input-group">
@@ -179,31 +197,32 @@
 
             <!-- Contenedor de Balanza Templaria -->
             <div id="balance-game-container" class="game-module-container hidden">
-            <div class="balance-scale">
-                <div id="balance-left" class="scale-pan"></div>
-                <div class="scale-fulcrum">⚖️</div>
-                <div id="balance-right" class="scale-pan"></div>
-            </div>
-            <div id="balance-options" class="options-grid mt-4"></div>
+                <div class="balance-scale">
+                    <div id="balance-left" class="scale-pan"></div>
+                    <div class="scale-fulcrum">⚖️</div>
+                    <div id="balance-right" class="scale-pan"></div>
+                </div>
+                <div id="balance-options" class="options-grid mt-4"></div>
             </div>
 
             <!-- Contenedor de Secuencia de Pasos -->
             <div id="sequence-game-container" class="game-module-container hidden">
-            <p class="instruction-text">Ordena los pasos del algoritmo de arriba a abajo:</p>
-            <div id="sequence-slots" class="slots-container"></div>
-            <div id="sequence-bank" class="bank-container"></div>
+                <p class="instruction-text">Ordena los pasos del algoritmo de arriba a abajo:</p>
+                <div id="sequence-slots" class="slots-container"></div>
+                <div id="sequence-bank" class="bank-container"></div>
             </div>
 
             <!-- Contenedor de Árbol de Jerarquía -->
             <div id="tree-game-container" class="game-module-container hidden">
-            <div id="tree-nodes-wrapper" class="tree-grid"></div>
+                <div id="tree-nodes-wrapper" class="tree-grid"></div>
             </div>
 
             <!-- Contenedor de Selección Múltiple de Sellos -->
             <div id="multi-select-container" class="game-module-container hidden">
-            <p class="instruction-text">Selecciona TODOS los sellos que cumplan la propiedad:</p>
-            <div id="multi-select-grid" class="options-grid"></div>
-            <button id="btn-submit-multi" class="btn-primary mt-4" onclick="checkMultiSelectAnswer()">Desvelar Sellos</button>
+                <p class="instruction-text">Selecciona TODOS los sellos que cumplan la propiedad:</p>
+                <div id="multi-select-grid" class="options-grid"></div>
+                <button id="btn-submit-multi" class="btn-primary mt-4" onclick="checkMultiSelectAnswer()">Desvelar
+                    Sellos</button>
             </div>
 
         </section>
@@ -222,7 +241,8 @@
     <div id="modal-leaderboard" class="modal-overlay hidden">
         <div class="modal-content leaderboard-modal">
             <div class="leaderboard-tabs">
-                <button id="btn-tab-sala1" class="tab-btn active" onclick="switchLeaderboardMode('sala1')">🏛️ Sala 1</button>
+                <button id="btn-tab-sala1" class="tab-btn active" onclick="switchLeaderboardMode('sala1')">🏛️ Sala
+                    1</button>
                 <button id="btn-tab-sala2" class="tab-btn" onclick="switchLeaderboardMode('sala2')">🔮 Sala 2</button>
                 <button id="btn-tab-sala3" class="tab-btn" onclick="switchLeaderboardMode('sala3')">📜 Sala 3</button>
                 <button id="btn-tab-root" class="tab-btn" onclick="switchLeaderboardMode('root')">👑 Grial</button>
@@ -231,7 +251,8 @@
             <div class="leaderboard-filters-row">
                 <div class="leaderboard-filter-group">
                     <label for="leaderboard-level-select">🎯 Grado:</label>
-                    <select id="leaderboard-level-select" class="leaderboard-select" onchange="onLeaderboardLevelChange()">
+                    <select id="leaderboard-level-select" class="leaderboard-select"
+                        onchange="onLeaderboardLevelChange()">
                         <option value="1">Grado 1: Iniciado</option>
                         <option value="2">Grado 2: Guardián</option>
                         <option value="3">Grado 3: Maestro</option>
@@ -240,7 +261,8 @@
 
                 <div class="leaderboard-filter-group">
                     <label for="leaderboard-type-select">📝 Cristal:</label>
-                    <select id="leaderboard-type-select" class="leaderboard-select" onchange="onLeaderboardTypeChange()">
+                    <select id="leaderboard-type-select" class="leaderboard-select"
+                        onchange="onLeaderboardTypeChange()">
                         <option value="multiple">Opción Múltiple</option>
                         <option value="direct">Entrada Directa</option>
                         <option value="mixed">Mixto</option>
@@ -262,7 +284,9 @@
                         </tr>
                     </thead>
                     <tbody id="leaderboard-body">
-                        <tr><td colspan="4">Cargando bitácora del templo...</td></tr>
+                        <tr>
+                            <td colspan="4">Cargando bitácora del templo...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -299,4 +323,5 @@
 
     <script type="module" src="js/guardianes.js"></script>
 </body>
+
 </html>

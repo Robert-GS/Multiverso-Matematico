@@ -89,6 +89,9 @@ body {
     margin: auto 0;
     transform: translateY(-20px);
     box-sizing: border-box;
+
+    margin-top: 50px;
+    margin-bottom: 70px;
 }
 
 .screen {
